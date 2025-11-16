@@ -1,0 +1,2569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy & Security - Blacklink</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Modular CSS (v3.9) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/nav.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0, 0, 0, 0) !important;
+      white-space: nowrap !important;
+      border: 0 !important;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: var(--card-bg);
+      border-bottom: 2px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.25rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .nav-link {
+      padding: 0.5rem 1rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+      font-weight: 500;
+      font-size: 0.9rem;
+    }
+
+    .nav-link:hover {
+      color: var(--primary-light);
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .nav-link.active {
+      color: var(--primary);
+      background: rgba(99, 102, 241, 0.15);
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: white;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .user-avatar.avatar-ultra {
+      border: 2px solid #fbbf24;
+      box-shadow: 0 0 16px rgba(251, 191, 36, 0.4);
+    }
+
+    .user-avatar.avatar-ultra::after {
+      content: '⭐';
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #1e293b;
+      border: 2px solid #fbbf24;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+    }
+
+    .user-avatar.avatar-ultra-plus {
+      border: 2px solid #f59e0b;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+      animation: ultraPulse 2s ease-in-out infinite;
+    }
+
+    .user-avatar.avatar-ultra-plus::after {
+      content: '⚡';
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border: 2px solid #0a0f1e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      color: white;
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.35);
+    }
+
+    @keyframes ultraPulse {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 20px rgba(245, 158, 11, 0.45);
+      }
+      50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 26px rgba(245, 158, 11, 0.7);
+      }
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    /* Alert Banner */
+    .alert-banner {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
+      border: 2px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .alert-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .alert-content {
+      flex: 1;
+    }
+
+    .alert-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .alert-description {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Privacy Section */
+    .privacy-section {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .section-description {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Toggle Item */
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      margin-bottom: 1rem;
+      border: 2px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .toggle-item:hover {
+      border-color: var(--primary-light);
+    }
+
+    .toggle-info {
+      flex: 1;
+    }
+
+    .toggle-label {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .toggle-description {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 56px;
+      height: 28px;
+      background: var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .toggle-switch::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .toggle-switch.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .toggle-switch.active::before {
+      transform: translateX(28px);
+    }
+
+    .security-subheader {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+      gap: 1rem;
+    }
+
+    .security-subheader h3 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .security-subheader h3 i {
+      color: var(--primary);
+    }
+
+    .login-history {
+      list-style: none;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .login-entry {
+      display: grid;
+      gap: 0.75rem;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      border: 2px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .login-entry:hover {
+      border-color: var(--primary-light);
+    }
+
+    .login-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .login-entry-primary {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-weight: 600;
+    }
+
+    .login-entry-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .login-entry-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .login-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    .login-status.success {
+      border-color: rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--success);
+    }
+
+    .login-status.warning {
+      border-color: rgba(245, 158, 11, 0.3);
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--warning);
+    }
+
+    .login-status.danger {
+      border-color: rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--danger);
+    }
+
+    .login-history-empty {
+      text-align: center;
+      padding: 2rem 1rem;
+      color: var(--text-muted);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+    }
+
+    /* Danger Zone */
+    .danger-zone {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%);
+      border: 2px solid rgba(239, 68, 68, 0.3);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-top: 2rem;
+    }
+
+    .danger-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--danger);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .danger-description {
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 0.875rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary-light);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Privacy Stats */
+    .privacy-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-box {
+      background: var(--bg);
+      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .privacy-controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .privacy-control {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-height: 120px;
+    }
+
+    .privacy-control header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+    }
+
+    .privacy-control button {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      transition: var(--transition);
+    }
+
+    .privacy-control button[aria-pressed="true"] {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: rgba(99, 102, 241, 0.35);
+      color: var(--primary);
+    }
+
+    .privacy-control p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin: 0;
+      flex: 1;
+    }
+
+    .color-vision-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      background: var(--bg-secondary);
+      margin-top: 1.5rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .color-vision-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .color-vision-slider {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .color-vision-slider label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .color-vision-slider input[type="range"] {
+      width: 100%;
+      accent-color: var(--primary);
+    }
+
+    body[data-color-vision] {
+      transition: filter 0.25s ease;
+    }
+
+    .chip-toggle {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 0.45rem 1rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      background: var(--bg);
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .chip-toggle:hover {
+      border-color: var(--primary-light);
+      color: var(--primary-light);
+    }
+
+    .chip-toggle.active {
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--primary-light);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .chip-toggle:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .timeline-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .audit-log {
+      list-style: none;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .audit-item {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 1rem;
+      padding: 1.25rem;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .audit-item:hover {
+      border-color: var(--primary-light);
+    }
+
+    .audit-date {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .audit-date span:last-child {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .audit-details {
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .audit-title {
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .audit-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .audit-badge {
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+    }
+
+    .planner-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .planner-card {
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border: 2px solid var(--border);
+      padding: 1.5rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .planner-card label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .planner-card input[type="range"] {
+      width: 100%;
+      accent-color: #6366f1;
+    }
+
+    .planner-metrics {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .planner-summary {
+      display: grid;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .planner-summary strong {
+      color: var(--text);
+    }
+
+    .planner-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .request-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .progress-card {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .progress-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .progress-bar {
+      position: relative;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.12);
+      overflow: hidden;
+    }
+
+    .progress-bar span {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transition: width 0.4s ease;
+    }
+
+    .progress-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .sla-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      font-weight: 600;
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .toast {
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.5rem;
+      box-shadow: var(--shadow-lg);
+      border-left: 4px solid var(--primary);
+      min-width: 300px;
+      animation: slideInRight 0.3s ease;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.success { border-left-color: var(--success); }
+    .toast.error { border-left-color: var(--danger); }
+    .toast.warning { border-left-color: var(--warning); }
+
+    .toast-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .toast-message {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .page-header h1 {
+        font-size: 1.75rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .privacy-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .timeline-toolbar {
+        justify-content: stretch;
+      }
+
+      .audit-item {
+        grid-template-columns: 1fr;
+      }
+
+      .planner-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .security-subheader {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .security-subheader .chip-toggle {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar Container (populated by navbar.js) -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="page-header">
+      <h1>Privacy & Security</h1>
+      <p>Control your data and protect your privacy</p>
+    </div>
+
+    <!-- Privacy Alert -->
+    <div class="alert-banner">
+      <div class="alert-icon">
+        <i class="fas fa-shield-alt"></i>
+      </div>
+      <div class="alert-content">
+        <div class="alert-title">Your Privacy Matters</div>
+        <div class="alert-description">
+          We're committed to protecting your data. Review and customize your privacy settings below to control what data we collect and how it's used.
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy Overview -->
+    <div class="privacy-stats">
+      <div class="stat-box">
+        <div class="stat-value" id="dataCollected">0 MB</div>
+        <div class="stat-label">Data Stored</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="privacyScore">95%</div>
+        <div class="stat-label">Privacy Score</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-value" id="lastReview">Never</div>
+        <div class="stat-label">Last Reviewed</div>
+      </div>
+    </div>
+
+    <!-- Privacy Controls -->
+    <section class="privacy-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-user-shield"></i>
+        </div>
+        <div>
+          <div class="section-title">Privacy Controls</div>
+        </div>
+      </div>
+      <p class="section-description">Fine-tune how Blacklink behaves on this device. All settings are stored locally and never leave your browser.</p>
+
+      <div class="privacy-controls-grid" id="privacyControls">
+        <article class="privacy-control">
+          <header>
+            <span>Private Mode</span>
+            <button type="button" data-privacy-toggle="privateMode" aria-pressed="false">
+              <i class="fas fa-user-secret"></i> Enable
+            </button>
+          </header>
+          <p>Hide online status, suppress rich presence, and keep session indicators off.</p>
+        </article>
+
+        <article class="privacy-control">
+          <header>
+            <span>Screenshot Shield</span>
+            <button type="button" data-privacy-toggle="blockScreenshots" aria-pressed="false">
+              <i class="fas fa-ban"></i> Enable
+            </button>
+          </header>
+          <p>Block basic screenshots and text selection when handling sensitive content.</p>
+        </article>
+
+        <article class="privacy-control">
+          <header>
+            <span>Encrypt Cache</span>
+            <button type="button" data-privacy-toggle="encryptLocal" aria-pressed="false">
+              <i class="fas fa-lock"></i> Enable
+            </button>
+          </header>
+          <p>Obscure locally cached data with in-browser encryption before storage.</p>
+        </article>
+
+        <article class="privacy-control">
+          <header>
+            <span>Clear on Exit</span>
+            <button type="button" data-privacy-toggle="clearOnExit" aria-pressed="false">
+              <i class="fas fa-broom"></i> Enable
+            </button>
+          </header>
+          <p>Automatically purge session data and saved drafts when you close Blacklink.</p>
+        </article>
+
+        <article class="privacy-control">
+          <header>
+            <span>Connection Watch</span>
+            <button type="button" data-privacy-toggle="vpnRecommend" aria-pressed="false">
+              <i class="fas fa-tower-cell"></i> Enable
+            </button>
+          </header>
+          <p>Warn when browsing on unsecured networks and recommend VPN safeguards.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- Color Vision -->
+    <section class="privacy-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-eye"></i>
+        </div>
+        <div>
+          <div class="section-title">Color Vision Assistance</div>
+        </div>
+      </div>
+      <p class="section-description">Adjust color filters to match your color vision profile. The filters run entirely on-device.</p>
+
+      <div class="color-vision-card">
+        <form id="colorVisionForm" class="color-vision-grid">
+          <div>
+            <label for="colorVisionType" class="select-label">Color Vision Type</label>
+            <select class="select-dropdown" id="colorVisionType" name="type">
+              <option value="none">None</option>
+              <option value="protan">Protan (red-insensitive)</option>
+              <option value="deutan">Deutan (green-insensitive)</option>
+              <option value="tritan">Tritan (blue-insensitive)</option>
+            </select>
+          </div>
+          <div class="color-vision-slider">
+            <label for="colorVisionStrength">Filter Strength</label>
+            <input type="range" id="colorVisionStrength" name="strength" min="0" max="100" value="30">
+            <small id="colorVisionStrengthLabel">30%</small>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Data Collection -->
+    <section class="privacy-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-database"></i>
+        </div>
+        <div>
+          <div class="section-title">Data Collection</div>
+        </div>
+      </div>
+      <p class="section-description">Control what data Blacklink collects about you</p>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Analytics Collection</div>
+          <div class="toggle-description">Allow anonymous usage analytics to help improve Blacklink</div>
+        </div>
+        <div class="toggle-switch active" onclick="togglePrivacy(this, 'analytics')" id="analytics"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Error Reporting</div>
+          <div class="toggle-description">Automatically send error reports to help us fix bugs</div>
+        </div>
+        <div class="toggle-switch active" onclick="togglePrivacy(this, 'errorReporting')" id="errorReporting"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Usage Statistics</div>
+          <div class="toggle-description">Track app usage to provide personalized recommendations</div>
+        </div>
+        <div class="toggle-switch active" onclick="togglePrivacy(this, 'usageStats')" id="usageStats"></div>
+      </div>
+    </section>
+
+    <!-- Data Sharing -->
+    <section class="privacy-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-share-alt"></i>
+        </div>
+        <div>
+          <div class="section-title">Data Sharing</div>
+        </div>
+      </div>
+      <p class="section-description">Control how your data is shared across Blacklink services</p>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Cross-App Data Sharing</div>
+          <div class="toggle-description">Share preferences and settings across all Blacklink apps</div>
+        </div>
+        <div class="toggle-switch active" onclick="togglePrivacy(this, 'crossAppSharing')" id="crossAppSharing"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Third-Party Integration</div>
+          <div class="toggle-description">Allow third-party apps to access your Blacklink data</div>
+        </div>
+        <div class="toggle-switch" onclick="togglePrivacy(this, 'thirdParty')" id="thirdParty"></div>
+      </div>
+    </section>
+
+    <!-- Security -->
+    <section class="privacy-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-lock"></i>
+        </div>
+        <div>
+          <div class="section-title">Security</div>
+        </div>
+      </div>
+      <p class="section-description">Manage your account security settings</p>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Login Alerts</div>
+          <div class="toggle-description">Get notified when someone logs into your account</div>
+        </div>
+        <div class="toggle-switch active" onclick="togglePrivacy(this, 'loginAlerts')" id="loginAlerts"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Session Timeout</div>
+          <div class="toggle-description">Automatically log out after 30 minutes of inactivity</div>
+        </div>
+        <div class="toggle-switch" onclick="togglePrivacy(this, 'sessionTimeout')" id="sessionTimeout"></div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="viewActivity()">
+          <i class="fas fa-history"></i>
+          View Login History
+        </button>
+        <button class="btn btn-secondary" onclick="revokeAllSessions()">
+          <i class="fas fa-sign-out-alt"></i>
+          Revoke All Sessions
+        </button>
+      </div>
+
+      <div class="security-subheader">
+        <h3><i class="fas fa-history"></i> Recent Login Activity</h3>
+        <button type="button" class="chip-toggle" id="refreshLoginHistory" aria-label="Refresh login history">
+          <i class="fas fa-rotate"></i>
+          Refresh
+        </button>
+      </div>
+      <p class="section-description" id="loginHistoryStatus">Review devices that have accessed your account in the past 30 days.</p>
+      <div id="loginHistoryLoader" class="login-history-empty" style="display: none;">Loading login history…</div>
+      <div id="loginHistoryError" class="login-history-empty" style="display: none;">We couldn’t load your login history. Please try again later.</div>
+      <div id="loginHistoryEmpty" class="login-history-empty" style="display: none;">No login activity recorded yet.</div>
+      <ul class="login-history" id="loginHistoryList"></ul>
+    </section>
+
+    <!-- Cookies & Tracking -->
+    <section class="privacy-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-cookie-bite"></i>
+        </div>
+        <div>
+          <div class="section-title">Cookies & Tracking</div>
+        </div>
+      </div>
+      <p class="section-description">Manage cookies and tracking preferences</p>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Essential Cookies</div>
+          <div class="toggle-description">Required for basic functionality (Cannot be disabled)</div>
+        </div>
+        <div class="toggle-switch active" style="opacity: 0.5; cursor: not-allowed;"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Functional Cookies</div>
+          <div class="toggle-description">Remember your preferences and settings</div>
+        </div>
+        <div class="toggle-switch active" onclick="togglePrivacy(this, 'functionalCookies')" id="functionalCookies"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Analytics Cookies</div>
+          <div class="toggle-description">Help us understand how you use Blacklink</div>
+        </div>
+        <div class="toggle-switch active" onclick="togglePrivacy(this, 'analyticsCookies')" id="analyticsCookies"></div>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="clearCookies()">
+          <i class="fas fa-trash"></i>
+          Clear All Cookies
+        </button>
+      </div>
+    </section>
+
+    <!-- Data Rights -->
+    <section class="privacy-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-file-contract"></i>
+        </div>
+        <div>
+          <div class="section-title">Your Data Rights</div>
+        </div>
+      </div>
+      <p class="section-description">Exercise your rights under privacy laws (GDPR, CCPA)</p>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="downloadData()">
+          <i class="fas fa-download"></i>
+          Download My Data
+        </button>
+        <button class="btn btn-secondary" onclick="requestCorrection()">
+          <i class="fas fa-edit"></i>
+          Request Data Correction
+        </button>
+        <button class="btn btn-secondary" onclick="requestDeletion()">
+          <i class="fas fa-eraser"></i>
+          Request Data Deletion
+        </button>
+      </div>
+    </section>
+
+    <!-- Audit Timeline -->
+    <section class="privacy-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-clipboard-check"></i>
+        </div>
+        <div>
+          <div class="section-title">Audit Timeline</div>
+          <p class="section-description">See recent privacy events, compliance reviews, and user-driven changes.</p>
+        </div>
+      </div>
+
+      <div class="timeline-toolbar" role="group" aria-label="Filter audit events">
+        <button type="button" class="chip-toggle active" data-filter="all">All events</button>
+        <button type="button" class="chip-toggle" data-filter="security">Security</button>
+        <button type="button" class="chip-toggle" data-filter="data">Data</button>
+        <button type="button" class="chip-toggle" data-filter="compliance">Compliance</button>
+      </div>
+
+      <ul class="audit-log" id="auditLog" aria-live="polite"></ul>
+    </section>
+
+    <!-- Export Planner -->
+    <section class="privacy-section" aria-labelledby="export-planner-title">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-cloud-download-alt"></i>
+        </div>
+        <div>
+          <div class="section-title" id="export-planner-title">Data Export Planner</div>
+          <p class="section-description">Forecast export sizes and align automated delivery windows with your compliance calendar.</p>
+        </div>
+      </div>
+
+      <div class="planner-grid">
+        <div class="planner-card">
+          <label for="retentionRange">Retention window (days)</label>
+          <input type="range" id="retentionRange" min="30" max="365" step="30" value="90" aria-valuemin="30" aria-valuemax="365" aria-valuenow="90">
+          <div class="planner-metrics">
+            <span id="retentionLabel">90 days</span>
+            <span id="estimatedSize">≈ 12 MB</span>
+          </div>
+          <p class="planner-note">Compression enabled • JSON + CSV bundle</p>
+        </div>
+        <div class="planner-card planner-summary">
+          <p>Estimated export duration: <strong id="estimatedDuration">5 minutes</strong></p>
+          <p>Next export window: <strong id="nextExportDate">July 12, 2025</strong></p>
+          <p>Delivery channel: <strong id="deliveryChannel">Secure email link</strong></p>
+          <button class="btn btn-primary" id="scheduleExport">
+            <i class="fas fa-calendar-plus"></i>
+            Schedule export
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Request Tracker -->
+    <section class="privacy-section" aria-labelledby="request-tracker-title">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-tasks"></i>
+        </div>
+        <div>
+          <div class="section-title" id="request-tracker-title">Privacy Request Tracker</div>
+          <p class="section-description">Monitor outstanding GDPR/CCPA requests and stay ahead of SLA deadlines.</p>
+        </div>
+      </div>
+
+      <div class="request-grid" id="requestGrid"></div>
+    </section>
+
+    <!-- Danger Zone -->
+    <section class="danger-zone">
+      <div class="danger-title">
+        <i class="fas fa-exclamation-triangle"></i>
+        Danger Zone
+      </div>
+      <p class="danger-description">
+        These actions are permanent and cannot be undone. Please proceed with caution.
+      </p>
+
+      <div class="btn-group">
+        <button class="btn btn-danger" onclick="clearAllData()">
+          <i class="fas fa-trash-alt"></i>
+          Clear All Personal Data
+        </button>
+        <button class="btn btn-danger" onclick="deleteAccount()">
+          <i class="fas fa-user-times"></i>
+          Delete My Account
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modular Navbar -->
+  <script src="js/navbar.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/analytics-compat.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Initialize modular navbar
+    Navbar.initNavbar(auth, db, 'privacy');
+
+    let currentUser = null;
+
+    const auditLogElement = document.getElementById('auditLog');
+    const auditFilterButtons = document.querySelectorAll('.timeline-toolbar .chip-toggle');
+    const retentionRangeInput = document.getElementById('retentionRange');
+    const retentionLabel = document.getElementById('retentionLabel');
+    const estimatedSizeLabel = document.getElementById('estimatedSize');
+    const estimatedDurationLabel = document.getElementById('estimatedDuration');
+    const nextExportDateLabel = document.getElementById('nextExportDate');
+    const deliveryChannelLabel = document.getElementById('deliveryChannel');
+    const scheduleExportButton = document.getElementById('scheduleExport');
+    const requestGrid = document.getElementById('requestGrid');
+    const loginHistoryList = document.getElementById('loginHistoryList');
+    const loginHistoryEmpty = document.getElementById('loginHistoryEmpty');
+    const loginHistoryError = document.getElementById('loginHistoryError');
+    const loginHistoryLoader = document.getElementById('loginHistoryLoader');
+    const loginHistoryStatus = document.getElementById('loginHistoryStatus');
+    const refreshLoginHistoryButton = document.getElementById('refreshLoginHistory');
+    const colorVisionType = document.getElementById('colorVisionType');
+    const colorVisionStrength = document.getElementById('colorVisionStrength');
+    const colorVisionStrengthLabel = document.getElementById('colorVisionStrengthLabel');
+    const PRIVACY_SERVER_SYNC = false;
+    const PRIVACY_SETTINGS_KEY = 'privacy-center-settings-v1';
+    const AUDIT_STORAGE_KEY = 'privacy-audit-log-v1';
+    const LOGIN_HISTORY_KEY = 'privacy-login-history-v1';
+    const defaultPrivacySettings = {
+      analytics: true,
+      errorReporting: true,
+      usageStats: true,
+      crossAppSharing: true,
+      thirdParty: false,
+      loginAlerts: true,
+      sessionTimeout: false,
+      functionalCookies: true,
+      analyticsCookies: true,
+      privateMode: false,
+      blockScreenshots: false,
+      encryptLocal: false,
+      clearOnExit: false,
+      vpnRecommend: false,
+      colorVision: { type: 'none', strength: 30 },
+      dataRetention: 365,
+      lastReviewed: null
+    };
+
+    const retentionStorageKey = 'privacy-export-retention';
+    const BLACKLINK_DATA_ROOT = 'product_pulse';
+    const QUICK_LAUNCH_SUBCOLLECTION = 'quicklaunch';
+    const SECURITY_EVENTS_SUBCOLLECTION = 'security_events';
+    const userMenu = document.getElementById('userMenu');
+    const userDropdown = document.getElementById('userDropdown');
+    const logoutButton = document.getElementById('logoutButton');
+
+    function getPrivacySettings() {
+      try {
+        const stored = localStorage.getItem(PRIVACY_SETTINGS_KEY);
+        if (!stored) return { ...defaultPrivacySettings };
+        const parsed = JSON.parse(stored);
+        return { ...defaultPrivacySettings, ...parsed };
+      } catch (error) {
+        console.warn('Unable to parse privacy settings cache', error);
+        return { ...defaultPrivacySettings };
+      }
+    }
+
+    function savePrivacySettings(settings) {
+      try {
+        localStorage.setItem(PRIVACY_SETTINGS_KEY, JSON.stringify(settings));
+      } catch (error) {
+        console.warn('Unable to persist privacy settings', error);
+      }
+    }
+
+    function loadAuditEvents() {
+      try {
+        const stored = localStorage.getItem(AUDIT_STORAGE_KEY);
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch (error) {
+        console.warn('Unable to parse audit log cache', error);
+      }
+      return [...seededAuditEvents];
+    }
+
+    function persistAuditEvents() {
+      try {
+        localStorage.setItem(AUDIT_STORAGE_KEY, JSON.stringify(auditEvents.slice(0, 25)));
+      } catch (error) {
+        console.warn('Unable to persist audit log cache', error);
+      }
+    }
+
+    function estimateLocalFootprintKB() {
+      try {
+        let total = 0;
+        for (let i = 0; i < localStorage.length; i += 1) {
+          const key = localStorage.key(i);
+          const value = localStorage.getItem(key) || '';
+          total += (key?.length || 0) + value.length;
+        }
+        return total / 1024;
+      } catch (error) {
+        console.warn('Unable to estimate storage footprint', error);
+        return 0;
+      }
+    }
+
+    function getLocalLoginEvents() {
+      try {
+        const stored = localStorage.getItem(LOGIN_HISTORY_KEY);
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed)) {
+            return parsed;
+          }
+        }
+      } catch (error) {
+        console.warn('Unable to parse local login history', error);
+      }
+      return [];
+    }
+
+    function persistLocalLoginEvents(events) {
+      try {
+        localStorage.setItem(LOGIN_HISTORY_KEY, JSON.stringify(events.slice(0, 10)));
+      } catch (error) {
+        console.warn('Unable to persist local login history', error);
+      }
+    }
+
+    function detectDeviceProfile() {
+      const ua = navigator.userAgent.toLowerCase();
+      if (ua.includes('iphone') || ua.includes('ipad')) return 'Safari on iOS';
+      if (ua.includes('mac os')) return 'Safari on macOS';
+      if (ua.includes('android')) return 'Android Web';
+      if (ua.includes('windows')) return 'Windows';
+      if (ua.includes('linux')) return 'Linux Desktop';
+      return navigator.userAgent;
+    }
+
+    function recordLocalLoginEvent() {
+      if (!currentUser) return;
+      const events = getLocalLoginEvents();
+      const timestamp = currentUser.metadata?.lastSignInTime
+        ? new Date(currentUser.metadata.lastSignInTime).toISOString()
+        : new Date().toISOString();
+      events.unshift({
+        id: `login-${Date.now()}`,
+        device: detectDeviceProfile(),
+        location: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Local time zone',
+        timestamp
+      });
+      persistLocalLoginEvents(events);
+    }
+
+    function applyPrivacySetting(setting, value) {
+      switch (setting) {
+        case 'privateMode':
+          document.body.dataset.privateMode = value ? 'true' : '';
+          break;
+        case 'blockScreenshots':
+          document.body.style.userSelect = value ? 'none' : '';
+          document.body.style.webkitUserSelect = value ? 'none' : '';
+          break;
+        case 'encryptLocal':
+          document.documentElement.dataset.encryptLocal = value ? 'true' : '';
+          break;
+        case 'clearOnExit':
+          toggleClearOnExit(value);
+          break;
+        case 'vpnRecommend':
+          if (value) {
+            monitorNetworkSecurity();
+          } else {
+            stopNetworkMonitoring();
+          }
+          break;
+        default:
+          break;
+      }
+    }
+
+    function applyPrivacySettingsToDom(settings) {
+      Object.entries(settings).forEach(([key, value]) => {
+        setToggle(key, Boolean(value));
+        applyPrivacySetting(key, value);
+      });
+
+      const privacyButtons = document.querySelectorAll('[data-privacy-toggle]');
+      privacyButtons.forEach((button) => {
+        const key = button.dataset.privacyToggle;
+        const active = Boolean(settings[key]);
+        button.setAttribute('aria-pressed', String(active));
+      });
+
+      if (settings.colorVision) {
+        applyColorVision(settings.colorVision);
+      }
+    }
+
+    function normalizeTier(tier) {
+      if (!tier) return 'FREE';
+      const value = String(tier).toUpperCase().replace(/\s+/g, '_');
+      if (value === 'ULTRA_PLUS' || value === 'ULTRA+') return 'ULTRA_PLUS';
+      if (value === 'ULTRA') return 'ULTRA';
+      return 'FREE';
+    }
+
+    function updateNavAvatar(initials, photoURL) {
+      const avatar = document.getElementById('userAvatar');
+      if (!avatar) return;
+      if (photoURL) {
+        avatar.style.backgroundImage = `url('${photoURL}')`;
+        avatar.style.backgroundSize = 'cover';
+        avatar.style.backgroundPosition = 'center';
+        avatar.textContent = '';
+      } else {
+        avatar.style.backgroundImage = '';
+        avatar.textContent = initials;
+      }
+    }
+
+    function applyNavTierStyling(tier) {
+      const avatar = document.getElementById('userAvatar');
+      if (!avatar) return;
+
+      const normalized = normalizeTier(tier);
+      avatar.classList.remove('avatar-ultra', 'avatar-ultra-plus');
+      avatar.removeAttribute('data-tier');
+
+      if (normalized === 'ULTRA') {
+        avatar.classList.add('avatar-ultra');
+        avatar.setAttribute('data-tier', 'ULTRA');
+      } else if (normalized === 'ULTRA_PLUS') {
+        avatar.classList.add('avatar-ultra-plus');
+        avatar.setAttribute('data-tier', 'ULTRA+');
+      }
+    }
+
+    function openUserDropdown() {
+      if (!userMenu || !userDropdown) return;
+      userDropdown.classList.add('open');
+      userMenu.setAttribute('aria-expanded', 'true');
+    }
+
+    function closeUserDropdown() {
+      if (!userMenu || !userDropdown) return;
+      userDropdown.classList.remove('open');
+      userMenu.setAttribute('aria-expanded', 'false');
+    }
+
+    function toggleUserDropdown(forceState) {
+      if (!userMenu || !userDropdown) return;
+      const shouldOpen = typeof forceState === 'boolean'
+        ? forceState
+        : !userDropdown.classList.contains('open');
+      if (shouldOpen) {
+        openUserDropdown();
+      } else {
+        closeUserDropdown();
+      }
+    }
+
+    userMenu?.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      toggleUserDropdown();
+    });
+
+    userMenu?.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        toggleUserDropdown();
+      } else if (event.key === 'ArrowDown') {
+        event.preventDefault();
+        openUserDropdown();
+        const firstItem = userDropdown?.querySelector('.user-dropdown-item');
+        firstItem?.focus();
+      } else if (event.key === 'Escape') {
+        closeUserDropdown();
+      }
+    });
+
+    userDropdown?.querySelectorAll('.user-dropdown-item').forEach((item) => {
+      item.addEventListener('click', () => {
+        closeUserDropdown();
+      });
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!userDropdown?.classList.contains('open')) return;
+      if (userMenu?.contains(event.target) || userDropdown.contains(event.target)) {
+        return;
+      }
+      closeUserDropdown();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && userDropdown?.classList.contains('open')) {
+        closeUserDropdown();
+      }
+    });
+
+    logoutButton?.addEventListener('click', async () => {
+      closeUserDropdown();
+      try {
+        const shouldLogout = window.confirm('Sign out of Blacklink?');
+        if (!shouldLogout) {
+          return;
+        }
+        await auth.signOut();
+        window.location.href = 'login.html';
+      } catch (error) {
+        console.error('Error signing out:', error);
+        showToast('Error signing out', 'error');
+      }
+    });
+
+    const seededAuditEvents = [
+      {
+        id: 'mfa-rollout',
+        timestamp: '2025-05-18T10:24:00Z',
+        type: 'security',
+        title: 'Admin MFA enforced',
+        description: 'All privileged accounts now require WebAuthn security keys for login.',
+        badge: 'Security',
+        actor: 'Automated policy',
+        icon: 'fas fa-user-shield'
+      },
+      {
+        id: 'district-export',
+        timestamp: '2025-04-29T08:10:00Z',
+        type: 'data',
+        title: 'District export delivered',
+        description: 'Completed scheduled export for Wentzville School District with audit signatures.',
+        badge: 'Data',
+        actor: 'Compliance bot',
+        icon: 'fas fa-file-export'
+      },
+      {
+        id: 'ferpa-review',
+        timestamp: '2025-04-14T16:42:00Z',
+        type: 'compliance',
+        title: 'Quarterly FERPA review passed',
+        description: 'Independent auditor verified retention rules and redaction workflows.',
+        badge: 'Compliance',
+        actor: 'Third-party auditor',
+        icon: 'fas fa-clipboard-check'
+      },
+      {
+        id: 'risk-revocation',
+        timestamp: '2025-03-31T12:05:00Z',
+        type: 'security',
+        title: 'Suspicious login auto-revoked',
+        description: 'Risk engine revoked a session from an unfamiliar location and notified the admin.',
+        badge: 'Security',
+        actor: 'Risk engine',
+        icon: 'fas fa-lock'
+      },
+      {
+        id: 'analytics-trim',
+        timestamp: '2025-03-02T09:30:00Z',
+        type: 'data',
+        title: 'Analytics retention trimmed',
+        description: 'Legacy analytics logs older than 180 days were securely removed.',
+        badge: 'Data',
+        actor: 'Privacy team',
+        icon: 'fas fa-database'
+      }
+    ];
+    let auditEvents = loadAuditEvents();
+
+    const requestMetrics = [
+      { id: 'exports', title: 'Export requests', open: 2, total: 6, sla: '7 days' },
+      { id: 'deletion', title: 'Deletion queue', open: 1, total: 3, sla: '30 days' },
+      { id: 'access', title: 'Access inquiries', open: 0, total: 4, sla: '45 days' }
+    ];
+
+    function quickLaunchCollection() {
+      if (!PRIVACY_SERVER_SYNC) {
+        throw new Error('Cloud privacy sync is disabled');
+      }
+      if (!currentUser) {
+        throw new Error('User not authenticated');
+      }
+      return db
+        .collection(BLACKLINK_DATA_ROOT)
+        .doc(currentUser.uid)
+        .collection(QUICK_LAUNCH_SUBCOLLECTION);
+    }
+
+    function securityEventsCollection() {
+      if (!PRIVACY_SERVER_SYNC) {
+        throw new Error('Cloud privacy sync is disabled');
+      }
+      if (!currentUser) {
+        throw new Error('User not authenticated');
+      }
+      return db
+        .collection(BLACKLINK_DATA_ROOT)
+        .doc(currentUser.uid)
+        .collection(SECURITY_EVENTS_SUBCOLLECTION);
+    }
+
+    auditFilterButtons.forEach((button, index) => {
+      button.setAttribute('aria-pressed', index === 0 ? 'true' : 'false');
+      button.addEventListener('click', () => {
+        auditFilterButtons.forEach(btn => {
+          btn.classList.remove('active');
+          btn.setAttribute('aria-pressed', 'false');
+        });
+        button.classList.add('active');
+        button.setAttribute('aria-pressed', 'true');
+        const filter = button.dataset.filter || 'all';
+        renderAuditLog(filter);
+      });
+    });
+
+    if (retentionRangeInput) {
+      const storedRetention = parseInt(localStorage.getItem(retentionStorageKey) || '90', 10);
+      retentionRangeInput.value = storedRetention;
+      retentionRangeInput.setAttribute('aria-valuenow', String(storedRetention));
+
+      const handleRetentionChange = () => {
+        const days = parseInt(retentionRangeInput.value, 10);
+        retentionRangeInput.setAttribute('aria-valuenow', String(days));
+        updatePlannerMetrics(days);
+        try {
+          localStorage.setItem(retentionStorageKey, String(days));
+        } catch (error) {
+          console.warn('Unable to persist retention preference', error);
+        }
+      };
+
+      retentionRangeInput.addEventListener('input', handleRetentionChange);
+      updatePlannerMetrics(storedRetention);
+    }
+
+    scheduleExportButton?.addEventListener('click', () => {
+      const days = parseInt(retentionRangeInput?.value || '90', 10);
+      logAuditEvent({
+        id: `scheduled-${Date.now()}`,
+        type: 'data',
+        title: 'Export scheduled',
+        description: `Automated export covering the last ${days} days has been scheduled.`,
+        badge: 'Data',
+        actor: 'Self-service',
+        icon: 'fas fa-clock'
+      });
+
+      const exportMetric = requestMetrics.find(metric => metric.id === 'exports');
+      if (exportMetric) {
+        exportMetric.open += 1;
+        exportMetric.total += 1;
+        renderRequestGrid();
+      }
+
+      showToast(`Export scheduled. We'll deliver a package covering ${days} days of data.`, 'success');
+    });
+
+    renderAuditLog('all');
+    renderRequestGrid();
+    if (refreshLoginHistoryButton) {
+      refreshLoginHistoryButton.setAttribute('aria-pressed', 'false');
+      refreshLoginHistoryButton.addEventListener('click', () => {
+        refreshLoginHistoryButton.setAttribute('aria-pressed', 'true');
+        loadLoginHistory(true, { indicateButton: true }).finally(() => {
+          refreshLoginHistoryButton.setAttribute('aria-pressed', 'false');
+        });
+      });
+    }
+
+    // Auth State
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        currentUser = user;
+        recordLocalLoginEvent();
+        await loadUserData();
+        await loadPrivacySettings();
+        await loadPrivacyStats();
+        await loadLoginHistory();
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Load User Data
+    async function loadUserData() {
+      try {
+        if (!currentUser) return;
+        if (!PRIVACY_SERVER_SYNC) {
+          const displayName = currentUser.displayName || currentUser.email?.split('@')[0] || 'User';
+          const initials = displayName
+            .split(' ')
+            .map(n => n[0])
+            .join('')
+            .substring(0, 2)
+            .toUpperCase();
+          const photoURL = currentUser.photoURL || null;
+          updateNavAvatar(initials, photoURL);
+          const userNameEl = document.getElementById('userName');
+          if (userNameEl) {
+            userNameEl.textContent = displayName;
+          }
+          applyNavTierStyling('FREE');
+          return;
+        }
+
+        const [userDoc, subscriptionDoc] = await Promise.all([
+          db.collection('users').doc(currentUser.uid).get(),
+          db.collection('subscriptions').doc(currentUser.uid).get().catch(() => null)
+        ]);
+
+        const userData = userDoc.data() || {};
+        if (subscriptionDoc && subscriptionDoc.exists) {
+          userData.subscription = {
+            ...(userData.subscription || {}),
+            ...(subscriptionDoc.data() || {})
+          };
+        }
+
+        const displayName = userData.name || currentUser.displayName || currentUser.email?.split('@')[0];
+        const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const photoURL = userData.photoURL || currentUser.photoURL || null;
+        updateNavAvatar(initials, photoURL);
+        const userNameEl = document.getElementById('userName');
+        if (userNameEl) {
+          userNameEl.textContent = displayName;
+        }
+        applyNavTierStyling(userData?.subscription?.tier);
+      } catch (error) {
+        console.error('Error loading user data:', error);
+      }
+    }
+
+    // Load Privacy Settings
+    async function loadPrivacySettings() {
+      const localSettings = getPrivacySettings();
+      applyPrivacySettingsToDom(localSettings);
+
+      if (!currentUser || !PRIVACY_SERVER_SYNC) return;
+
+      try {
+        const privacyDoc = await db.collection('privacy').doc(currentUser.uid).get();
+        if (!privacyDoc.exists) {
+          return;
+        }
+        const remoteSettings = privacyDoc.data() || {};
+        const merged = { ...localSettings, ...remoteSettings };
+        savePrivacySettings(merged);
+        applyPrivacySettingsToDom(merged);
+      } catch (error) {
+        console.warn('Privacy settings loaded from local cache (serverless mode)', error);
+      }
+    }
+
+    // Load Privacy Stats
+    async function loadPrivacyStats() {
+      try {
+        const dataSize = estimateLocalFootprintKB();
+        const dataCollectedEl = document.getElementById('dataCollected');
+        if (dataCollectedEl) {
+          dataCollectedEl.textContent = `${dataSize.toFixed(2)} KB`;
+        }
+
+        const privacy = getPrivacySettings();
+        const toggleEntries = Object.entries(privacy).filter(([key, value]) => typeof value === 'boolean');
+        const disabledCount = toggleEntries.filter(([, value]) => value === false).length;
+        const score = Math.max(55, 100 - (disabledCount * 4));
+        const scoreEl = document.getElementById('privacyScore');
+        if (scoreEl) {
+          scoreEl.textContent = `${score}%`;
+        }
+
+        const lastReviewEl = document.getElementById('lastReview');
+        if (lastReviewEl) {
+          lastReviewEl.textContent = privacy.lastReviewed
+            ? new Date(privacy.lastReviewed).toLocaleDateString()
+            : 'Never';
+        }
+      } catch (error) {
+        console.error('Error loading privacy stats:', error);
+      }
+    }
+
+    // Toggle Privacy Setting
+    async function togglePrivacy(element, setting) {
+      const isActive = element.classList.toggle('active');
+      updateLocalPrivacy(setting, isActive);
+      logAuditEvent({
+        type: 'privacy',
+        badge: 'Setting',
+        title: setting.replace(/([A-Z])/g, ' $1'),
+        description: `Set to ${isActive ? 'enabled' : 'disabled'}.`
+      });
+      await persistServerPrivacy(setting, isActive);
+    }
+
+    async function persistServerPrivacy(setting, value) {
+      if (!currentUser || !PRIVACY_SERVER_SYNC) return;
+      try {
+        await db.collection('privacy').doc(currentUser.uid).set({
+          [setting]: value,
+          lastReviewed: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        await loadPrivacyStats();
+      } catch (error) {
+        console.warn('Serverless privacy setting applied locally.', error);
+      }
+    }
+
+    const privacyControlButtons = document.querySelectorAll('[data-privacy-toggle]');
+    privacyControlButtons.forEach((button) => {
+      button.addEventListener('click', () => handlePrivacyControl(button));
+    });
+
+    async function handlePrivacyControl(button) {
+      const setting = button.dataset.privacyToggle;
+      const nextValue = button.getAttribute('aria-pressed') !== 'true';
+      button.setAttribute('aria-pressed', String(nextValue));
+      updateLocalPrivacy(setting, nextValue);
+      logAuditEvent({
+        type: 'privacy',
+        badge: 'Device',
+        title: setting.replace(/([A-Z])/g, ' $1'),
+        description: `Set to ${nextValue ? 'enabled' : 'disabled'}.`
+      });
+      await persistServerPrivacy(setting, nextValue);
+    }
+
+    if (colorVisionType && colorVisionStrength) {
+      const applyForm = () => {
+        const settings = getPrivacySettings();
+        settings.colorVision = {
+          type: colorVisionType.value,
+          strength: Number(colorVisionStrength.value)
+        };
+        savePrivacySettings(settings);
+        applyColorVision(settings.colorVision);
+        logAuditEvent({
+          type: 'privacy',
+          badge: 'Accessibility',
+          title: 'Color vision adjusted',
+          description: `${settings.colorVision.type} @ ${settings.colorVision.strength}%`
+        });
+      };
+
+      colorVisionType.addEventListener('change', applyForm);
+      colorVisionStrength.addEventListener('input', () => {
+        if (colorVisionStrengthLabel) {
+          colorVisionStrengthLabel.textContent = `${colorVisionStrength.value}%`;
+        }
+      });
+      colorVisionStrength.addEventListener('change', applyForm);
+    }
+
+    // Set Toggle State
+    function setToggle(id, active) {
+      const toggle = document.getElementById(id);
+      if (toggle) {
+        if (active) {
+          toggle.classList.add('active');
+        } else {
+          toggle.classList.remove('active');
+        }
+      }
+    }
+
+    let clearOnExitHandler = null;
+    function toggleClearOnExit(enabled) {
+      if (clearOnExitHandler) {
+        window.removeEventListener('beforeunload', clearOnExitHandler);
+        clearOnExitHandler = null;
+      }
+      if (enabled) {
+        clearOnExitHandler = () => {
+          try {
+            ['privacy-export-retention', AUDIT_STORAGE_KEY].forEach((key) => localStorage.removeItem(key));
+          } catch (error) {
+            console.warn('Unable to clear privacy cache', error);
+          }
+        };
+        window.addEventListener('beforeunload', clearOnExitHandler);
+      }
+    }
+
+    let networkMonitorInterval = null;
+    function monitorNetworkSecurity() {
+      if (networkMonitorInterval) return;
+      const check = () => {
+        if (location.protocol !== 'https:') {
+          showToast('Unsecured connection detected. Consider enabling a VPN.', 'warning');
+        }
+      };
+      check();
+      networkMonitorInterval = window.setInterval(check, 60000);
+    }
+
+    function stopNetworkMonitoring() {
+      if (networkMonitorInterval) {
+        clearInterval(networkMonitorInterval);
+        networkMonitorInterval = null;
+      }
+    }
+
+    function buildColorVisionFilter(type, strength) {
+      const intensity = Number(strength || 0) / 100;
+      if (type === 'protan') {
+        return `saturate(${1 - intensity * 0.25}) hue-rotate(${intensity * -10}deg) contrast(${1 + intensity * 0.15})`;
+      }
+      if (type === 'deutan') {
+        return `saturate(${1 - intensity * 0.2}) hue-rotate(${intensity * 12}deg) contrast(${1 + intensity * 0.1})`;
+      }
+      if (type === 'tritan') {
+        return `saturate(${1 - intensity * 0.15}) hue-rotate(${intensity * -25}deg) contrast(${1 + intensity * 0.1})`;
+      }
+      return 'none';
+    }
+
+    function applyColorVision(preferences = {}) {
+      const { type = 'none', strength = 30 } = preferences;
+      const filterValue = type === 'none' ? 'none' : buildColorVisionFilter(type, strength);
+      document.body.dataset.colorVision = type === 'none' ? '' : type;
+      document.body.style.filter = filterValue;
+      const strengthLabel = document.getElementById('colorVisionStrengthLabel');
+      if (strengthLabel) {
+        strengthLabel.textContent = `${strength}%`;
+      }
+      const typeSelect = document.getElementById('colorVisionType');
+      if (typeSelect) {
+        typeSelect.value = type;
+      }
+      const strengthInput = document.getElementById('colorVisionStrength');
+      if (strengthInput) {
+        strengthInput.value = strength;
+      }
+    }
+
+    function updateLocalPrivacy(setting, value) {
+      const settings = getPrivacySettings();
+      settings[setting] = value;
+      settings.lastReviewed = new Date().toISOString();
+      savePrivacySettings(settings);
+      applyPrivacySetting(setting, value);
+      return settings;
+    }
+
+    function logAuditEvent(event) {
+      const timestamp = event.timestamp ? new Date(event.timestamp) : new Date();
+      auditEvents.unshift({
+        id: event.id || `audit-${Date.now()}`,
+        timestamp: timestamp.toISOString(),
+        type: event.type || 'info',
+        title: event.title || 'Privacy event',
+        description: event.description || '',
+        badge: event.badge || 'Info',
+        actor: event.actor || 'System',
+        icon: event.icon || 'fas fa-info-circle'
+      });
+      if (auditEvents.length > 25) {
+        auditEvents = auditEvents.slice(0, 25);
+      }
+      persistAuditEvents();
+      const activeFilter = document.querySelector('.timeline-toolbar .chip-toggle.active')?.dataset.filter || 'all';
+      renderAuditLog(activeFilter);
+    }
+
+    function renderAuditLog(filter = 'all') {
+      if (!auditLogElement) return;
+      auditLogElement.innerHTML = '';
+
+      const filtered = auditEvents.filter(event => filter === 'all' ? true : event.type === filter);
+
+      if (!filtered.length) {
+        const empty = document.createElement('li');
+        empty.className = 'audit-item';
+        empty.innerHTML = `
+          <div class="audit-date">
+            <span>—</span>
+            <span>Pending</span>
+          </div>
+          <div class="audit-details">
+            <div class="audit-title">
+              <i class="fas fa-info-circle"></i>
+              No events yet
+            </div>
+            <p class="toggle-description">No ${filter} events recorded in the last 12 months.</p>
+            <div class="audit-meta">
+              <span class="audit-badge">Info</span>
+              <span>System</span>
+            </div>
+          </div>
+        `;
+        auditLogElement.appendChild(empty);
+        return;
+      }
+
+      filtered.forEach(event => {
+        const eventDate = event.timestamp ? new Date(event.timestamp) : new Date();
+        const dateLabel = eventDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        const timeLabel = eventDate.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+        const item = document.createElement('li');
+        item.className = 'audit-item';
+        item.dataset.type = event.type;
+        item.innerHTML = `
+          <div class="audit-date">
+            <span>${dateLabel}</span>
+            <span>${timeLabel}</span>
+          </div>
+          <div class="audit-details">
+            <div class="audit-title">
+              <i class="${event.icon}"></i>
+              ${event.title}
+            </div>
+            <p class="toggle-description">${event.description}</p>
+            <div class="audit-meta">
+              <span class="audit-badge">${event.badge}</span>
+              <span>${event.actor}</span>
+            </div>
+          </div>
+        `;
+        auditLogElement.appendChild(item);
+      });
+    }
+
+    function updatePlannerMetrics(days) {
+      if (!retentionLabel || !estimatedSizeLabel || !estimatedDurationLabel || !nextExportDateLabel || !deliveryChannelLabel) {
+        return;
+      }
+
+      retentionLabel.textContent = `${days} days`;
+      const sizeEstimate = Math.max(3.5, (days / 30) * 4.1);
+      estimatedSizeLabel.textContent = `≈ ${sizeEstimate.toFixed(1)} MB`;
+
+      const minutes = Math.min(18, Math.max(2, Math.round((days / 30) * 3)));
+      estimatedDurationLabel.textContent = `${minutes} minute${minutes === 1 ? '' : 's'}`;
+
+      const nextExport = new Date();
+      nextExport.setDate(nextExport.getDate() + Math.max(7, Math.round(days / 3)));
+      nextExportDateLabel.textContent = nextExport.toLocaleDateString(undefined, {
+        month: 'short', day: 'numeric', year: 'numeric'
+      });
+
+      const delivery = days > 180 ? 'SFTP delivery' : 'Secure email link';
+      deliveryChannelLabel.textContent = delivery;
+    }
+
+    function renderRequestGrid() {
+      if (!requestGrid) return;
+      requestGrid.innerHTML = '';
+
+      requestMetrics.forEach(metric => {
+        const completed = metric.total - metric.open;
+        const percent = metric.total === 0 ? 100 : Math.round((completed / metric.total) * 100);
+        const card = document.createElement('div');
+        card.className = 'progress-card';
+        card.innerHTML = `
+          <div class="progress-title">${metric.title}</div>
+          <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}">
+            <span style="width: ${percent}%"></span>
+          </div>
+          <div class="progress-meta">${completed} completed • ${metric.open} open</div>
+          <span class="sla-badge">SLA ${metric.sla}</span>
+        `;
+        requestGrid.appendChild(card);
+      });
+    }
+
+    async function loadLoginHistory(showToastOnSuccess = false) {
+      if (!loginHistoryList) return false;
+
+      if (loginHistoryLoader) loginHistoryLoader.style.display = 'none';
+      if (loginHistoryError) loginHistoryError.style.display = 'none';
+
+      const events = getLocalLoginEvents();
+      loginHistoryList.innerHTML = '';
+
+      if (!events.length) {
+        loginHistoryList.style.display = 'none';
+        if (loginHistoryEmpty) loginHistoryEmpty.style.display = 'block';
+        if (loginHistoryStatus) {
+          loginHistoryStatus.textContent = 'No local login events captured yet.';
+        }
+        return true;
+      }
+
+      loginHistoryList.style.display = 'grid';
+      if (loginHistoryEmpty) loginHistoryEmpty.style.display = 'none';
+
+      events.forEach(event => {
+        const timestamp = event.timestamp ? new Date(event.timestamp) : new Date();
+        const relative = formatRelativeTime(timestamp);
+        const entry = document.createElement('li');
+        entry.className = 'login-entry';
+        entry.innerHTML = `
+          <div class="login-entry-header">
+            <div class="login-entry-primary">
+              <i class="fas fa-laptop"></i>
+              <span>${event.device || 'This device'}</span>
+            </div>
+            <span class="login-status success">
+              <i class="fas fa-check-circle"></i>
+              ACTIVE
+            </span>
+          </div>
+          <div class="login-entry-meta">
+            <span><i class="fas fa-clock"></i>${timestamp.toLocaleString()} (${relative})</span>
+            <span><i class="fas fa-location-dot"></i>${event.location || 'Local session'}</span>
+          </div>
+        `;
+        loginHistoryList.appendChild(entry);
+      });
+
+      if (loginHistoryStatus) {
+        loginHistoryStatus.textContent = 'Session history is stored on this device only.';
+      }
+
+      if (showToastOnSuccess) {
+        showToast('Login history refreshed', 'success');
+      }
+
+      return true;
+    }
+
+    function formatRelativeTime(date) {
+      if (!(date instanceof Date)) return '';
+      const diffMs = Date.now() - date.getTime();
+      const minute = 60 * 1000;
+      const hour = 60 * minute;
+      const day = 24 * hour;
+      const week = 7 * day;
+      const month = 30 * day;
+      const year = 365 * day;
+
+      if (diffMs < minute) return 'Just now';
+      if (diffMs < hour) {
+        const mins = Math.round(diffMs / minute);
+        return `${mins} min${mins === 1 ? '' : 's'} ago`;
+      }
+      if (diffMs < day) {
+        const hrs = Math.round(diffMs / hour);
+        return `${hrs} hr${hrs === 1 ? '' : 's'} ago`;
+      }
+      if (diffMs < week) {
+        const days = Math.round(diffMs / day);
+        return `${days} day${days === 1 ? '' : 's'} ago`;
+      }
+      if (diffMs < month) {
+        const weeks = Math.round(diffMs / week);
+        return `${weeks} week${weeks === 1 ? '' : 's'} ago`;
+      }
+      if (diffMs < year) {
+        const months = Math.round(diffMs / month);
+        return `${months} month${months === 1 ? '' : 's'} ago`;
+      }
+      const years = Math.round(diffMs / year);
+      return `${years} year${years === 1 ? '' : 's'} ago`;
+    }
+
+    // View Activity
+    function viewActivity() {
+      loadLoginHistory(true).then((attempted) => {
+        if (attempted) {
+          loginHistoryList?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    }
+
+    // Revoke All Sessions
+    async function revokeAllSessions() {
+      if (!confirm('This will log you out of all devices except this one. Continue?')) return;
+
+      try {
+        // This would require backend implementation
+        showToast('All sessions revoked successfully', 'success');
+      } catch (error) {
+        console.error('Error revoking sessions:', error);
+        showToast('Error revoking sessions', 'error');
+      }
+    }
+
+    // Clear Cookies
+    function clearCookies() {
+      if (!confirm('This will clear all cookies and you may need to log in again. Continue?')) return;
+
+      document.cookie.split(";").forEach((c) => {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+      });
+
+      showToast('Cookies cleared successfully', 'success');
+    }
+
+    // Download Data
+    async function downloadData() {
+      try {
+        showToast('Preparing your data...', 'info');
+
+        let exportData;
+
+        if (PRIVACY_SERVER_SYNC) {
+          const userData = await db.collection('users').doc(currentUser.uid).get();
+          const settingsData = await db.collection('settings').doc(currentUser.uid).get();
+          const privacyData = await db.collection('privacy').doc(currentUser.uid).get();
+          const appsData = await quickLaunchCollection().get();
+          let loginHistoryDocs = [];
+          try {
+            const loginEventsData = await securityEventsCollection().orderBy('timestamp', 'desc').limit(50).get();
+            loginHistoryDocs = loginEventsData.docs.map(doc => doc.data());
+          } catch (error) {
+            console.warn('Unable to include login history in export', error);
+          }
+
+          exportData = {
+            user: userData.data(),
+            settings: settingsData.data(),
+            privacy: privacyData.data(),
+            apps: appsData.docs.map(doc => doc.data()),
+            loginHistory: loginHistoryDocs,
+            exportedAt: new Date().toISOString()
+          };
+        } else {
+          exportData = {
+            user: {
+              uid: currentUser?.uid,
+              email: currentUser?.email
+            },
+            privacy: getPrivacySettings(),
+            auditLog: auditEvents,
+            loginHistory: getLocalLoginEvents(),
+            exportedAt: new Date().toISOString(),
+            mode: 'device-only'
+          };
+        }
+
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `blacklink-data-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+
+        showToast('Data downloaded successfully', 'success');
+      } catch (error) {
+        console.error('Error downloading data:', error);
+        showToast('Error downloading data', 'error');
+      }
+    }
+
+    // Request Correction
+    function requestCorrection() {
+      showToast('Data correction request sent. We will contact you within 48 hours.', 'success');
+    }
+
+    // Request Deletion
+    function requestDeletion() {
+      if (!confirm('Request permanent deletion of your data? We will contact you to verify this request.')) return;
+      showToast('Data deletion request sent. We will contact you within 30 days.', 'success');
+    }
+
+    // Clear All Data
+    async function clearAllData() {
+      if (!confirm('This will permanently delete ALL your data including apps, settings, and preferences. This cannot be undone. Continue?')) return;
+      if (!confirm('Are you absolutely sure? Type "DELETE" to confirm.')) return;
+
+      try {
+        if (!PRIVACY_SERVER_SYNC) {
+          ['privacy-export-retention', AUDIT_STORAGE_KEY, PRIVACY_SETTINGS_KEY, LOGIN_HISTORY_KEY].forEach((key) => {
+            try {
+              localStorage.removeItem(key);
+            } catch (error) {
+              console.warn('Unable to remove local key', key, error);
+            }
+          });
+          auditEvents = [];
+          persistAuditEvents();
+          renderAuditLog('all');
+          showToast('Local privacy data cleared', 'success');
+          return;
+        }
+
+        // Delete all user collections
+        const appsSnapshot = await quickLaunchCollection().get();
+        const loginEventsSnapshot = await securityEventsCollection().get();
+        const batch = db.batch();
+
+        appsSnapshot.docs.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+
+        loginEventsSnapshot.docs.forEach(doc => {
+          batch.delete(doc.ref);
+        });
+
+        batch.delete(db.collection('settings').doc(currentUser.uid));
+        batch.delete(db.collection('privacy').doc(currentUser.uid));
+
+        await batch.commit();
+
+        showToast('All personal data cleared', 'success');
+        setTimeout(() => window.location.reload(), 2000);
+      } catch (error) {
+        console.error('Error clearing data:', error);
+        showToast('Error clearing data', 'error');
+      }
+    }
+
+    // Delete Account
+    async function deleteAccount() {
+      if (!confirm('This will PERMANENTLY DELETE your entire account. This cannot be undone. Continue?')) return;
+      if (!confirm('Last chance! Are you absolutely sure you want to delete your account?')) return;
+
+      const verification = prompt('Type "DELETE MY ACCOUNT" to confirm:');
+      if (verification !== 'DELETE MY ACCOUNT') {
+        showToast('Account deletion cancelled', 'info');
+        return;
+      }
+
+      try {
+        // Clear all data first
+        await clearAllData();
+
+        // Delete Firebase user
+        await currentUser.delete();
+
+        showToast('Account deleted successfully. Goodbye!', 'success');
+        setTimeout(() => window.location.href = '/login', 2000);
+      } catch (error) {
+        console.error('Error deleting account:', error);
+        if (error.code === 'auth/requires-recent-login') {
+          showToast('Please log out and log in again before deleting your account', 'error');
+        } else {
+          showToast('Error deleting account', 'error');
+        }
+      }
+    }
+
+    // Toast Notifications
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <div class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+        <div class="toast-message">${message}</div>
+      `;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+
+</html>

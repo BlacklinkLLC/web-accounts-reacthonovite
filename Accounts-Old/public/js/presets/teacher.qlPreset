@@ -1,0 +1,166 @@
+{
+  "presetId": "teacher-workspace",
+  "name": "Teacher Workspace",
+  "description": "Professional tools for educators including gradebooks, lesson planning, and classroom management.",
+  "version": "1.0.0",
+  "targetAudience": "teachers",
+  "icon": "👩‍🏫",
+  "color": "#10b981",
+  "apps": [
+    {
+      "id": "gradebook",
+      "name": "Gradebook",
+      "url": "https://gradebook.blacklink.net",
+      "icon": "📊",
+      "color": "#10b981",
+      "description": "Modern gradebook with standards-based grading and analytics.",
+      "category": "classroom-management",
+      "tier": "ultra",
+      "pinned": true,
+      "tags": ["grading", "assessment", "analytics"]
+    },
+    {
+      "id": "lesson-planner",
+      "name": "Lesson Planner",
+      "url": "https://lessons.blacklink.net",
+      "icon": "📋",
+      "color": "#6366f1",
+      "description": "Design, organize, and share lesson plans aligned with standards.",
+      "category": "planning",
+      "tier": "free",
+      "pinned": true,
+      "tags": ["lessons", "planning", "curriculum"]
+    },
+    {
+      "id": "classroom",
+      "name": "Classroom Hub",
+      "url": "https://classroom.blacklink.net",
+      "icon": "🏫",
+      "color": "#f59e0b",
+      "description": "Manage assignments, attendance, and student communications.",
+      "category": "classroom-management",
+      "tier": "free",
+      "pinned": true,
+      "tags": ["classroom", "students", "communication"]
+    },
+    {
+      "id": "note26",
+      "name": "Note26",
+      "url": "https://note.blacklink.net/26",
+      "icon": "📝",
+      "color": "#6366f1",
+      "description": "Collaborative documents for handouts and class materials.",
+      "category": "content-creation",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["documents", "handouts", "materials"]
+    },
+    {
+      "id": "trust",
+      "name": "Blacklink Trust",
+      "url": "https://trust.blacklink.net",
+      "icon": "✅",
+      "color": "#22c55e",
+      "description": "Curate and verify educational resources for students.",
+      "category": "content-creation",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["resources", "verification", "curation"]
+    },
+    {
+      "id": "analytics",
+      "name": "Class Analytics",
+      "url": "https://analytics.blacklink.net/class",
+      "icon": "📈",
+      "color": "#8b5cf6",
+      "description": "Track student progress and identify learning gaps.",
+      "category": "classroom-management",
+      "tier": "ultra",
+      "pinned": false,
+      "tags": ["data", "progress", "insights"]
+    },
+    {
+      "id": "resource-library",
+      "name": "Resource Library",
+      "url": "https://library.blacklink.net/teacher",
+      "icon": "📚",
+      "color": "#ec4899",
+      "description": "Access teaching materials, worksheets, and lesson templates.",
+      "category": "content-creation",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["materials", "templates", "worksheets"]
+    },
+    {
+      "id": "parent-portal",
+      "name": "Parent Portal",
+      "url": "https://parents.blacklink.net",
+      "icon": "👨‍👩‍👧‍👦",
+      "color": "#f97316",
+      "description": "Share progress reports and communicate with families.",
+      "category": "communication",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["parents", "communication", "reports"]
+    }
+  ],
+  "categories": {
+    "classroom-management": {
+      "name": "Classroom Management",
+      "icon": "🏫",
+      "color": "#10b981",
+      "sortOrder": 1
+    },
+    "planning": {
+      "name": "Planning & Curriculum",
+      "icon": "📋",
+      "color": "#6366f1",
+      "sortOrder": 2
+    },
+    "content-creation": {
+      "name": "Content Creation",
+      "icon": "✏️",
+      "color": "#f59e0b",
+      "sortOrder": 3
+    },
+    "communication": {
+      "name": "Communication",
+      "icon": "💬",
+      "color": "#f97316",
+      "sortOrder": 4
+    }
+  },
+  "recommendations": [
+    {
+      "condition": "tier === 'ULTRA'",
+      "apps": ["gradebook", "analytics", "advanced-reporting"]
+    },
+    {
+      "condition": "startOfSchoolYear",
+      "apps": ["lesson-planner", "classroom", "parent-portal"]
+    }
+  ],
+  "quickActions": [
+    {
+      "id": "take-attendance",
+      "name": "Take Attendance",
+      "icon": "✓",
+      "action": "openAttendance",
+      "color": "#10b981"
+    },
+    {
+      "id": "grade-assignments",
+      "name": "Grade Assignments",
+      "icon": "📝",
+      "action": "openGrading",
+      "color": "#6366f1"
+    },
+    {
+      "id": "post-announcement",
+      "name": "Post Announcement",
+      "icon": "📢",
+      "action": "createAnnouncement",
+      "color": "#f59e0b"
+    }
+  ]
+}

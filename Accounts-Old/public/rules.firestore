@@ -1,0 +1,184 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =========================
+    // ===== HELPER FUNCTIONS =====
+    // =========================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function hasClaim(claim) {
+      return isAuthenticated() && request.auth.token[claim] == true;
+    }
+
+    function isBlacklinkStaff() {
+      return isAuthenticated()
+        && request.auth.token.email != null
+        && request.auth.token.email.matches('(?i).*@blacklink\\.net$');
+    }
+
+    function isAdmin() {
+      return hasClaim('admin') || isBlacklinkStaff() || hasAdminField();
+    }
+
+    function hasAdminField() {
+      return isAuthenticated()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true;
+    }
+
+    function isRecognizedApp(appName) {
+      return appName in ['note26', 'note25', 'trust', 'product_pulse', 'quicklaunch', 'aero'];
+    }
+
+    // =========================
+    // ===== USER PROFILES =====
+    // =========================
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    // =========================
+    // ===== USER SETTINGS =====
+    // =========================
+    match /settings/{userId} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // =========================
+    // ===== SUBSCRIPTIONS =====
+    // =========================
+    match /subscriptions/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      // Only server-side code (via Admin SDK) should create or update subscriptions.
+      allow write: if false;
+    }
+
+    match /aero_tokens/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if false;
+    }
+
+    match /aero_usage/{userId}/{document=**} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow write: if false;
+    }
+
+    // =========================
+    // ===== ORGANIZATIONS & TEAMS (v3.9) =====
+    // =========================
+    function isOrgMember(orgId) {
+      return isAuthenticated()
+        && exists(/databases/$(database)/documents/organizations/$(orgId)/members/$(request.auth.uid));
+    }
+
+    function isOrgAdmin(orgId) {
+      return isOrgMember(orgId)
+        && get(/databases/$(database)/documents/organizations/$(orgId)/members/$(request.auth.uid)).data.role in ['admin', 'owner'];
+    }
+
+    function isOrgOwner(orgId) {
+      return isAuthenticated()
+        && (
+          (resource != null && resource.data.owner == request.auth.uid)
+          || get(/databases/$(database)/documents/organizations/$(orgId)).data.owner == request.auth.uid
+        );
+    }
+
+    match /organizations/{orgId} {
+      // Anyone can read basic org info if they're a member
+      allow read: if isOrgMember(orgId) || (resource != null && resource.data.owner == request.auth.uid);
+      // Only owners or admins within the org can write
+      allow write: if isOrgAdmin(orgId) || (resource != null && resource.data.owner == request.auth.uid);
+      // Creation allowed for authenticated users
+      allow create: if isAuthenticated();
+
+      // Organization members subcollection
+      match /members/{userId} {
+        allow read: if isOrgMember(orgId) || isOrgOwner(orgId);
+        allow write: if isOrgAdmin(orgId) || isOrgOwner(orgId);
+      }
+
+      // Organization invites
+      match /invites/{inviteId} {
+        allow read: if isOrgMember(orgId) || isOrgOwner(orgId);
+        allow write: if isOrgAdmin(orgId) || isOrgOwner(orgId);
+      }
+
+      // Shared Aero AI credits pool
+      match /aero_pool/{document=**} {
+        allow read: if isOrgMember(orgId) || isOrgOwner(orgId);
+        allow write: if false; // Only server-side updates
+      }
+    }
+
+    // =========================
+    // ===== BILLING & AUTOMATION =====
+    // =========================
+    match /billing_sync/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    match /webhooks/{provider}/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // =========================
+    // ===== NOTE26 =====
+    // =========================
+    match /note26/{userId}/private/{noteId=**} {
+      allow read, write: if isOwner(userId);
+    }
+
+    match /note26/{userId}/shared/{noteId=**} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId);
+    }
+
+    // =========================
+    // ===== NOTE25 =====
+    // =========================
+    match /note25/{userId}/notes/{noteId=**} {
+      allow read, write: if isOwner(userId);
+    }
+
+    // =========================
+    // ===== GENERIC BLACKLINK APP STRUCTURE =====
+    // =========================
+    // Supports nested subcollections (e.g., product_pulse/{userId}/tasks/{taskId}/subtasks/{subtaskId})
+    match /{appName}/{userId}/{path=**} {
+      allow read, write: if isRecognizedApp(appName) && isOwner(userId);
+    }
+
+    // =========================
+    // ===== PUBLIC / ANALYTICS / ADMIN =====
+    // =========================
+    match /public/{document=**} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /analytics/{document=**} {
+      allow write: if isAuthenticated();
+      allow read: if isAdmin();
+    }
+
+    match /admin/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    // =========================
+    // ===== DEFAULT DENY =====
+    // =========================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Blacklink Accounts</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Modular CSS (v3.9) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/nav.css">
+
+  <!-- Page-specific styles -->
+  <style>
+    body {
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+      color: var(--text);
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .nav-link:hover {
+      color: var(--primary);
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      text-align: center;
+      margin-bottom: 4rem;
+      padding: 3rem 0;
+    }
+
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+      border: 2px solid var(--primary);
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      font-size: 1.125rem;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, #667eea, #764ba2, #f093fb);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+
+    .hero-description {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    /* Roadmap */
+    .roadmap {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .roadmap-item {
+      background: rgba(99, 102, 241, 0.05);
+      border-left: 4px solid var(--primary);
+      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .roadmap-item:hover {
+      background: rgba(99, 102, 241, 0.1);
+      transform: translateX(5px);
+    }
+
+    .roadmap-version {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .roadmap-version.current {
+      background: var(--success);
+    }
+
+    .roadmap-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .roadmap-description {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .feature-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--text-secondary);
+      font-size: 0.9375rem;
+    }
+
+    .feature-list i {
+      color: var(--success);
+      font-size: 1rem;
+    }
+
+    .roadmap-version.highlight {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      padding: 0.375rem 1rem;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .roadmap-subsection {
+      margin: 1.5rem 0;
+      padding: 1.25rem;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 8px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .roadmap-subsection h4 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .roadmap-subsection h4 i {
+      color: var(--primary);
+    }
+
+    .roadmap-subsection p {
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      font-size: 0.9375rem;
+    }
+
+    .roadmap-subsection .feature-list {
+      margin-left: 1rem;
+    }
+
+    .code-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 1rem;
+      padding: 1rem;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .code-block code {
+      font-family: 'Courier New', monospace;
+      color: var(--primary);
+      font-size: 0.875rem;
+      padding: 0.375rem 0.75rem;
+      background: rgba(99, 102, 241, 0.1);
+      border-radius: 4px;
+      display: inline-block;
+    }
+
+    /* Build Info */
+    .build-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .build-stat {
+      background: rgba(99, 102, 241, 0.05);
+      border: 2px solid var(--border);
+      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+
+    .build-stat-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .build-stat-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Team */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .team-member {
+      text-align: center;
+      padding: 1.5rem;
+      background: rgba(99, 102, 241, 0.05);
+      border-radius: var(--radius-sm);
+      transition: var(--transition);
+    }
+
+    .team-member:hover {
+      background: rgba(99, 102, 241, 0.1);
+      transform: translateY(-5px);
+    }
+
+    .team-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 50%;
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .team-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .team-role {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--card-bg);
+      border-top: 1px solid var(--border);
+      padding: 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      margin-top: 4rem;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .build-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar Container (populated by navbar.js) -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="version-badge">
+        <i class="fas fa-code-branch"></i>
+        Version 3.9 Build 39C05022026
+      </div>
+      <h1>About Blacklink Accounts</h1>
+      <p class="hero-description">
+        The unified authentication and subscription platform powering all Blacklink products with ULTRA tiers, Aero AI
+        credits, and premium features.
+      </p>
+    </section>
+
+    <!-- Current Build Info -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-info-circle"></i>
+        </div>
+        <h2>Current Build</h2>
+      </div>
+      <div class="build-grid">
+        <div class="build-stat">
+          <div class="build-stat-label">Version</div>
+          <div class="build-stat-value">3.9</div>
+        </div>
+        <div class="build-stat">
+          <div class="build-stat-label">Build Number</div>
+          <div class="build-stat-value">39C05022026</div>
+        </div>
+        <div class="build-stat">
+          <div class="build-stat-label">Release Date</div>
+          <div class="build-stat-value">February 5th 2026</div>
+        </div>
+        <div class="build-stat">
+          <div class="build-stat-label">Status</div>
+          <div class="build-stat-value" style="color: var(--success);">Stable</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- What's New in 3.9 -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-sparkles"></i>
+        </div>
+        <h2>What's New in Accounts 3.9</h2>
+      </div>
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+        Bridge release introducing teams, organizations, modular architecture, and 25+ premium themes.
+      </p>
+      <div class="feature-list">
+        <li><i class="fas fa-check-circle"></i> Organizations & Teams with role-based permissions (owner, admin, member)</li>
+        <li><i class="fas fa-check-circle"></i> Shared AeroAI credits pool for team collaboration</li>
+        <li><i class="fas fa-check-circle"></i> 25+ premium themes including Dracula, Monokai, Tokyo Night, and more</li>
+        <li><i class="fas fa-check-circle"></i> Modular CSS & JavaScript architecture for better maintainability</li>
+        <li><i class="fas fa-check-circle"></i> ULTRA+ tier with priority features and beta access</li>
+        <li><i class="fas fa-check-circle"></i> Advanced analytics tracking system for user interactions</li>
+        <li><i class="fas fa-check-circle"></i> ClassLink discovery mode and Connect API groundwork</li>
+        <li><i class="fas fa-check-circle"></i> Enhanced SSO with JWT token support and external providers</li>
+        <li><i class="fas fa-check-circle"></i> Accessibility options (reduce motion, high contrast, font scaling)</li>
+        <li><i class="fas fa-check-circle"></i> Organization dashboard with member management</li>
+        <li><i class="fas fa-check-circle"></i> Live theme preview with interactive picker</li>
+        <li><i class="fas fa-check-circle"></i> Comprehensive Firestore security rules for organizations</li>
+      </div>
+    </div>
+
+    <!-- Roadmap -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-road"></i>
+        </div>
+        <h2>Roadmap</h2>
+      </div>
+      <div class="roadmap">
+        <!-- Current Version -->
+        <div class="roadmap-item">
+          <span class="roadmap-version current">v3.9 (Current)</span>
+          <div class="roadmap-title">Teams, Organizations, and Modular Architecture</div>
+          <div class="roadmap-description">
+            Bridge release between 3.8 and 4.0. Focused on collaborative management, modular codebase, and backend readiness.
+          </div>
+          <ul class="feature-list">
+            <li><i class="fas fa-check-circle"></i> Team subscriptions and organization accounts</li>
+            <li><i class="fas fa-check-circle"></i> Shared AeroAI credits between team members</li>
+            <li><i class="fas fa-check-circle"></i> Organization dashboard with roles & permissions</li>
+            <li><i class="fas fa-check-circle"></i> Connect API groundwork (OAuth2 structure & key management)</li>
+            <li><i class="fas fa-check-circle"></i> ClassLink discovery (without full rostering yet)</li>
+            <li><i class="fas fa-check-circle"></i> ULTRA+ early access features (priority AI queue, beta access)</li>
+            <li><i class="fas fa-check-circle"></i> Modular CSS & JavaScript architecture</li>
+            <li><i class="fas fa-check-circle"></i> Advanced analytics tracking system</li>
+            <li><i class="fas fa-check-circle"></i> 25+ premium themes (Monokai, Dracula, Tokyo Night, and more)</li>
+            <li><i class="fas fa-check-circle"></i> Live theme preview with interactive picker</li>
+          </ul>
+        </div>
+
+        <div class="roadmap-item">
+          <span class="roadmap-version highlight">v4.0</span>
+          <div class="roadmap-title">Accounts 4.0 - Major Platform Upgrade</div>
+          <div class="roadmap-description">
+            Complete overhaul of Blacklink Accounts with improved architecture, new products, and updated policies.
+          </div>
+
+          <div class="roadmap-subsection">
+            <h4><i class="fas fa-database"></i> Firestore Architecture Upgrade</h4>
+            <p>Migration to organized document structure for improved performance and scalability:</p>
+            <div class="code-block">
+              <code>users/[userid]/billing</code>
+              <code>users/[userid]/profile</code>
+              <code>users/[userid]/avatar</code>
+              <code>users/[userid]/accessibility</code>
+              <code>users/[userid]/settings</code>
+              <code>users/[userid]/privacy</code>
+            </div>
+          </div>
+
+          <div class="roadmap-subsection">
+            <h4><i class="fas fa-crown"></i> Expanded ULTRA+ Features</h4>
+            <p>New exclusive features and capabilities for ULTRA+ subscribers to enhance the premium experience.</p>
+          </div>
+
+          <div class="roadmap-subsection">
+            <h4><i class="fas fa-users"></i> Social Preferences & New Products</h4>
+            <p>Central configuration platform for all Blacklink products:</p>
+            <ul class="feature-list">
+              <li><i class="fas fa-circle"></i> <strong>Messages</strong> - Built into Accounts 4.0</li>
+              <li><i class="fas fa-circle"></i> <strong>Community</strong> - New social media platform</li>
+              <li><i class="fas fa-circle"></i> Integration with QuickLaunch, Connect, and existing products</li>
+            </ul>
+          </div>
+
+          <div class="roadmap-subsection">
+            <h4><i class="fas fa-gavel"></i> Updated Legal & Privacy Policies</h4>
+            <p>Comprehensive policy updates to reflect platform growth:</p>
+            <ul class="feature-list">
+              <li><i class="fas fa-circle"></i> <strong>AUP</strong> - Acceptable Use Policy</li>
+              <li><i class="fas fa-circle"></i> <strong>TOS</strong> - Terms of Service</li>
+              <li><i class="fas fa-circle"></i> <strong>Privacy Policy</strong> - Enhanced data protection</li>
+              <li><i class="fas fa-circle"></i> <strong>AUR</strong> - Accessibility Users Rights Policy</li>
+              <li><i class="fas fa-circle"></i> <strong>SDPP</strong> - Student Data Privacy Pledge</li>
+              <li><i class="fas fa-circle"></i> <strong>3DPP</strong> - Third Party Data Practices Policy (New)</li>
+            </ul>
+          </div>
+
+          <div class="roadmap-subsection">
+            <h4><i class="fas fa-link"></i> Connect & SSO Enhancements</h4>
+            <p>Major updates to authentication and rostering:</p>
+            <ul class="feature-list">
+              <li><i class="fas fa-circle"></i> <strong>ClassLink Integration</strong> - OneRoster support for rostering data (classes, districts)</li>
+              <li><i class="fas fa-circle"></i> <strong>OpenSiS Framework</strong> - Powers upcoming SiS product (github.com/BlacklinkLLC/OpenSiS)</li>
+              <li><i class="fas fa-circle"></i> <strong>Third-Party SSO</strong> - Allow external apps to integrate Blacklink authentication</li>
+              <li><i class="fas fa-circle"></i> <strong>External SSO URL</strong> - accounts.blacklink.net/sso/external?token=[JWT]</li>
+              <li><i class="fas fa-circle"></i> <strong>Privacy Controls</strong> - User-controlled data sharing through SSO page</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technologies -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-code"></i>
+        </div>
+        <h2>Platform Technology</h2>
+      </div>
+      <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+        Blacklink Accounts is built on modern, scalable Firebase infrastructure with security-first architecture.
+      </p>
+      <div class="feature-list">
+        <li><i class="fas fa-fire"></i> Firebase Authentication - Multi-provider SSO support</li>
+        <li><i class="fas fa-database"></i> Cloud Firestore - Real-time NoSQL database</li>
+        <li><i class="fas fa-server"></i> Firebase Hosting - Global CDN delivery</li>
+        <li><i class="fas fa-shield-alt"></i> Advanced Security Rules - Comprehensive access control</li>
+        <li><i class="fas fa-palette"></i> Custom CSS Variables - Dynamic theming system</li>
+        <li><i class="fas fa-coffee"></i> Buy Me a Coffee API - Subscription payments</li>
+      </div>
+    </div>
+
+    <!-- Team -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon">
+          <i class="fas fa-users"></i>
+        </div>
+        <h2>Team</h2>
+      </div>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="team-avatar">B</div>
+          <div class="team-name">Blacklink Team</div>
+          <div class="team-role">Development & Design</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>&copy; 2025 Blacklink Accounts. All rights reserved.</p>
+    <p style="margin-top: 0.5rem; font-size: 0.875rem; color: var(--text-muted);">
+      The unified authentication platform for all Blacklink products
+    </p>
+    <p style="margin-top: 0.75rem;">
+      <a href="/privacy.html" style="color: var(--primary); text-decoration: none;">Privacy Policy</a> •
+      <a href="/settings.html" style="color: var(--primary); text-decoration: none;">Settings</a> •
+      <a href="https://buymeacoffee.com/Blacklink" target="_blank"
+        style="color: var(--primary); text-decoration: none;">Support Us</a>
+    </p>
+  </footer>
+
+  <!-- Modular JavaScript (v3.9) -->
+  <script src="js/navbar.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/analytics-compat.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Initialize modular navbar
+    Navbar.initNavbar(auth, db, 'about');
+
+    // Redirect if not authenticated (optional - remove if you want public access)
+    auth.onAuthStateChanged((user) => {
+      if (!user) {
+        // Uncomment to require login
+        // window.location.href = '/login.html';
+      }
+    });
+  </script>
+</body>
+
+</html>

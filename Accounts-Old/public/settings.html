@@ -1,0 +1,2710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Blacklink</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Modular CSS (v3.9) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/nav.css">
+
+  <!-- Page-specific styles -->
+  <style>
+    body {
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-header p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+    }
+
+    /* Settings Cards */
+    .settings-section {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .section-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .section-description {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Toggle Item */
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      margin-bottom: 1rem;
+      border: 2px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .toggle-item:hover {
+      border-color: var(--primary-light);
+    }
+
+    .toggle-info {
+      flex: 1;
+    }
+
+    .toggle-label {
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .toggle-description {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 56px;
+      height: 28px;
+      background: var(--border);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .toggle-switch::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 22px;
+      height: 22px;
+      background: white;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+
+    .toggle-switch.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .toggle-switch.active::before {
+      transform: translateX(28px);
+    }
+
+    /* Select Dropdown */
+    .select-item {
+      margin-bottom: 1.5rem;
+    }
+
+    .select-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+    }
+
+    .select-dropdown {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .select-dropdown:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    }
+
+    .select-dropdown:hover {
+      border-color: var(--primary-light);
+    }
+
+    /* Form Elements */
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.875rem;
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+    }
+
+    .form-help {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 0.875rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary-light);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .toast {
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.5rem;
+      box-shadow: var(--shadow-lg);
+      border-left: 4px solid var(--primary);
+      min-width: 300px;
+      animation: slideInRight 0.3s ease;
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    .toast.success { border-left-color: var(--success); }
+    .toast.error { border-left-color: var(--danger); }
+
+    .toast-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .toast-message {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+    }
+
+    /* Profile Section */
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      color: white;
+      margin: 0 auto 1rem;
+    }
+
+    .avatar-upload-btn {
+      display: block;
+      margin: 0 auto 2rem;
+      cursor: pointer;
+    }
+
+    /* Subscription Section */
+    .subscription-status-message {
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: rgba(99, 102, 241, 0.08);
+      color: var(--text-secondary);
+      margin-bottom: 1.5rem;
+      display: none;
+      line-height: 1.4;
+    }
+
+    .subscription-status-message strong {
+      color: var(--text);
+    }
+
+    .subscription-status-message.error {
+      border-color: rgba(239, 68, 68, 0.45);
+      background: rgba(239, 68, 68, 0.12);
+      color: var(--text);
+    }
+
+    .subscription-status-message.warning {
+      border-color: rgba(245, 158, 11, 0.45);
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--text);
+    }
+
+    .subscription-status-message a {
+      color: var(--primary-light);
+      text-decoration: underline;
+    }
+
+    .subscription-current {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 1.5rem;
+    }
+
+    .subscription-tier {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .tier-badge {
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .tier-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .tier-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Aero Tokens Card */
+    .aero-tokens {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+      border: 2px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .aero-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .aero-icon {
+      font-size: 2.5rem;
+    }
+
+    .aero-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .aero-subtitle {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .aero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .aero-stat {
+      text-align: center;
+    }
+
+    .aero-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.25rem;
+    }
+
+    .aero-stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #10b981;
+    }
+
+    .aero-progress {
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .aero-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #10b981, #059669);
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    /* Subscription Plans */
+    .subscription-plans {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .plan-card {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 2rem;
+      position: relative;
+      transition: var(--transition);
+    }
+
+    .plan-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+    }
+
+    .plan-featured {
+      border-color: #f59e0b;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(217, 119, 6, 0.05));
+    }
+
+    .plan-featured:hover {
+      border-color: #f59e0b;
+      box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+    }
+
+    .plan-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .plan-badge-featured {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.875rem;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .plan-recommended {
+      position: absolute;
+      top: -12px;
+      right: 20px;
+      background: #f59e0b;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .plan-price {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-period {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .plan-description {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .plan-features {
+      margin-bottom: 1.5rem;
+    }
+
+    .plan-feature {
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .plan-feature:last-child {
+      border-bottom: none;
+    }
+
+    .plan-btn {
+      width: 100%;
+      justify-content: center;
+      font-size: 1rem;
+      padding: 1rem;
+    }
+
+    /* Subscription Info */
+    .subscription-info {
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .info-row:last-child {
+      border-bottom: none;
+    }
+
+    .info-label {
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .info-value {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .page-header h1 {
+        font-size: 1.75rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .btn-group {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .subscription-plans {
+        grid-template-columns: 1fr;
+      }
+
+      .subscription-current {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+      }
+
+      .aero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .plan-price {
+        font-size: 2.5rem;
+      }
+    }
+
+    /* Theme Preview and Picker Styles */
+    .theme-preview-container {
+      margin: 2rem 0;
+    }
+
+    .theme-preview-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .theme-preview {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .preview-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 1rem 1.5rem;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .preview-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .preview-nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .preview-nav-item {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+
+    .preview-nav-item.active {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+    }
+
+    .preview-content {
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+    }
+
+    .preview-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .preview-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+
+    .preview-card-text {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+
+    .preview-button {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .preview-card-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-stat {
+      text-align: center;
+    }
+
+    .preview-stat-value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .preview-stat-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Theme Picker */
+    .theme-picker-section {
+      margin: 2rem 0;
+    }
+
+    .theme-picker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .theme-picker-title {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .theme-picker-count {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .theme-card {
+      position: relative;
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: var(--transition);
+      overflow: hidden;
+    }
+
+    .theme-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      border-color: var(--primary);
+    }
+
+    .theme-card.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .theme-card.locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .theme-card.locked:hover {
+      transform: none;
+      box-shadow: none;
+      border-color: var(--border);
+    }
+
+    .theme-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .theme-card-name {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .theme-card-badge {
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+      border-radius: 999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .theme-card-lock {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .theme-card-preview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+      margin-bottom: 0.75rem;
+    }
+
+    .theme-color-swatch {
+      height: 32px;
+      border-radius: 6px;
+    }
+
+    .theme-card-meta {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Accessibility Section */
+    .accessibility-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+
+    .accessibility-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .accessibility-header i {
+      color: var(--primary);
+      font-size: 1.25rem;
+    }
+
+    /* Display Settings Section */
+    .display-settings-section {
+      margin: 2rem 0;
+    }
+
+    .section-subtitle {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    /* Accessibility Modifiers */
+    [data-reduce-motion="true"] * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+
+    [data-large-text="true"] {
+      font-size: 1.125rem !important;
+    }
+
+    [data-large-text="true"] .section-title {
+      font-size: 1.75rem !important;
+    }
+
+    [data-large-text="true"] .select-dropdown,
+    [data-large-text="true"] .toggle-label {
+      font-size: 1.125rem !important;
+    }
+
+    [data-text-spacing="relaxed"] {
+      line-height: 1.8 !important;
+      letter-spacing: 0.02em !important;
+    }
+
+    [data-text-spacing="loose"] {
+      line-height: 2 !important;
+      letter-spacing: 0.04em !important;
+    }
+
+    [data-smooth-scrolling="true"] {
+      scroll-behavior: smooth;
+    }
+
+    [data-compact-mode="true"] .settings-section {
+      padding: 1rem !important;
+    }
+
+    [data-compact-mode="true"] .toggle-item,
+    [data-compact-mode="true"] .select-item {
+      padding: 0.75rem !important;
+    }
+
+    /* Font Family Options */
+    [data-font-family="system"] {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif !important;
+    }
+
+    [data-font-family="opensans"] {
+      font-family: 'Open Sans', sans-serif !important;
+    }
+
+    [data-font-family="roboto"] {
+      font-family: 'Roboto', sans-serif !important;
+    }
+
+    [data-font-family="poppins"] {
+      font-family: 'Poppins', sans-serif !important;
+    }
+
+    [data-font-family="monospace"] {
+      font-family: 'Courier New', monospace !important;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar Container (populated by navbar.js) -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <div class="page-header">
+      <h1>Settings</h1>
+      <p>Customize your Blacklink experience</p>
+    </div>
+
+    <!-- Profile Settings -->
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-user"></i>
+        </div>
+        <div>
+          <div class="section-title">Profile</div>
+        </div>
+      </div>
+      <p class="section-description">Manage your personal information and account details</p>
+
+      <div class="profile-avatar" id="profileAvatar">U</div>
+      <button class="btn btn-secondary avatar-upload-btn" onclick="showToast('Avatar upload coming soon!', 'info')">
+        <i class="fas fa-camera"></i>
+        Change Avatar
+      </button>
+
+      <form id="profileForm" onsubmit="saveProfile(event)">
+        <div class="form-group">
+          <label class="form-label" for="displayName">Display Name</label>
+          <input type="text" class="form-input" id="displayName" placeholder="Your name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="email">Email Address</label>
+          <input type="email" class="form-input" id="email" disabled>
+          <div class="form-help">Email cannot be changed for security reasons</div>
+        </div>
+
+        <div class="btn-group">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i>
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Subscription Section -->
+    <section class="settings-section" id="subscriptionSection">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-bolt"></i>
+        </div>
+        <div>
+          <div class="section-title">Blacklink ULTRA</div>
+        </div>
+      </div>
+      <p class="section-description">Unlock early access, exclusive features, and Aero AI credits</p>
+
+      <div id="subscriptionStatusMessage" class="subscription-status-message" role="alert"></div>
+
+      <!-- Current Plan Display -->
+      <div id="currentPlan" class="subscription-current">
+        <div class="subscription-tier">
+          <div class="tier-badge" id="tierBadge">FREE</div>
+          <div class="tier-name" id="tierName">Free Plan</div>
+        </div>
+        <div class="tier-price" id="tierPrice">$0/month</div>
+      </div>
+
+      <!-- Aero AI Tokens -->
+      <div class="aero-tokens" id="aeroTokensCard" style="display: none;">
+        <div class="aero-header">
+          <div class="aero-icon">🤖</div>
+          <div>
+            <div class="aero-title">Aero AI Credits</div>
+            <div class="aero-subtitle">Monthly token allocation</div>
+          </div>
+        </div>
+        <div class="aero-stats">
+          <div class="aero-stat">
+            <div class="aero-stat-label">Monthly Allocation</div>
+            <div class="aero-stat-value" id="aeroMonthly">$0</div>
+          </div>
+          <div class="aero-stat">
+            <div class="aero-stat-label">Remaining</div>
+            <div class="aero-stat-value" id="aeroRemaining">$0</div>
+          </div>
+          <div class="aero-stat">
+            <div class="aero-stat-label">Used</div>
+            <div class="aero-stat-value" id="aeroUsed">$0</div>
+          </div>
+        </div>
+        <div class="aero-progress">
+          <div class="aero-progress-bar" id="aeroProgressBar"></div>
+        </div>
+      </div>
+
+      <!-- Upgrade Options -->
+      <div class="subscription-plans">
+        <!-- ULTRA Plan -->
+        <div class="plan-card plan-featured">
+          <div class="plan-badge-featured">⚡ ULTRA</div>
+          <div class="plan-recommended">PREMIUM ACCESS</div>
+          <div class="plan-price">$10<span class="plan-period">/month</span></div>
+          <div class="plan-description">
+            Unlock the full Blacklink experience with advanced analytics, AI credits, premium themes, enhanced privacy controls, and complete profile customization.
+          </div>
+          <div class="plan-features">
+            <div class="plan-feature">✓ Advanced Analytics Dashboard</div>
+            <div class="plan-feature">✓ $10 worth of Aero AI credits/month</div>
+            <div class="plan-feature">✓ Premium Themes (Ocean, Forest, Sunset, Rose, Midnight, Aurora)</div>
+            <div class="plan-feature">✓ Custom App Categories</div>
+            <div class="plan-feature">✓ Enhanced Privacy Controls</div>
+            <div class="plan-feature">✓ Profile Customization & Decorations</div>
+          </div>
+          <button class="btn btn-primary plan-btn" onclick="subscribeToPlan('ULTRA')">
+            <i class="fas fa-bolt"></i>
+            Get ULTRA
+          </button>
+        </div>
+      </div>
+
+      <!-- Manage Subscription (shown only if subscribed) -->
+      <div id="manageSubscription" style="display: none;">
+        <div class="subscription-info">
+          <div class="info-row">
+            <span class="info-label">Status:</span>
+            <span class="info-value" id="subStatus">Active</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Started:</span>
+            <span class="info-value" id="subStarted">-</span>
+          </div>
+        </div>
+        <div class="btn-group">
+          <a href="https://buymeacoffee.com/Blacklink/membership" target="_blank" class="btn btn-secondary">
+            <i class="fas fa-external-link-alt"></i>
+            Manage on Buy Me a Coffee
+          </a>
+          <button class="btn btn-secondary" onclick="syncSubscription()">
+            <i class="fas fa-sync"></i>
+            Refresh Status
+          </button>
+        </div>
+      </div>
+
+      <!-- Manual Subscription Update (ADMIN ONLY) -->
+      <div class="subscription-admin" id="adminSubscriptionControls" style="margin-top: 2rem; padding: 1.5rem; background: rgba(245, 158, 11, 0.08); border: 2px dashed rgba(245, 158, 11, 0.3); border-radius: var(--radius-sm); display: none;">
+        <h3 style="margin-bottom: 0.5rem; font-size: 0.875rem; color: var(--ultra-plus); text-transform: uppercase; font-weight: 700;">
+          🔐 Admin Controls
+        </h3>
+        <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 1rem;">
+          Blacklink Employee access. Manually manage subscription tiers:
+        </p>
+        <div class="btn-group">
+          <button class="btn btn-secondary" onclick="updateSubscriptionTier('FREE')" style="font-size: 0.875rem;">
+            Set to FREE
+          </button>
+          <button class="btn btn-secondary" onclick="updateSubscriptionTier('ULTRA')" style="font-size: 0.875rem;">
+            ⚡ Set to ULTRA
+          </button>
+          <button class="btn btn-secondary" onclick="updateSubscriptionTier('ULTRA_PLUS')" style="font-size: 0.875rem;">
+            🚀 Set to ULTRA+
+          </button>
+        </div>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem; font-style: italic;">
+          ⚠️ Admin privileges detected. As a Blacklink employee, you have complimentary ULTRA+.
+        </p>
+      </div>
+    </section>
+
+    <!-- Accessibility Settings -->
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-universal-access"></i>
+        </div>
+        <div>
+          <div class="section-title">Accessibility</div>
+        </div>
+      </div>
+      <p class="section-description">Customize display and accessibility features to match your needs</p>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Dark Mode</div>
+          <div class="toggle-description">Use dark theme throughout Blacklink</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSetting(this, 'darkMode')" id="darkMode"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">High Contrast Mode</div>
+          <div class="toggle-description">Increase contrast for better visibility</div>
+        </div>
+        <div class="toggle-switch" onclick="toggleSetting(this, 'highContrast')" id="highContrast"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Reduce Motion</div>
+          <div class="toggle-description">Minimize animations and transitions</div>
+        </div>
+        <div class="toggle-switch" onclick="toggleSetting(this, 'reduceMotion')" id="reduceMotion"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Dyslexia-Friendly Font</div>
+          <div class="toggle-description">Use OpenDyslexic font for easier reading</div>
+        </div>
+        <div class="toggle-switch" onclick="toggleSetting(this, 'dyslexiaFont')" id="dyslexiaFont"></div>
+      </div>
+
+      <div class="select-item">
+        <label class="select-label" for="fontSize">Font Size</label>
+        <select class="select-dropdown" id="fontSize" onchange="saveFontSize(this.value)">
+          <option value="normal">Normal (100%)</option>
+          <option value="large">Large (125%)</option>
+          <option value="xlarge">Extra Large (150%)</option>
+        </select>
+      </div>
+
+      <div class="select-item">
+        <label class="select-label" for="colorBlindMode">Color Blind Support</label>
+        <select class="select-dropdown" id="colorBlindMode" onchange="saveColorBlindMode(this.value)">
+          <option value="none">None</option>
+          <option value="protanopia">Protanopia (Red-Blind)</option>
+          <option value="deuteranopia">Deuteranopia (Green-Blind)</option>
+          <option value="tritanopia">Tritanopia (Blue-Blind)</option>
+        </select>
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-primary" onclick="syncSettings()">
+          <i class="fas fa-sync"></i>
+          Sync to All Devices
+        </button>
+        <button class="btn btn-secondary" onclick="resetAccessibility()">
+          <i class="fas fa-undo"></i>
+          Reset to Defaults
+        </button>
+      </div>
+    </section>
+
+    <!-- Display Settings -->
+    <section class="settings-section appearance-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-palette"></i>
+        </div>
+        <div>
+          <div class="section-title">Appearance & Accessibility</div>
+        </div>
+      </div>
+      <p class="section-description">Customize how Blacklink looks and feels with themes, colors, and accessibility options</p>
+
+      <!-- Theme Preview -->
+      <div class="theme-preview-container">
+        <div class="theme-preview-label">Theme Preview</div>
+        <div class="theme-preview" id="themePreview">
+          <div class="preview-header">
+            <div class="preview-logo">BL</div>
+            <div class="preview-nav">
+              <div class="preview-nav-item active">Dashboard</div>
+              <div class="preview-nav-item">Settings</div>
+            </div>
+          </div>
+          <div class="preview-content">
+            <div class="preview-card">
+              <div class="preview-card-title">Welcome Back!</div>
+              <div class="preview-card-text">This is how your interface will look with the selected theme.</div>
+              <div class="preview-button">Get Started</div>
+            </div>
+            <div class="preview-card preview-card-secondary">
+              <div class="preview-stat">
+                <div class="preview-stat-value">24</div>
+                <div class="preview-stat-label">Apps</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Theme Picker Grid -->
+      <div class="theme-picker-section">
+        <div class="theme-picker-header">
+          <span class="theme-picker-title">Choose Your Theme</span>
+          <span class="theme-picker-count" id="themeCount">20 themes available</span>
+        </div>
+        <div class="theme-grid" id="themeGrid">
+          <!-- Themes will be populated by JavaScript -->
+        </div>
+      </div>
+
+      <!-- Accessibility Settings -->
+      <div class="accessibility-section">
+        <div class="accessibility-header">
+          <i class="fas fa-universal-access"></i>
+          <span>Accessibility Options</span>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Reduce Motion</div>
+            <div class="toggle-description">Minimize animations and transitions for better accessibility</div>
+          </div>
+          <div class="toggle-switch" onclick="toggleSetting(this, 'reduceMotion')" id="reduceMotion"></div>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">High Contrast</div>
+            <div class="toggle-description">Increase contrast for better readability</div>
+          </div>
+          <div class="toggle-switch" onclick="toggleSetting(this, 'highContrast')" id="highContrast"></div>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Large Text</div>
+            <div class="toggle-description">Increase base font size for easier reading</div>
+          </div>
+          <div class="toggle-switch" onclick="toggleSetting(this, 'largeText')" id="largeText"></div>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Focus Indicators</div>
+            <div class="toggle-description">Enhanced keyboard navigation visibility</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSetting(this, 'focusIndicators')" id="focusIndicators"></div>
+        </div>
+
+        <div class="select-item">
+          <label class="select-label">Font Family</label>
+          <select class="select-dropdown" id="fontFamily" onchange="saveFontFamily(this.value)">
+            <option value="inter">Inter (Default)</option>
+            <option value="system">System Font</option>
+            <option value="opensans">Open Sans</option>
+            <option value="roboto">Roboto</option>
+            <option value="poppins">Poppins</option>
+            <option value="monospace">Monospace</option>
+          </select>
+        </div>
+
+        <div class="select-item">
+          <label class="select-label">Text Spacing</label>
+          <select class="select-dropdown" id="textSpacing" onchange="saveTextSpacing(this.value)">
+            <option value="tight">Tight</option>
+            <option value="normal" selected>Normal</option>
+            <option value="relaxed">Relaxed</option>
+            <option value="loose">Loose</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Display Settings -->
+      <div class="display-settings-section">
+        <div class="section-subtitle">Display Customization</div>
+
+        <div class="select-item">
+          <label class="select-label">Border Radius</label>
+          <select class="select-dropdown" id="borderRadius" onchange="saveBorderRadius(this.value)">
+            <option value="sharp">Sharp (0px)</option>
+            <option value="small">Small (8px)</option>
+            <option value="medium">Medium (12px)</option>
+            <option value="large" selected>Large (20px)</option>
+            <option value="round">Extra Round (32px)</option>
+          </select>
+        </div>
+
+        <div class="select-item">
+          <label class="select-label">UI Density</label>
+          <select class="select-dropdown" id="uiDensity" onchange="saveUIDensity(this.value)">
+            <option value="compact">Compact</option>
+            <option value="comfortable" selected>Comfortable</option>
+            <option value="spacious">Spacious</option>
+          </select>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Smooth Scrolling</div>
+            <div class="toggle-description">Enable smooth scrolling behavior</div>
+          </div>
+          <div class="toggle-switch active" onclick="toggleSetting(this, 'smoothScrolling')" id="smoothScrolling"></div>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Compact Mode</div>
+            <div class="toggle-description">Reduce padding and margins for more content on screen</div>
+          </div>
+          <div class="toggle-switch" onclick="toggleSetting(this, 'compactMode')" id="compactMode"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Subscription Preferences (NEW) -->
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-crown"></i>
+        </div>
+        <div>
+          <div class="section-title">Subscription Preferences</div>
+        </div>
+      </div>
+      <p class="section-description">Manage your ULTRA subscription settings</p>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Auto-Renew</div>
+          <div class="toggle-description">Automatically renew subscription each month</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSetting(this, 'autoRenew')" id="autoRenew"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Renewal Reminders</div>
+          <div class="toggle-description">Get notified before your subscription renews</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSetting(this, 'renewalReminders')" id="renewalReminders"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Token Usage Alerts</div>
+          <div class="toggle-description">Notify when Aero AI tokens are running low</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSetting(this, 'tokenAlerts')" id="tokenAlerts"></div>
+      </div>
+
+      <div class="select-item">
+        <label class="select-label">Low Token Threshold</label>
+        <select class="select-dropdown" id="tokenThreshold" onchange="saveTokenThreshold(this.value)">
+          <option value="1">$1 remaining</option>
+          <option value="2">$2 remaining</option>
+          <option value="5" selected>$5 remaining</option>
+          <option value="10">$10 remaining</option>
+        </select>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Show ULTRA Badge</div>
+          <div class="toggle-description">Display your subscription badge on dashboard</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSetting(this, 'showBadge')" id="showBadge"></div>
+      </div>
+    </section>
+
+    <!-- Advanced Privacy -->
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-shield-alt"></i>
+        </div>
+        <div>
+          <div class="section-title">Advanced Privacy</div>
+        </div>
+      </div>
+      <p class="section-description">
+        Privacy controls now live inside the dedicated <strong>Privacy Center</strong> so you can adjust audit logging,
+        color vision accessibility, and export rules in one place.
+      </p>
+      <div class="btn-group">
+        <a class="btn btn-secondary" href="privacy.html">
+          <i class="fas fa-lock"></i>
+          Open Privacy Center
+        </a>
+      </div>
+    </section>
+
+    <!-- Notifications & Alerts (NEW) -->
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-bell"></i>
+        </div>
+        <div>
+          <div class="section-title">Notifications & Alerts</div>
+        </div>
+      </div>
+      <p class="section-description">Control when and how you receive notifications</p>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Browser Notifications</div>
+          <div class="toggle-description">Receive push notifications in your browser</div>
+        </div>
+        <div class="toggle-switch" onclick="toggleNotifications(this)" id="browserNotifications"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Email Notifications</div>
+          <div class="toggle-description">Receive updates via email</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSetting(this, 'emailNotifications')" id="emailNotifications"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Security Alerts</div>
+          <div class="toggle-description">Get notified of suspicious activity</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSetting(this, 'securityAlerts')" id="securityAlerts"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Product Updates</div>
+          <div class="toggle-description">Notifications about new features and updates</div>
+        </div>
+        <div class="toggle-switch active" onclick="toggleSetting(this, 'productUpdates')" id="productUpdates"></div>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Marketing Communications</div>
+          <div class="toggle-description">Promotional emails and offers</div>
+        </div>
+        <div class="toggle-switch" onclick="toggleSetting(this, 'marketing')" id="marketing"></div>
+      </div>
+
+      <div class="select-item">
+        <label class="select-label">Notification Sound</label>
+        <select class="select-dropdown" id="notificationSound" onchange="saveNotificationSound(this.value)">
+          <option value="default">Default</option>
+          <option value="gentle">Gentle</option>
+          <option value="chime">Chime</option>
+          <option value="ping">Ping</option>
+          <option value="none">Silent</option>
+        </select>
+      </div>
+
+      <div class="toggle-item">
+        <div class="toggle-info">
+          <div class="toggle-label">Do Not Disturb</div>
+          <div class="toggle-description">Pause all non-critical notifications</div>
+        </div>
+        <div class="toggle-switch" onclick="toggleSetting(this, 'doNotDisturb')" id="doNotDisturb"></div>
+      </div>
+    </section>
+
+    <!-- Linked Accounts -->
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-link"></i>
+        </div>
+        <div>
+          <div class="section-title">Linked Accounts</div>
+        </div>
+      </div>
+      <p class="section-description">Manage your connected SSO providers</p>
+
+      <div id="linkedAccountsList">
+        <!-- Loaded dynamically -->
+      </div>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="showToast('Link new account coming soon!', 'info')">
+          <i class="fas fa-plus"></i>
+          Link New Account
+        </button>
+      </div>
+    </section>
+
+    <!-- Data Management -->
+    <section class="settings-section">
+      <div class="section-header">
+        <div class="section-icon">
+          <i class="fas fa-database"></i>
+        </div>
+        <div>
+          <div class="section-title">Data Management</div>
+        </div>
+      </div>
+      <p class="section-description">Export or delete your data</p>
+
+      <div class="btn-group">
+        <button class="btn btn-secondary" onclick="exportData()">
+          <i class="fas fa-download"></i>
+          Export My Data
+        </button>
+        <button class="btn btn-secondary" onclick="exportSettings()">
+          <i class="fas fa-file-export"></i>
+          Export Settings
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modular JavaScript (v3.9) -->
+  <script src="js/navbar.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/analytics-compat.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Initialize modular navbar
+    Navbar.initNavbar(auth, db, 'settings');
+
+    let currentUser = null;
+    let userTier = 'FREE';
+    const QUICK_LAUNCH_ROOT = 'product_pulse';
+    const QUICK_LAUNCH_SUBCOLLECTION = 'quicklaunch';
+
+    function normalizeTier(tier) {
+      if (!tier) return 'FREE';
+      const value = String(tier).toUpperCase().replace(/\s+/g, '_');
+      // Employee tier gets ULTRA_PLUS access
+      if (value.includes('EMPLOYEE')) return 'ULTRA_PLUS';
+      if (value === 'ULTRA_PLUS' || value === 'ULTRA+') return 'ULTRA_PLUS';
+      if (value === 'ULTRA' || value.includes('DISTRICT')) return 'ULTRA';
+      return 'FREE';
+    }
+
+    // Old navbar functions removed - now handled by modular navbar.js
+    function updateNavAvatar(initials, photoURL) {
+      // Deprecated: navbar.js handles this automatically
+    }
+
+    function applyNavTierStyling(tier) {
+      // Deprecated: navbar.js handles this automatically
+    }
+
+    function quickLaunchCollection() {
+      if (!currentUser) {
+        throw new Error('User not authenticated');
+      }
+      return db
+        .collection(QUICK_LAUNCH_ROOT)
+        .doc(currentUser.uid)
+        .collection(QUICK_LAUNCH_SUBCOLLECTION);
+    }
+
+    // Old navbar event listeners removed - navbar.js handles all dropdown/logout interactions
+
+    // Auth State
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        currentUser = user;
+
+        // Initialize analytics
+        if (window.BlacklinkAnalytics) {
+          BlacklinkAnalytics.init(db, user);
+          BlacklinkAnalytics.trackPageView('settings');
+        }
+
+        await loadUserProfile();
+        await loadSettings();
+        await loadLinkedAccounts();
+        await loadSubscriptionStatus();
+        // Initialize theme picker after settings are loaded
+        initializeThemePicker();
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
+
+    // Load User Profile
+    async function loadUserProfile() {
+      try {
+        const userDoc = await db.collection('users').doc(currentUser.uid).get();
+        const userData = userDoc.data();
+
+        const displayName = userData?.name || currentUser.displayName || currentUser.email?.split('@')[0];
+        document.getElementById('displayName').value = displayName;
+        document.getElementById('email').value = currentUser.email;
+
+        const initials = displayName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const photoURL = userData?.photoURL || currentUser.photoURL || null;
+        updateNavAvatar(initials, photoURL);
+        const userNameEl = document.getElementById('userName');
+        if (userNameEl) {
+          userNameEl.textContent = displayName;
+        }
+
+        const profileAvatarEl = document.getElementById('profileAvatar');
+        if (profileAvatarEl) {
+          if (photoURL) {
+            profileAvatarEl.style.backgroundImage = `url('${photoURL}')`;
+            profileAvatarEl.style.backgroundSize = 'cover';
+            profileAvatarEl.style.backgroundPosition = 'center';
+            profileAvatarEl.textContent = '';
+          } else {
+            profileAvatarEl.style.backgroundImage = '';
+            profileAvatarEl.textContent = initials;
+          }
+        }
+      } catch (error) {
+        console.error('Error loading profile:', error);
+      }
+    }
+
+    // Save Profile
+    async function saveProfile(event) {
+      event.preventDefault();
+
+      const displayName = document.getElementById('displayName').value.trim();
+
+      if (!displayName) {
+        showToast('Please enter a display name', 'error');
+        return;
+      }
+
+      try {
+        await db.collection('users').doc(currentUser.uid).set({
+          name: displayName,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        showToast('Profile updated successfully', 'success');
+        await loadUserProfile();
+      } catch (error) {
+        console.error('Error saving profile:', error);
+        showToast('Error saving profile', 'error');
+      }
+    }
+
+    // Load Settings
+    async function loadSettings() {
+      try {
+        const settingsDoc = await db.collection('settings').doc(currentUser.uid).get();
+        const settings = settingsDoc.data() || {};
+
+        // Load accessibility settings
+        setToggle('darkMode', settings.darkMode !== false); // Default true
+        setToggle('highContrast', settings.highContrast || false);
+        setToggle('reduceMotion', settings.reduceMotion || false);
+        setToggle('dyslexiaFont', settings.dyslexiaFont || false);
+
+        document.getElementById('fontSize').value = settings.fontSize || 'normal';
+        document.getElementById('colorBlindMode').value = settings.colorBlindMode || 'none';
+
+        // Load display settings (theme is handled by theme grid picker, not a select element)
+        if (document.getElementById('theme')) {
+          document.getElementById('theme').value = settings.theme || 'dark';
+        }
+        if (document.getElementById('accentColor')) {
+          document.getElementById('accentColor').value = settings.accentColor || 'purple';
+        }
+
+        // Apply settings
+        applySettings(settings);
+      } catch (error) {
+        console.error('Error loading settings:', error);
+        if (error?.code === 'permission-denied') {
+          showToast('Deploy Firestore security rules to enable settings sync.', 'error');
+        } else {
+          showToast('Unable to load settings right now. Please retry shortly.', 'error');
+        }
+      }
+    }
+
+    // Apply Settings
+    function applySettings(settings) {
+      // Apply theme (persist across site)
+      const theme = settings.theme || 'dark';
+      if (window.BlacklinkUtils) {
+        BlacklinkUtils.applyTheme(theme);
+      } else {
+        document.documentElement.setAttribute('data-theme', theme);
+        try {
+          localStorage.setItem('theme', theme);
+        } catch (error) {
+          console.warn('Unable to persist theme preference', error);
+        }
+      }
+
+      // Apply high contrast
+      if (settings.highContrast) {
+        document.documentElement.setAttribute('data-contrast', 'high');
+      } else {
+        document.documentElement.removeAttribute('data-contrast');
+      }
+
+      // Apply reduce motion or animations
+      if (settings.reduceMotion || settings.animations === false) {
+        document.documentElement.style.setProperty('--transition', 'none');
+      } else {
+        document.documentElement.style.setProperty('--transition', 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)');
+      }
+
+      // Apply dyslexia font
+      if (settings.dyslexiaFont) {
+        document.body.style.fontFamily = 'OpenDyslexic, monospace';
+      } else {
+        document.body.style.fontFamily = '';
+      }
+
+      // Apply font size
+      if (settings.fontSize) {
+        const sizes = { normal: '100%', large: '125%', xlarge: '150%' };
+        document.documentElement.style.fontSize = sizes[settings.fontSize] || '100%';
+      }
+
+      // Apply border radius
+      if (settings.borderRadius) {
+        const radiusMap = {
+          sharp: '0px',
+          small: '8px',
+          medium: '12px',
+          large: '20px',
+          round: '32px'
+        };
+        document.documentElement.style.setProperty('--radius', radiusMap[settings.borderRadius]);
+        document.documentElement.style.setProperty('--radius-sm', radiusMap[settings.borderRadius === 'sharp' ? 'sharp' : 'small']);
+      }
+
+      // Apply UI density
+      if (settings.uiDensity) {
+        const densityMap = {
+          compact: { padding: '0.75rem', fontSize: '0.875rem' },
+          comfortable: { padding: '1rem', fontSize: '1rem' },
+          spacious: { padding: '1.5rem', fontSize: '1.125rem' }
+        };
+        const density = densityMap[settings.uiDensity];
+        if (density) {
+          document.documentElement.style.setProperty('--padding', density.padding);
+        }
+      }
+
+      // Apply screenshot blocking
+      if (settings.blockScreenshots) {
+        document.body.style.webkitUserSelect = 'none';
+        document.body.style.userSelect = 'none';
+      } else {
+        document.body.style.webkitUserSelect = '';
+        document.body.style.userSelect = '';
+      }
+    }
+
+    // Toggle Setting
+    async function toggleSetting(element, setting) {
+      element.classList.toggle('active');
+      const value = element.classList.contains('active');
+
+      try {
+        await db.collection('settings').doc(currentUser.uid).set({
+          [setting]: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        showToast('Setting updated', 'success');
+        await loadSettings();
+      } catch (error) {
+        console.error('Error saving setting:', error);
+        showToast('Error saving setting', 'error');
+        element.classList.toggle('active'); // Revert
+      }
+    }
+
+    // Set Toggle State
+    function setToggle(id, active) {
+      const toggle = document.getElementById(id);
+      if (toggle) {
+        if (active) {
+          toggle.classList.add('active');
+        } else {
+          toggle.classList.remove('active');
+        }
+      }
+    }
+
+    // Save Font Size
+    async function saveFontSize(value) {
+      try {
+        await db.collection('settings').doc(currentUser.uid).set({
+          fontSize: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        showToast('Font size updated', 'success');
+        await loadSettings();
+      } catch (error) {
+        console.error('Error saving font size:', error);
+        showToast('Error saving font size', 'error');
+      }
+    }
+
+    // Save Color Blind Mode
+    async function saveColorBlindMode(value) {
+      try {
+        await db.collection('settings').doc(currentUser.uid).set({
+          colorBlindMode: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        showToast('Color blind mode updated', 'success');
+        await loadSettings();
+      } catch (error) {
+        console.error('Error saving color blind mode:', error);
+        showToast('Error saving color blind mode', 'error');
+      }
+    }
+
+    // Save Theme
+    async function saveTheme(value) {
+      try {
+        // Check if theme requires ULTRA access
+        const ultraThemes = ['ocean', 'forest', 'sunset', 'rose', 'midnight', 'aurora', 'crimson',
+                             'monokai', 'dracula', 'gruvbox', 'solarized', 'tokyo', 'catppuccin',
+                             'cyberpunk', 'lavender', 'emerald', 'amber', 'coral', 'mint', 'volcano', 'berry'];
+        const requiresUltra = ultraThemes.includes(value);
+
+        if (requiresUltra && userTier === 'FREE') {
+          showToast('Upgrade to ULTRA to access premium themes', 'info');
+          return;
+        }
+
+        await db.collection('settings').doc(currentUser.uid).set({
+          theme: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        // Apply theme immediately and persist locally
+        if (window.BlacklinkUtils) {
+          BlacklinkUtils.applyTheme(value);
+        } else {
+          document.documentElement.setAttribute('data-theme', value);
+          try {
+            localStorage.setItem('theme', value);
+          } catch (error) {
+            console.warn('Unable to persist theme preference', error);
+          }
+        }
+
+        showToast('Theme updated', 'success');
+      } catch (error) {
+        console.error('Error saving theme:', error);
+        showToast('Error saving theme', 'error');
+      }
+    }
+
+    // Theme Picker Configuration
+    const themes = [
+      { id: 'dark', name: 'Dark', icon: '🌙', tier: 'free', colors: ['#0a0f1e', '#6366f1', '#f8fafc'] },
+      { id: 'light', name: 'Light', icon: '☀️', tier: 'free', colors: ['#f8fafc', '#6366f1', '#0f172a'] },
+      { id: 'nord', name: 'Nord', icon: '❄️', tier: 'free', colors: ['#2e3440', '#88c0d0', '#eceff4'] },
+      { id: 'slate', name: 'Slate', icon: '🪨', tier: 'free', colors: ['#0f172a', '#94a3b8', '#f1f5f9'] },
+      { id: 'dusk', name: 'Dusk', icon: '🌇', tier: 'free', colors: ['#120c1c', '#c084fc', '#f5f3ff'] },
+      { id: 'noir', name: 'Noir', icon: '🕶️', tier: 'free', colors: ['#020202', '#f5f5f4', '#27272a'] },
+      { id: 'ocean', name: 'Ocean', icon: '🌊', tier: 'ULTRA', colors: ['#0c2d48', '#2081c3', '#b4e1ff'] },
+      { id: 'forest', name: 'Forest', icon: '🌲', tier: 'ULTRA', colors: ['#1b3a28', '#4caf50', '#c8e6c9'] },
+      { id: 'sunset', name: 'Sunset', icon: '🌅', tier: 'ULTRA', colors: ['#2d1b0e', '#ff6f3c', '#ffe5d9'] },
+      { id: 'rose', name: 'Rose', icon: '🌹', tier: 'ULTRA', colors: ['#2d1520', '#f43f5e', '#ffe4e6'] },
+      { id: 'midnight', name: 'Midnight', icon: '🌌', tier: 'ULTRA', colors: ['#050a30', '#5b7cb5', '#d4e4ff'] },
+      { id: 'aurora', name: 'Aurora', icon: '✨', tier: 'ULTRA', colors: ['#0f0a1e', '#a78bfa', '#f0e7ff'] },
+      { id: 'crimson', name: 'Crimson', icon: '🔥', tier: 'ULTRA', colors: ['#1a0505', '#dc2626', '#ffe5e5'] },
+      { id: 'monokai', name: 'Monokai', icon: '💻', tier: 'ULTRA', colors: ['#272822', '#a6e22e', '#f8f8f2'] },
+      { id: 'dracula', name: 'Dracula', icon: '🧛', tier: 'ULTRA', colors: ['#282a36', '#bd93f9', '#f8f8f2'] },
+      { id: 'gruvbox', name: 'Gruvbox', icon: '🎨', tier: 'ULTRA', colors: ['#282828', '#b8bb26', '#ebdbb2'] },
+      { id: 'solarized', name: 'Solarized', icon: '☀️', tier: 'ULTRA', colors: ['#002b36', '#268bd2', '#fdf6e3'] },
+      { id: 'tokyo', name: 'Tokyo Night', icon: '🗼', tier: 'ULTRA', colors: ['#1a1b26', '#7aa2f7', '#c0caf5'] },
+      { id: 'catppuccin', name: 'Catppuccin', icon: '🐈', tier: 'ULTRA', colors: ['#1e1e2e', '#89b4fa', '#cdd6f4'] },
+      { id: 'cyberpunk', name: 'Cyberpunk', icon: '🤖', tier: 'ULTRA', colors: ['#05010d', '#ff2a6d', '#05d9e8'] },
+      { id: 'lavender', name: 'Lavender', icon: '💜', tier: 'ULTRA', colors: ['#1e1b2e', '#c4b5fd', '#f5f3ff'] },
+      { id: 'emerald', name: 'Emerald', icon: '💚', tier: 'ULTRA', colors: ['#022c22', '#10b981', '#d1fae5'] },
+      { id: 'amber', name: 'Amber', icon: '🟡', tier: 'ULTRA', colors: ['#1c1108', '#f59e0b', '#fef3c7'] },
+      { id: 'coral', name: 'Coral', icon: '🪸', tier: 'ULTRA', colors: ['#1a0a0a', '#ff6b6b', '#ffe0e0'] },
+      { id: 'mint', name: 'Mint', icon: '🌿', tier: 'ULTRA', colors: ['#0a1f1c', '#00d4aa', '#e0fff8'] },
+      { id: 'volcano', name: 'Volcano', icon: '🌋', tier: 'ULTRA', colors: ['#1f0b05', '#fa541c', '#fff2e8'] },
+      { id: 'berry', name: 'Berry', icon: '🫐', tier: 'ULTRA', colors: ['#1a0514', '#ec4899', '#fce7f3'] },
+      { id: 'desert', name: 'Desert', icon: '🏜️', tier: 'free', colors: ['#1f140c', '#f4a261', '#ffe8d6'] },
+      { id: 'horizon', name: 'Horizon', icon: '🌅', tier: 'free', colors: ['#0a101f', '#3b82f6', '#e2e8f0'] },
+      { id: 'matrix', name: 'Matrix', icon: '🧮', tier: 'ULTRA', colors: ['#010a05', '#00ff90', '#e0ffe5'] },
+      { id: 'pastel', name: 'Pastel', icon: '🎨', tier: 'ULTRA', colors: ['#fdf2f8', '#fb7185', '#872341'] },
+      { id: 'glacier', name: 'Glacier', icon: '🧊', tier: 'ULTRA', colors: ['#02121f', '#38bdf8', '#e0f2ff'] },
+      { id: 'ember', name: 'Ember', icon: '🔥', tier: 'ULTRA', colors: ['#140705', '#fb5607', '#ffd7ba'] }
+    ];
+
+    function initializeThemePicker() {
+      const themeGrid = document.getElementById('themeGrid');
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+
+      if (!themeGrid) return;
+
+      // Update theme count
+      const themeCount = document.getElementById('themeCount');
+      if (themeCount) {
+        const ultraThemes = themes.filter(t => t.tier === 'ULTRA').length;
+        const freeThemes = themes.filter(t => t.tier === 'free').length;
+        themeCount.textContent = `${themes.length} themes (${freeThemes} free, ${ultraThemes} ULTRA)`;
+      }
+
+      // Render theme cards
+      themeGrid.innerHTML = themes.map(theme => {
+        const isActive = theme.id === currentTheme;
+        const isLocked = theme.tier === 'ULTRA' && userTier === 'FREE';
+        const lockIcon = isLocked ? '<i class="fas fa-lock theme-card-lock"></i>' : '';
+
+        return `
+          <div class="theme-card ${isActive ? 'active' : ''} ${isLocked ? 'locked' : ''}"
+               data-theme="${theme.id}"
+               onclick="selectThemeFromPicker('${theme.id}')">
+            <div class="theme-card-header">
+              <div class="theme-card-name">
+                <span>${theme.icon}</span>
+                <span>${theme.name}</span>
+              </div>
+              ${theme.tier === 'ULTRA' ? '<span class="theme-card-badge">ULTRA</span>' : ''}
+              ${lockIcon}
+            </div>
+            <div class="theme-card-preview">
+              ${theme.colors.map(color => `<div class="theme-color-swatch" style="background: ${color};"></div>`).join('')}
+            </div>
+            ${isActive ? '<div class="theme-card-meta">✓ Active</div>' : '<div class="theme-card-meta">Click to apply</div>'}
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function selectThemeFromPicker(themeId) {
+      const theme = themes.find(t => t.id === themeId);
+      if (!theme) return;
+
+      // Check if theme is locked
+      if (theme.tier === 'ULTRA' && userTier === 'FREE') {
+        showToast('Upgrade to ULTRA to access premium themes', 'info');
+        // Track locked theme attempt
+        if (window.BlacklinkAnalytics) {
+          BlacklinkAnalytics.trackEvent('theme_locked_attempt', {
+            theme: themeId,
+            userTier: userTier,
+            source: 'theme_picker'
+          });
+        }
+        return;
+      }
+
+      await saveTheme(themeId);
+
+      // Track theme change
+      if (window.BlacklinkAnalytics) {
+        BlacklinkAnalytics.trackThemeChange(themeId, 'theme_picker');
+      }
+
+      initializeThemePicker(); // Refresh the grid to update active state
+    }
+
+    // Accessibility Settings Functions
+    async function saveFontFamily(value) {
+      try {
+        await db.collection('settings').doc(currentUser.uid).set({
+          fontFamily: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        document.documentElement.setAttribute('data-font-family', value);
+        showToast('Font family updated', 'success');
+      } catch (error) {
+        console.error('Error saving font family:', error);
+        showToast('Error saving font family', 'error');
+      }
+    }
+
+    async function saveTextSpacing(value) {
+      try {
+        await db.collection('settings').doc(currentUser.uid).set({
+          textSpacing: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        document.documentElement.setAttribute('data-text-spacing', value);
+        showToast('Text spacing updated', 'success');
+      } catch (error) {
+        console.error('Error saving text spacing:', error);
+        showToast('Error saving text spacing', 'error');
+      }
+    }
+
+    // Save Border Radius
+    async function saveBorderRadius(value) {
+      try {
+        const radiusMap = {
+          sharp: '0px',
+          small: '8px',
+          medium: '12px',
+          large: '20px',
+          round: '32px'
+        };
+
+        await db.collection('settings').doc(currentUser.uid).set({
+          borderRadius: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        document.documentElement.style.setProperty('--radius', radiusMap[value]);
+        document.documentElement.style.setProperty('--radius-sm', radiusMap[value === 'sharp' ? 'sharp' : 'small']);
+
+        showToast('Border radius updated', 'success');
+      } catch (error) {
+        console.error('Error saving border radius:', error);
+        showToast('Error saving border radius', 'error');
+      }
+    }
+
+    // Save UI Density
+    async function saveUIDensity(value) {
+      try {
+        const densityMap = {
+          compact: { padding: '0.75rem', fontSize: '0.875rem' },
+          comfortable: { padding: '1rem', fontSize: '1rem' },
+          spacious: { padding: '1.5rem', fontSize: '1.125rem' }
+        };
+
+        await db.collection('settings').doc(currentUser.uid).set({
+          uiDensity: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        const density = densityMap[value];
+        document.documentElement.style.setProperty('--padding', density.padding);
+        document.documentElement.style.setProperty('--font-size', density.fontSize);
+
+        showToast('UI density updated', 'success');
+      } catch (error) {
+        console.error('Error saving UI density:', error);
+        showToast('Error saving UI density', 'error');
+      }
+    }
+
+    // Save Token Threshold
+    async function saveTokenThreshold(value) {
+      try {
+        await db.collection('settings').doc(currentUser.uid).set({
+          tokenThreshold: parseInt(value),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        showToast('Token threshold updated', 'success');
+      } catch (error) {
+        console.error('Error saving token threshold:', error);
+        showToast('Error saving token threshold', 'error');
+      }
+    }
+
+    // Save Notification Sound
+    async function saveNotificationSound(value) {
+      try {
+        await db.collection('settings').doc(currentUser.uid).set({
+          notificationSound: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        showToast('Notification sound updated', 'success');
+      } catch (error) {
+        console.error('Error saving notification sound:', error);
+        showToast('Error saving notification sound', 'error');
+      }
+    }
+
+    // Toggle Browser Notifications
+    async function toggleNotifications(element) {
+      const isActive = element.classList.contains('active');
+
+      if (!isActive) {
+        // Request permission
+        if ('Notification' in window) {
+          const permission = await Notification.requestPermission();
+          if (permission === 'granted') {
+            element.classList.add('active');
+            await toggleSetting(element, 'browserNotifications');
+            showToast('Browser notifications enabled', 'success');
+          } else {
+            showToast('Notification permission denied', 'error');
+          }
+        } else {
+          showToast('Notifications not supported', 'error');
+        }
+      } else {
+        element.classList.remove('active');
+        await toggleSetting(element, 'browserNotifications');
+        showToast('Browser notifications disabled', 'success');
+      }
+    }
+
+    // Save Accent Color
+    async function saveAccentColor(value) {
+      try {
+        await db.collection('settings').doc(currentUser.uid).set({
+          accentColor: value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        showToast('Accent color updated', 'success');
+        await loadSettings();
+      } catch (error) {
+        console.error('Error saving accent color:', error);
+        showToast('Error saving accent color', 'error');
+      }
+    }
+
+    // Sync Settings
+    async function syncSettings() {
+      try {
+        const settingsDoc = await db.collection('settings').doc(currentUser.uid).get();
+        const settings = settingsDoc.data();
+
+        // Mark as synced
+        await db.collection('settings').doc(currentUser.uid).set({
+          syncedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          synced: true
+        }, { merge: true });
+
+        showToast('Settings synced to all devices', 'success');
+      } catch (error) {
+        console.error('Error syncing settings:', error);
+        showToast('Error syncing settings', 'error');
+      }
+    }
+
+    // Reset Accessibility
+    async function resetAccessibility() {
+      if (!confirm('Are you sure you want to reset all accessibility settings?')) return;
+
+      try {
+        await db.collection('settings').doc(currentUser.uid).set({
+          darkMode: true,
+          highContrast: false,
+          reduceMotion: false,
+          dyslexiaFont: false,
+          fontSize: 'normal',
+          colorBlindMode: 'none',
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        showToast('Accessibility settings reset', 'success');
+        await loadSettings();
+      } catch (error) {
+        console.error('Error resetting settings:', error);
+        showToast('Error resetting settings', 'error');
+      }
+    }
+
+    // Load Linked Accounts
+    async function loadLinkedAccounts() {
+      try {
+        const userDoc = await db.collection('users').doc(currentUser.uid).get();
+        const userData = userDoc.data();
+        const ssoProviders = userData?.['sso-providers'] || {};
+
+        const container = document.getElementById('linkedAccountsList');
+        container.innerHTML = '';
+
+        const providers = Object.keys(ssoProviders);
+
+        if (providers.length === 0) {
+          container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No linked accounts</p>';
+          return;
+        }
+
+        providers.forEach(provider => {
+          const providerData = ssoProviders[provider];
+          const email = typeof providerData === 'object' ? providerData.email : null;
+
+          const item = document.createElement('div');
+          item.className = 'toggle-item';
+          item.innerHTML = `
+            <div class="toggle-info">
+              <div class="toggle-label">${provider.charAt(0).toUpperCase() + provider.slice(1)}</div>
+              <div class="toggle-description">${email || 'Linked account'}</div>
+            </div>
+            <button class="btn btn-secondary" onclick="unlinkAccount('${provider}')">
+              <i class="fas fa-unlink"></i>
+              Unlink
+            </button>
+          `;
+          container.appendChild(item);
+        });
+      } catch (error) {
+        console.error('Error loading linked accounts:', error);
+      }
+    }
+
+    // Unlink Account
+    async function unlinkAccount(provider) {
+      if (!confirm(`Are you sure you want to unlink your ${provider} account?`)) return;
+
+      try {
+        await db.collection('users').doc(currentUser.uid).update({
+          [`sso-providers.${provider}`]: firebase.firestore.FieldValue.delete()
+        });
+
+        showToast('Account unlinked successfully', 'success');
+        await loadLinkedAccounts();
+      } catch (error) {
+        console.error('Error unlinking account:', error);
+        showToast('Error unlinking account', 'error');
+      }
+    }
+
+    // Subscription Functions (Direct Firestore)
+    async function loadSubscriptionStatus() {
+      clearSubscriptionMessage();
+
+      try {
+        // Check if user is admin (Blacklink Employee)
+        const userDoc = await db.collection('users').doc(currentUser.uid).get();
+        const userData = userDoc.data() || {};
+        const isAdmin = userData.isAdmin === true;
+
+        // Show admin controls if user is admin
+        if (isAdmin) {
+          const adminControls = document.getElementById('adminSubscriptionControls');
+          if (adminControls) {
+            adminControls.style.display = 'block';
+          }
+        }
+
+        // Get subscription from Firestore
+        const subDoc = await db.collection('subscriptions').doc(currentUser.uid).get();
+
+        let subscriptionData;
+
+        if (subDoc.exists) {
+          subscriptionData = subDoc.data();
+
+          // Auto-upgrade admins to ULTRA+ if they don't have it
+          if (isAdmin && subscriptionData.tier !== 'ULTRA_PLUS') {
+            subscriptionData.tier = 'ULTRA_PLUS';
+            subscriptionData.status = 'active';
+            subscriptionData.price = 0;
+            subscriptionData.features = ['All Blacklink Apps', 'Unlimited Aero AI', 'Priority Support', 'Early Access', 'Blacklink Employee Benefits'];
+            subscriptionData.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+            subscriptionData.adminGranted = true;
+
+            // Update in Firestore
+            await db.collection('subscriptions').doc(currentUser.uid).set(subscriptionData, { merge: true });
+            console.log('Admin auto-upgraded to ULTRA+');
+          }
+        } else {
+          // Create default subscription (ULTRA+ for admins, FREE for others)
+          if (isAdmin) {
+            subscriptionData = {
+              userId: currentUser.uid,
+              email: currentUser.email,
+              tier: 'ULTRA_PLUS',
+              status: 'active',
+              price: 0,
+              features: ['All Blacklink Apps', 'Unlimited Aero AI', 'Priority Support', 'Early Access', 'Blacklink Employee Benefits'],
+              adminGranted: true,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            console.log('Admin created with ULTRA+');
+          } else {
+            subscriptionData = {
+              userId: currentUser.uid,
+              email: currentUser.email,
+              tier: 'FREE',
+              status: 'active',
+              price: 0,
+              features: ['Basic Blacklink Apps', 'Standard Support'],
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+          }
+
+          // Save to Firestore
+          await db.collection('subscriptions').doc(currentUser.uid).set(subscriptionData);
+        }
+
+        // Get Aero tokens
+        const tokensDoc = await db.collection('aero_tokens').doc(currentUser.uid).get();
+        let aeroTokens = {
+          monthly: 0,
+          remaining: 0,
+          used: 0
+        };
+
+        if (tokensDoc.exists) {
+          const tokenData = tokensDoc.data();
+          aeroTokens = {
+            monthly: tokenData.monthlyAllocation || 0,
+            remaining: tokenData.remaining || 0,
+            used: tokenData.used || 0
+          };
+        } else if (subscriptionData.tier === 'ULTRA' || subscriptionData.tier === 'ULTRA_PLUS') {
+          // Create token allocation based on tier
+          const monthlyAllocation = subscriptionData.tier === 'ULTRA' ? 10 : 25;
+          aeroTokens = {
+            monthly: monthlyAllocation,
+            remaining: monthlyAllocation,
+            used: 0
+          };
+
+          // Save to Firestore
+          await db.collection('aero_tokens').doc(currentUser.uid).set({
+            userId: currentUser.uid,
+            tier: subscriptionData.tier,
+            monthlyAllocation: monthlyAllocation,
+            remaining: monthlyAllocation,
+            used: 0,
+            lastReset: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+
+        // Store tier globally for theme access control
+        userTier = normalizeTier(subscriptionData.tier);
+
+        // Combine subscription and token data
+        const subData = {
+          ...subscriptionData,
+          aeroTokens: aeroTokens
+        };
+
+        updateSubscriptionUI(subData);
+        return true;
+      } catch (error) {
+        console.error('Error loading subscription:', error);
+        resetSubscriptionUI();
+        return false;
+      }
+    }
+
+    // Upgrade to ULTRA - opens Buy Me a Coffee
+    async function upgradeTier(tier) {
+      const urls = {
+        'ULTRA': 'https://buymeacoffee.com/Blacklink/membership',
+        'ULTRA_PLUS': 'https://buymeacoffee.com/Blacklink/membership'
+      };
+
+      window.open(urls[tier] || urls['ULTRA'], '_blank');
+    }
+
+    // Update subscription tier manually (for testing or after BMC purchase)
+    async function updateSubscriptionTier(tier) {
+      try {
+        const prices = {
+          'FREE': 0,
+          'ULTRA': 10,
+          'ULTRA_PLUS': 25
+        };
+
+        const features = {
+          'FREE': ['Basic Blacklink Apps', 'Standard Support'],
+          'ULTRA': ['Early Access Features', 'Exclusive Themes', '$10 Aero AI Credits', 'Priority Support'],
+          'ULTRA_PLUS': ['Everything in ULTRA', '$25 Aero AI Credits', 'Alpha/Beta Access', 'Experimental Features', 'Premium Support']
+        };
+
+        await db.collection('subscriptions').doc(currentUser.uid).set({
+          userId: currentUser.uid,
+          email: currentUser.email,
+          tier: tier,
+          status: 'active',
+          price: prices[tier],
+          features: features[tier],
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        // Create/update token allocation
+        if (tier === 'ULTRA' || tier === 'ULTRA_PLUS') {
+          const monthlyAllocation = tier === 'ULTRA' ? 10 : 25;
+
+          await db.collection('aero_tokens').doc(currentUser.uid).set({
+            userId: currentUser.uid,
+            tier: tier,
+            monthlyAllocation: monthlyAllocation,
+            remaining: monthlyAllocation,
+            used: 0,
+            lastReset: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          }, { merge: true });
+        }
+
+        showToast(`Subscription updated to ${tier}!`, 'success');
+        await loadSubscriptionStatus();
+      } catch (error) {
+        console.error('Error updating subscription:', error);
+        showToast('Error updating subscription', 'error');
+      }
+    }
+
+    function showSubscriptionMessage(type, message) {
+      const messageEl = document.getElementById('subscriptionStatusMessage');
+      if (!messageEl) return;
+      messageEl.className = `subscription-status-message ${type}`;
+      messageEl.innerHTML = message;
+      messageEl.style.display = 'block';
+    }
+
+    function clearSubscriptionMessage() {
+      const messageEl = document.getElementById('subscriptionStatusMessage');
+      if (!messageEl) return;
+      messageEl.className = 'subscription-status-message';
+      messageEl.innerHTML = '';
+      messageEl.style.display = 'none';
+    }
+
+    function resetSubscriptionUI() {
+      const tierBadge = document.getElementById('tierBadge');
+      const tierName = document.getElementById('tierName');
+      const tierPrice = document.getElementById('tierPrice');
+      if (tierBadge) {
+        tierBadge.textContent = 'FREE';
+        tierBadge.style.background = 'linear-gradient(135deg, #667eea, #764ba2)';
+      }
+      if (tierName) tierName.textContent = 'Free Plan';
+      if (tierPrice) tierPrice.textContent = '$0/month';
+      const aeroCard = document.getElementById('aeroTokensCard');
+      if (aeroCard) aeroCard.style.display = 'none';
+      const manage = document.getElementById('manageSubscription');
+      if (manage) manage.style.display = 'none';
+      applyNavTierStyling('FREE');
+    }
+
+    function updateSubscriptionUI(subData) {
+      const tier = normalizeTier(subData.tier);
+      const rawTierName = subData.tier || 'FREE';
+      const isDistrictPlan = rawTierName.toLowerCase().includes('district');
+      const isEmployeePlan = rawTierName.toLowerCase().includes('employee');
+
+      const tierColors = {
+        'FREE': 'linear-gradient(135deg, #667eea, #764ba2)',
+        'ULTRA': 'linear-gradient(135deg, #667eea, #764ba2)',
+        'ULTRA_PLUS': 'linear-gradient(135deg, #f59e0b, #d97706)'
+      };
+
+      const tierBadge = document.getElementById('tierBadge');
+      const tierName = document.getElementById('tierName');
+      const tierPrice = document.getElementById('tierPrice');
+
+      // Display badge based on normalized tier
+      if (tier === 'ULTRA_PLUS') {
+        tierBadge.textContent = 'ULTRA+';
+      } else if (tier === 'ULTRA') {
+        tierBadge.textContent = 'ULTRA';
+      } else if (isDistrictPlan) {
+        tierBadge.textContent = 'DISTRICT';
+      } else {
+        tierBadge.textContent = 'FREE';
+      }
+
+      tierBadge.style.background = tierColors[tier] || tierColors['ULTRA'];
+
+      // Display full tier name from Firestore
+      // Special formatting for Employee plans
+      if (isEmployeePlan) {
+        tierName.textContent = 'ULTRA+ For Employees';
+      } else {
+        tierName.textContent = rawTierName;
+      }
+
+      // Display price and district info
+      if (isDistrictPlan && subData.district) {
+        tierPrice.textContent = `District: ${subData.district}`;
+      } else if (isEmployeePlan) {
+        tierPrice.textContent = 'Employee Benefits';
+      } else {
+        tierPrice.textContent = `$${subData.price || 0}/month`;
+      }
+
+      applyNavTierStyling(tier);
+
+      // Show/hide Aero tokens card
+      if (tier !== 'FREE' && subData.aeroTokens) {
+        document.getElementById('aeroTokensCard').style.display = 'block';
+        document.getElementById('aeroMonthly').textContent = `$${subData.aeroTokens.monthly}`;
+        document.getElementById('aeroRemaining').textContent = `$${subData.aeroTokens.remaining}`;
+        document.getElementById('aeroUsed').textContent = `$${subData.aeroTokens.used}`;
+
+        const percentage = subData.aeroTokens.monthly > 0
+          ? (subData.aeroTokens.remaining / subData.aeroTokens.monthly) * 100
+          : 0;
+        document.getElementById('aeroProgressBar').style.width = percentage + '%';
+      } else {
+        document.getElementById('aeroTokensCard').style.display = 'none';
+      }
+
+      // Show/hide manage subscription section
+      // Hide for district plans, employee plans, or FREE tier
+      if (tier !== 'FREE' && !isDistrictPlan && !isEmployeePlan) {
+        document.getElementById('manageSubscription').style.display = 'block';
+        document.getElementById('subStatus').textContent = subData.status || 'Active';
+        if (subData.startedAt) {
+          const date = new Date(subData.startedAt);
+          document.getElementById('subStarted').textContent = date.toLocaleDateString();
+        }
+      } else {
+        document.getElementById('manageSubscription').style.display = 'none';
+      }
+    }
+
+    function subscribeToPlan(plan) {
+      const planUrls = {
+        'ULTRA': 'https://buymeacoffee.com/Blacklink/membership',
+        'ULTRA_PLUS': 'https://buymeacoffee.com/Blacklink/membership'
+      };
+
+      showToast('Opening Buy Me a Coffee...', 'info');
+      setTimeout(() => {
+        window.open(planUrls[plan], '_blank');
+      }, 500);
+    }
+
+    async function syncSubscription() {
+      showToast('Syncing subscription status...', 'info');
+      const success = await loadSubscriptionStatus();
+      if (success) {
+        showToast('Subscription status updated', 'success');
+      } else {
+        showToast('Unable to refresh subscription status. See notice above for next steps.', 'error');
+      }
+    }
+
+    // Export Data
+    async function exportData() {
+      try {
+        showToast('Preparing your data...', 'info');
+
+        const userData = await db.collection('users').doc(currentUser.uid).get();
+        const settingsData = await db.collection('settings').doc(currentUser.uid).get();
+        const appsData = await quickLaunchCollection().get();
+
+        const exportData = {
+          user: userData.data(),
+          settings: settingsData.data(),
+          apps: appsData.docs.map(doc => doc.data()),
+          exportedAt: new Date().toISOString()
+        };
+
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `blacklink-data-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+
+        showToast('Data exported successfully', 'success');
+      } catch (error) {
+        console.error('Error exporting data:', error);
+        showToast('Error exporting data', 'error');
+      }
+    }
+
+    // Export Settings
+    async function exportSettings() {
+      try {
+        const settingsData = await db.collection('settings').doc(currentUser.uid).get();
+
+        const blob = new Blob([JSON.stringify(settingsData.data(), null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `blacklink-settings-${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+
+        showToast('Settings exported successfully', 'success');
+      } catch (error) {
+        console.error('Error exporting settings:', error);
+        showToast('Error exporting settings', 'error');
+      }
+    }
+
+    // Toast Notifications
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <div class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+        <div class="toast-message">${message}</div>
+      `;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+
+</html>

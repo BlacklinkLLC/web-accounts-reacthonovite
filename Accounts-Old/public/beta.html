@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blacklink Beta Program</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Shared Styles -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/nav.css">
+
+  <style>
+    :root {
+      --card-gradient: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(14, 165, 233, 0.08));
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+    }
+
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 3rem;
+    }
+
+    .hero {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--card-gradient);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .hero h1 {
+      font-size: 1.75rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .hero p {
+      margin: 0.5rem 0 0;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary-light);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      margin-bottom: 1rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.1rem;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .muted {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.35rem 0.6rem;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .status.live {
+      background: rgba(34, 197, 94, 0.15);
+      color: #4ade80;
+      border: 1px solid rgba(34, 197, 94, 0.35);
+    }
+
+    .status.waitlist {
+      background: rgba(59, 130, 246, 0.15);
+      color: #93c5fd;
+      border: 1px solid rgba(59, 130, 246, 0.35);
+    }
+
+    .status.upcoming {
+      background: rgba(251, 191, 36, 0.15);
+      color: #facc15;
+      border: 1px solid rgba(251, 191, 36, 0.35);
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 999px;
+      background: var(--card-strong);
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .tag i {
+      font-size: 0.9rem;
+    }
+
+    .tags {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .form-control {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .form-control label {
+      font-weight: 600;
+    }
+
+    .checkboxes {
+      display: grid;
+      gap: 0.35rem;
+    }
+
+    .checkbox-row {
+      display: flex;
+      gap: 0.55rem;
+      align-items: flex-start;
+      background: var(--card-strong);
+      border: 1px solid var(--border);
+      padding: 0.6rem 0.75rem;
+      border-radius: 10px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 0.75rem 1.1rem;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      display: inline-flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .input {
+      width: 100%;
+      padding: 0.75rem 0.85rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card-strong);
+      color: var(--text);
+    }
+
+    .aside {
+      display: flex;
+      gap: 0.65rem;
+      background: var(--card-strong);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 0.8rem 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .aside i {
+      color: var(--primary-light);
+      margin-top: 0.2rem;
+    }
+
+    .beta-list {
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .beta-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      background: var(--card-strong);
+    }
+
+    .beta-card h3 {
+      margin: 0;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .beta-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      margin-top: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .beta-card p {
+      margin: 0.5rem 0 0;
+      color: var(--text-secondary);
+      line-height: 1.45;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 1.5rem 1rem;
+      color: var(--text-secondary);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      background: var(--card-strong);
+    }
+
+    @media (max-width: 720px) {
+      .page {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="navbar-container"></div>
+
+  <main class="page">
+    <section class="hero">
+      <div class="hero-content">
+        <div>
+          <div class="pill"><i class="fas fa-flask"></i> Blacklink Beta</div>
+          <h1><i class="fas fa-rocket"></i> Try upcoming Blacklink experiences</h1>
+          <p>Opt in to the Beta program to preview new releases, unlock experimental features, and share feedback that
+            shapes the next version of Blacklink Accounts, Aero AI, QuickLaunch, and more.</p>
+          <div class="actions">
+            <button id="ctaJoin" class="btn-primary">
+              <i class="fas fa-check-circle"></i>
+              Opt in to Beta
+            </button>
+            <button id="ctaFeedback" class="btn-outline">
+              <i class="fas fa-heart"></i>
+              View current betas
+            </button>
+          </div>
+          <div class="aside">
+            <i class="fas fa-shield-halved" aria-hidden="true"></i>
+            <div>
+              Participation is optional. You can leave the Beta at any time and your production experience will stay
+              stable while you test new builds in parallel.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid" aria-label="Beta program settings">
+      <div class="card">
+        <h2><i class="fas fa-user-check"></i> Beta enrollment</h2>
+        <p class="muted">Tell us how you’d like to participate. We’ll use this to prioritize invites.</p>
+
+        <div class="form-control">
+          <label>
+            <input type="checkbox" id="optIn" />
+            I want to join the Blacklink Beta program
+          </label>
+        </div>
+
+        <div class="form-control">
+          <label>Areas you’re interested in</label>
+          <div class="checkboxes" id="interestList">
+            <!-- populated by script -->
+          </div>
+        </div>
+
+        <div class="form-control">
+          <label for="notes">Anything specific you’d like to test?</label>
+          <textarea id="notes" class="input" rows="3" placeholder="Optional — e.g., 'Focus on QuickLaunch automations'"></textarea>
+        </div>
+
+        <div class="actions">
+          <button id="saveBtn" class="btn-primary">
+            <span class="spinner" aria-hidden="true" style="display:none;"><i class="fas fa-circle-notch fa-spin"></i></span>
+            Save preferences
+          </button>
+          <span id="status" class="muted"></span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><i class="fas fa-list-check"></i> Current & upcoming betas</h2>
+        <p class="muted">These tracks refresh regularly. Opt in above to get prioritized access.</p>
+        <div id="betaTracks" class="beta-list" aria-live="polite"></div>
+        <div id="betaEmpty" class="empty-state" hidden>
+          <i class="fas fa-inbox"></i> No active betas right now. Check back soon!
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Shared JS -->
+  <script src="js/utils.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const interestOptions = [
+      { id: 'accounts4', label: 'Accounts 4.0 UI and new settings' },
+      { id: 'privacy', label: 'Privacy & data controls' },
+      { id: 'themes', label: 'Themes, accessibility, and layout polish' }
+    ];
+
+    const betaTracks = [
+      {
+        title: 'Accounts 4.0 preview',
+        status: 'upcoming',
+        description: 'Redesigned settings, theme system, privacy center, and organized user subcollections.',
+        tags: ['Accounts', 'UI', 'Settings']
+      }
+    ];
+
+    const elements = {
+      optIn: document.getElementById('optIn'),
+      interestList: document.getElementById('interestList'),
+      notes: document.getElementById('notes'),
+      saveBtn: document.getElementById('saveBtn'),
+      status: document.getElementById('status'),
+      betaTracks: document.getElementById('betaTracks'),
+      betaEmpty: document.getElementById('betaEmpty'),
+      ctaJoin: document.getElementById('ctaJoin'),
+      ctaFeedback: document.getElementById('ctaFeedback')
+    };
+
+    function renderInterestOptions() {
+      elements.interestList.innerHTML = '';
+      interestOptions.forEach(option => {
+        const row = document.createElement('label');
+        row.className = 'checkbox-row';
+        row.innerHTML = `
+          <input type="checkbox" value="${option.id}" />
+          <div>
+            <div style="font-weight:600;">${option.label}</div>
+            <div class="muted" style="font-size:0.9rem;">${option.id === 'accounts4' ? 'Early access to settings + privacy center updates' : option.id === 'privacy' ? 'Data controls, permissions, audit surfaces' : 'Themes, accessibility tweaks, and layout polish'}</div>
+          </div>
+        `;
+        elements.interestList.appendChild(row);
+      });
+    }
+
+    function renderTracks() {
+      const container = elements.betaTracks;
+      container.innerHTML = '';
+      betaTracks.forEach(track => {
+        const card = document.createElement('div');
+        card.className = 'beta-card';
+        card.innerHTML = `
+          <h3><i class="fas fa-flask"></i> ${track.title}</h3>
+          <div class="beta-meta">
+            <span class="status ${track.status}">
+              ${track.status === 'live' ? '<i class="fas fa-bolt"></i> Live' : track.status === 'waitlist' ? '<i class="fas fa-clock"></i> Waitlist' : '<i class="fas fa-road"></i> Upcoming'}
+            </span>
+            <div class="tags">
+              ${track.tags.map(tag => `<span class="tag"><i class="fas fa-tag"></i> ${tag}</span>`).join('')}
+            </div>
+          </div>
+          <p>${track.description}</p>
+        `;
+        container.appendChild(card);
+      });
+      elements.betaEmpty.hidden = betaTracks.length > 0;
+    }
+
+    function setSavingState(isSaving) {
+      const spinner = elements.saveBtn.querySelector('.spinner');
+      elements.saveBtn.disabled = isSaving;
+      spinner.style.display = isSaving ? 'inline-block' : 'none';
+      elements.saveBtn.style.opacity = isSaving ? 0.7 : 1;
+    }
+
+    function showStatus(message, type = 'muted') {
+      elements.status.textContent = message || '';
+      elements.status.style.color = type === 'error' ? '#f87171' : 'var(--text-secondary)';
+    }
+
+    async function savePreferences(user) {
+      if (!user) {
+        const returnUrl = encodeURIComponent('/beta.html');
+        window.location.href = `/login.html?redirect=${returnUrl}`;
+        return;
+      }
+
+      const selectedInterests = Array.from(elements.interestList.querySelectorAll('input[type="checkbox"]'))
+        .filter(input => input.checked)
+        .map(input => input.value);
+
+      const payload = {
+        betaProgram: {
+          optedIn: elements.optIn.checked,
+          interests: selectedInterests,
+          notes: elements.notes.value.trim(),
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }
+      };
+
+      setSavingState(true);
+      showStatus('Saving preferences…');
+      try {
+        await db.collection('users').doc(user.uid).set(payload, { merge: true });
+        showStatus('Saved. We’ll notify you when new betas open.');
+      } catch (err) {
+        console.error('Failed to save beta prefs', err);
+        showStatus('Failed to save. Please try again.', 'error');
+      } finally {
+        setSavingState(false);
+      }
+    }
+
+    async function loadPreferences(user) {
+      if (!user) return;
+      try {
+        const doc = await db.collection('users').doc(user.uid).get();
+        const data = doc.data() || {};
+        const beta = data.betaProgram || {};
+        elements.optIn.checked = Boolean(beta.optedIn);
+        elements.notes.value = beta.notes || '';
+
+        const selected = new Set(beta.interests || []);
+        elements.interestList.querySelectorAll('input[type="checkbox"]').forEach(input => {
+          input.checked = selected.has(input.value);
+        });
+
+        if (beta.optedIn) {
+          showStatus('You’re in the Beta program. Thank you for testing!');
+        }
+      } catch (err) {
+        console.error('Failed to load beta prefs', err);
+        showStatus('Could not load your preferences.', 'error');
+      }
+    }
+
+    function requireAuthOrPrompt(user) {
+      if (user) return;
+      showStatus('Sign in to save Beta preferences.');
+    }
+
+    function attachEvents() {
+      elements.saveBtn.addEventListener('click', () => savePreferences(auth.currentUser));
+      elements.ctaJoin.addEventListener('click', () => {
+        if (!auth.currentUser) {
+          const returnUrl = encodeURIComponent('/beta.html');
+          window.location.href = `/register.html?redirect=${returnUrl}`;
+          return;
+        }
+        elements.optIn.checked = true;
+        showStatus('Ready to save your Beta preferences.');
+        elements.optIn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      elements.ctaFeedback.addEventListener('click', () => {
+        elements.betaTracks.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    function init() {
+      renderInterestOptions();
+      renderTracks();
+      attachEvents();
+
+      Navbar.initNavbar(auth, db, { currentPage: 'beta' });
+
+      auth.onAuthStateChanged(async (user) => {
+        requireAuthOrPrompt(user);
+        if (user) {
+          await loadPreferences(user);
+        }
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+
+</html>

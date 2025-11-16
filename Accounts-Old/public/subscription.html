@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subscriptions - Blacklink</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Modular CSS -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/nav.css">
+
+  <style>
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .hero {
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .hero h1 {
+      font-size: 2.75rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .release-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      background: rgba(99, 102, 241, 0.12);
+      color: var(--primary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+    }
+
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .plan-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      background: var(--card-bg);
+      display: grid;
+      gap: 1rem;
+      position: relative;
+    }
+
+    .plan-card.featured {
+      border-color: rgba(99, 102, 241, 0.5);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .plan-card h3 {
+      margin: 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .plan-price {
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .plan-price span {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .plan-features {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .plan-features i {
+      color: var(--success);
+    }
+
+    .plan-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .comparison-card {
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      background: var(--bg-secondary);
+      margin-top: 2rem;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .comparison-pill {
+      padding: 0.65rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .comparison-pill i {
+      color: var(--primary);
+    }
+
+    .cta-banner {
+      border: 2px solid rgba(99, 102, 241, 0.35);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      background: rgba(99, 102, 241, 0.08);
+      margin-top: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .cta-banner strong {
+      font-size: 1.15rem;
+    }
+
+    /* ULTRA Feature Cards */
+    .ultra-feature-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .ultra-feature-card:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .ultra-feature-card.locked {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .ultra-feature-card.locked:hover {
+      transform: none;
+    }
+
+    .ultra-feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+
+    .ultra-feature-name {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: var(--text);
+    }
+
+    .ultra-feature-description {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .feature-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: auto;
+      gap: 0.5rem;
+    }
+
+    .feature-tier-pill {
+      padding: 0.35rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .feature-tier-pill.tier-ultra {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+    }
+
+    .feature-tier-pill.tier-ultra-plus {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(99, 102, 241, 0.15));
+      color: #ec4899;
+    }
+
+    .feature-status {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .feature-status.ready {
+      color: var(--success);
+    }
+
+    .feature-status.locked {
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+
+      .hero h1 {
+        font-size: 2.1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="navbar-container"></div>
+
+  <main class="container">
+    <section class="hero">
+      <div class="release-chip">
+        <i class="fas fa-code-branch"></i>
+        Accounts 3.9
+      </div>
+      <h1>Choose the right plan</h1>
+      <p style="color: var(--text-secondary); max-width: 640px;">
+        Whether you’re exploring Blacklink for free or need ULTRA+ benefits with employee accelerators, this page
+        outlines every tier and how to activate it instantly.
+      </p>
+      <div class="btn-group">
+        <a href="https://buymeacoffee.com/Blacklink/membership" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          <i class="fas fa-crown"></i>
+          Get ULTRA Membership
+        </a>
+        <a href="mailto:support@blacklink.net" class="btn btn-secondary">
+          <i class="fas fa-envelope"></i>
+          Contact Sales
+        </a>
+      </div>
+    </section>
+
+    <section class="plan-grid" aria-label="Subscription tiers">
+      <article class="plan-card">
+        <h3>Free</h3>
+        <p class="plan-price">$0 <span>/ month</span></p>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Core Blacklink apps</li>
+          <li><i class="fas fa-check"></i> Standard privacy controls</li>
+          <li><i class="fas fa-check"></i> QuickLaunch and profile basics</li>
+        </ul>
+        <button class="btn btn-secondary" disabled>Current Plan</button>
+        <p class="plan-meta">Perfect for students or trying out Blacklink.</p>
+      </article>
+
+      <article class="plan-card featured">
+        <h3>ULTRA</h3>
+        <p class="plan-price">$10 <span>/ month</span></p>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> $10 Aero AI credits monthly</li>
+          <li><i class="fas fa-check"></i> 25+ premium themes</li>
+          <li><i class="fas fa-check"></i> QuickLaunch analytics & automations</li>
+          <li><i class="fas fa-check"></i> Priority support & feature flighting</li>
+        </ul>
+        <button class="btn btn-primary" onclick="openUltraCheckout('ULTRA')">
+          <i class="fas fa-bolt"></i>
+          Upgrade to ULTRA
+        </button>
+        <p class="plan-meta">Unlock advanced automation, customization, and faster response times.</p>
+      </article>
+
+      <article class="plan-card">
+        <h3>ULTRA+</h3>
+        <p class="plan-price">$25 <span>/ month</span></p>
+        <ul class="plan-features">
+          <li><i class="fas fa-check"></i> Everything in ULTRA</li>
+          <li><i class="fas fa-check"></i> $25 Aero AI credits & pooled tokens</li>
+          <li><i class="fas fa-check"></i> Custom theme builder (Beta)</li>
+          <li><i class="fas fa-check"></i> Experimental feature access</li>
+        </ul>
+        <button class="btn btn-primary" onclick="openUltraCheckout('ULTRA_PLUS')">
+          <i class="fas fa-rocket"></i>
+          Unlock ULTRA+
+        </button>
+        <p class="plan-meta">Best for power users, early adopters, and content creators.</p>
+      </article>
+    </section>
+
+    <!-- Employee & District Benefits -->
+    <section class="comparison-card" style="margin-top: 2rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.08), rgba(99, 102, 241, 0.08)); border-color: rgba(236, 72, 153, 0.3);">
+      <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+        <i class="fas fa-briefcase" style="font-size: 2rem; color: #ec4899;"></i>
+        <div>
+          <h3 style="margin: 0; font-size: 1.5rem;">ULTRA+ for Employees & Districts</h3>
+          <p style="margin: 0.5rem 0 0 0; color: var(--text-secondary);">Automatic ULTRA+ access for Blacklink team members and educational institutions</p>
+        </div>
+      </div>
+
+      <div class="comparison-grid">
+        <div class="comparison-pill" style="background: var(--card-bg);">
+          <i class="fas fa-building"></i>
+          <strong>Employee Benefits:</strong> All @blacklink.net emails automatically get ULTRA+ access with unlimited AI credits
+        </div>
+        <div class="comparison-pill" style="background: var(--card-bg);">
+          <i class="fas fa-school"></i>
+          <strong>ULTRA District:</strong> Bulk licensing for K-12 schools with shared organization pools and SSO integration
+        </div>
+        <div class="comparison-pill" style="background: var(--card-bg);">
+          <i class="fas fa-users"></i>
+          <strong>Shared Resources:</strong> Pooled Aero AI credits across your organization for collaborative workflows
+        </div>
+        <div class="comparison-pill" style="background: var(--card-bg);">
+          <i class="fas fa-shield-halved"></i>
+          <strong>Admin Controls:</strong> Full admin dashboard for managing users, rosters, and subscription allocations
+        </div>
+      </div>
+
+      <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border);">
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">
+          <i class="fas fa-info-circle"></i>
+          <strong>Note:</strong> Employees are automatically upgraded to ULTRA+ upon signing in with their @blacklink.net email. Districts can contact sales for volume pricing and custom deployment.
+        </p>
+        <div class="btn-group">
+          <a class="btn btn-secondary" href="mailto:employees@blacklink.net">
+            <i class="fas fa-briefcase"></i>
+            Employee Access
+          </a>
+          <a class="btn btn-secondary" href="mailto:districts@blacklink.net">
+            <i class="fas fa-school"></i>
+            District Pricing
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ULTRA Suite Features -->
+    <section class="panel-card" id="ultraModuleCard" style="display: none; border: 2px solid var(--border); border-radius: var(--radius); padding: 1.5rem; background: var(--card-bg); margin-top: 2rem;">
+      <div class="panel-header" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+        <h2 class="panel-title" style="margin: 0; font-size: 1.75rem; font-weight: 700;">
+          <i class="fas fa-crown"></i>
+          ULTRA suite
+        </h2>
+        <span class="feature-tier-pill tier-ultra" id="ultraModuleBadge" style="display: none; padding: 0.4rem 0.85rem; border-radius: 999px; background: rgba(99, 102, 241, 0.15); color: var(--primary); font-size: 0.75rem; font-weight: 700; text-transform: uppercase;">ULTRA</span>
+      </div>
+      <p class="panel-subtitle" id="ultraModuleSubtitle" style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+        Unlock premium Blacklink workspaces tailored to your tier.
+      </p>
+      <div class="ultra-feature-grid" id="ultraFeatureGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;"></div>
+      <div class="panel-footer" id="ultraModuleFooter" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 2px solid var(--border); text-align: center; color: var(--text-secondary);">
+        Need more power? <a href="subscription.html">Manage subscription</a>
+      </div>
+    </section>
+
+    <section class="comparison-card" aria-label="Plan comparison">
+      <h3 style="margin-top:0;">Why upgrade?</h3>
+      <div class="comparison-grid">
+        <div class="comparison-pill">
+          <i class="fas fa-sparkles"></i>
+          Smart App Hub insights & usage heatmaps
+        </div>
+        <div class="comparison-pill">
+          <i class="fas fa-universal-access"></i>
+          Color vision calibration synced across devices
+        </div>
+        <div class="comparison-pill">
+          <i class="fas fa-building"></i>
+          Organization workspaces with shared credits
+        </div>
+        <div class="comparison-pill">
+          <i class="fas fa-clock"></i>
+          Priority privacy exports and audit automation
+        </div>
+      </div>
+    </section>
+
+    <section class="cta-banner">
+      <strong>Need a quote for your district or company?</strong>
+      <p style="margin:0;">
+        We can activate ULTRA+ for educators and employees automatically. Reach out with your roster or HR contact to
+        provision licenses without credit cards.
+      </p>
+      <div class="btn-group">
+        <a class="btn btn-secondary" href="mailto:districts@blacklink.net">
+          <i class="fas fa-school"></i>
+          District Sales
+        </a>
+        <a class="btn btn-secondary" href="mailto:employees@blacklink.net">
+          <i class="fas fa-briefcase"></i>
+          Employee Access
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/navbar.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/analytics-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    Navbar.initNavbar(auth, db, 'subscription');
+
+    let premiumFeaturesCatalog = [];
+    let subscriptionTier = 'FREE';
+
+    // Utility function for tier normalization
+    function normalizeTier(tier) {
+      if (!tier) return 'FREE';
+      const value = String(tier).toUpperCase().replace(/\s+/g, '_');
+      if (value.includes('EMPLOYEE')) return 'ULTRA_PLUS';
+      if (value === 'ULTRA_PLUS' || value === 'ULTRA+') return 'ULTRA_PLUS';
+      if (value === 'ULTRA' || value.includes('DISTRICT')) return 'ULTRA';
+      return 'FREE';
+    }
+
+    function hexToRgba(hex, alpha = 1) {
+      const r = parseInt(hex.slice(1, 3), 16);
+      const g = parseInt(hex.slice(3, 5), 16);
+      const b = parseInt(hex.slice(5, 7), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    function showToast(message, type = 'info') {
+      console.log(`[${type.toUpperCase()}] ${message}`);
+      alert(message);
+    }
+
+    async function loadPremiumFeatures() {
+      try {
+        const configResponse = await fetch('./js/basic.qlConfig');
+        const config = await configResponse.json();
+        premiumFeaturesCatalog = Array.isArray(config.premiumFeatures) ? config.premiumFeatures : [];
+        renderUltraFeatures();
+      } catch (error) {
+        console.error('Error loading premium features:', error);
+      }
+    }
+
+    function renderUltraFeatures() {
+      const ultraFeatureGrid = document.getElementById('ultraFeatureGrid');
+      const ultraModuleCard = document.getElementById('ultraModuleCard');
+
+      if (!ultraFeatureGrid || !ultraModuleCard) return;
+
+      const features = premiumFeaturesCatalog || [];
+      if (features.length === 0) {
+        ultraModuleCard.style.display = 'none';
+        return;
+      }
+
+      ultraModuleCard.style.display = 'block';
+
+      ultraFeatureGrid.innerHTML = features.map(feature => {
+        const isAccessible = Array.isArray(feature.tiers)
+          ? feature.tiers.some((tier) => tier === subscriptionTier || (subscriptionTier === 'ULTRA_PLUS' && tier === 'ULTRA'))
+          : subscriptionTier !== 'FREE';
+        const cardClass = isAccessible ? 'ultra-feature-card' : 'ultra-feature-card locked';
+        const statusClass = isAccessible ? 'feature-status ready' : 'feature-status locked';
+        const statusText = isAccessible ? 'Ready' : 'Locked';
+        const statusIcon = isAccessible ? 'fa-check-circle' : 'fa-lock';
+
+        // Determine tier text for badge
+        let tierText = 'ULTRA';
+        if (feature.tiers) {
+          if (feature.tiers.includes('ULTRA_PLUS') && !feature.tiers.includes('ULTRA')) {
+            tierText = 'ULTRA+';
+          } else if (feature.tiers.includes('ULTRA_PLUS') && feature.tiers.includes('ULTRA')) {
+            tierText = 'ULTRA';
+          } else {
+            tierText = feature.tiers.map(t => t.replace('ULTRA_PLUS', 'ULTRA+').replace('_', ' ')).join(', ');
+          }
+        }
+
+        const hasAction = feature.action && isAccessible;
+        const href = hasAction ? '#' : (isAccessible ? feature.url : '#');
+        const onclickAttr = hasAction
+          ? `onclick="event.preventDefault(); handleFeatureAction('${feature.action}')"`
+          : (isAccessible ? '' : `onclick="event.preventDefault(); showToast('Upgrade to ${tierText} to access this feature', 'info')"`);
+
+        return `
+          <a href="${href}" class="${cardClass}" ${onclickAttr}>
+            <div class="ultra-feature-icon" style="background: ${hexToRgba(feature.color, 0.15)}; color: ${feature.color};">
+              ${feature.icon || '🚀'}
+            </div>
+            <div class="ultra-feature-name">${feature.name}</div>
+            <div class="ultra-feature-description">${feature.description}</div>
+            <div class="feature-meta">
+              <span class="feature-tier-pill ${feature.tiers?.includes('ULTRA_PLUS') ? 'tier-ultra-plus' : 'tier-ultra'}">${tierText}</span>
+              <span class="${statusClass}">
+                <i class="fas ${statusIcon}"></i>
+                ${statusText}
+              </span>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+
+    async function loadUserSubscription() {
+      try {
+        const user = auth.currentUser;
+        if (!user) {
+          subscriptionTier = 'FREE';
+          renderUltraFeatures();
+          return;
+        }
+
+        // Check subscriptions collection first (correct location)
+        const subscriptionDoc = await db.collection('subscriptions').doc(user.uid).get();
+        let subscriptionData = null;
+
+        if (subscriptionDoc.exists) {
+          subscriptionData = subscriptionDoc.data();
+        }
+
+        // Also check users collection for isAdmin flag
+        const userDoc = await db.collection('users').doc(user.uid).get();
+        let userData = null;
+
+        if (userDoc.exists) {
+          userData = userDoc.data();
+        }
+
+        // Normalize raw tier values from both sources
+        const rawTier = (subscriptionData && subscriptionData.tier) || (userData && (userData.tier || userData.subscription?.tier)) || '';
+
+        // Employee detection: official email OR tier label contains "employee"
+        const isEmployee = (user.email && user.email.toLowerCase().endsWith('@blacklink.net')) || /employee/i.test(rawTier);
+
+        // Admin detection: flag in users collection OR employee status implies admin controls
+        const isAdminUser = (userData && userData.isAdmin === true) || isEmployee;
+
+        // Determine tier: employees/admins get ULTRA_PLUS automatically
+        let tierValue = 'FREE';
+
+        if (isEmployee || isAdminUser) {
+          tierValue = 'ULTRA_PLUS';
+          console.log('Employee/Admin detected - automatic ULTRA+ access');
+          console.log('  - Email employee:', isEmployee);
+          console.log('  - Database admin:', isAdminUser);
+        } else if (subscriptionData && subscriptionData.tier) {
+          tierValue = subscriptionData.tier;
+          console.log('Tier from subscriptions collection:', tierValue);
+        } else if (userData && userData.tier) {
+          tierValue = userData.tier;
+          console.log('Tier from users collection (fallback):', tierValue);
+        }
+
+        subscriptionTier = normalizeTier(tierValue);
+
+        // Update ULTRA badge
+        const ultraBadge = document.getElementById('ultraModuleBadge');
+        if (ultraBadge) {
+          if (subscriptionTier === 'ULTRA') {
+            ultraBadge.textContent = 'ULTRA';
+            ultraBadge.classList.remove('tier-ultra-plus');
+            ultraBadge.style.display = 'inline-block';
+          } else if (subscriptionTier === 'ULTRA_PLUS') {
+            ultraBadge.textContent = 'ULTRA+';
+            ultraBadge.classList.add('tier-ultra-plus');
+            ultraBadge.style.display = 'inline-block';
+          } else {
+            ultraBadge.style.display = 'none';
+          }
+        }
+
+        console.log('User email:', user.email);
+        console.log('Is employee:', isEmployee);
+        console.log('Database admin:', isAdminUser);
+        console.log('Subscription tier (subscriptions collection):', subscriptionData?.tier);
+        console.log('User tier (users collection):', userData?.tier);
+        console.log('Final loaded subscription tier:', subscriptionTier);
+        renderUltraFeatures();
+      } catch (error) {
+        console.error('Error loading user subscription:', error);
+        subscriptionTier = 'FREE';
+        renderUltraFeatures();
+      }
+    }
+
+    auth.onAuthStateChanged(async (user) => {
+      if (user && window.BlacklinkAnalytics) {
+        BlacklinkAnalytics.init(db, user);
+        BlacklinkAnalytics.trackPageView('subscription');
+      }
+
+      await loadPremiumFeatures();
+      if (user) {
+        await loadUserSubscription();
+      }
+    });
+
+    function handleFeatureAction(action) {
+      switch (action) {
+        case 'openAnalytics':
+          window.location.href = 'dashboard.html#analytics';
+          break;
+        case 'openThemeBuilder':
+          window.location.href = 'dashboard.html#theme-builder';
+          break;
+        case 'openAutomations':
+          window.location.href = 'dashboard.html#automations';
+          break;
+        default:
+          showToast('Feature coming soon!', 'info');
+      }
+    }
+
+    function openUltraCheckout(tier) {
+      if (window.BlacklinkAnalytics) {
+        BlacklinkAnalytics.trackSubscription('checkout', tier);
+      }
+      const checkoutUrl = tier === 'ULTRA_PLUS'
+        ? 'https://buymeacoffee.com/Blacklink/membership'
+        : 'https://buymeacoffee.com/Blacklink/membership';
+      window.open(checkoutUrl, '_blank', 'noopener');
+    }
+  </script>
+</body>
+
+</html>

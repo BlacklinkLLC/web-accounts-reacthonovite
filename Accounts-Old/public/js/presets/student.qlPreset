@@ -1,0 +1,113 @@
+{
+  "presetId": "student-essentials",
+  "name": "Student Essentials",
+  "description": "Curated apps and tools for K-12 and college students focused on note-taking, research, and organization.",
+  "version": "1.0.0",
+  "targetAudience": "students",
+  "icon": "🎓",
+  "color": "#6366f1",
+  "apps": [
+    {
+      "id": "note26",
+      "name": "Note26",
+      "url": "https://note.blacklink.net/26",
+      "icon": "📝",
+      "color": "#6366f1",
+      "description": "Modern note-taking with real-time collaboration and smart organization.",
+      "category": "productivity",
+      "tier": "free",
+      "pinned": true,
+      "tags": ["notes", "collaboration", "study"]
+    },
+    {
+      "id": "trust",
+      "name": "Blacklink Trust",
+      "url": "https://trust.blacklink.net",
+      "icon": "✅",
+      "color": "#22c55e",
+      "description": "Verify source credibility and find trusted research materials.",
+      "category": "education",
+      "tier": "free",
+      "pinned": true,
+      "tags": ["research", "citations", "academic"]
+    },
+    {
+      "id": "aero-ai",
+      "name": "Aero AI",
+      "url": "https://aero.blacklink.net",
+      "icon": "🤖",
+      "color": "#0ea5e9",
+      "description": "AI-powered study assistant for homework help and concept explanations.",
+      "category": "education",
+      "tier": "ultra",
+      "pinned": false,
+      "tags": ["ai", "tutoring", "study-help"]
+    },
+    {
+      "id": "calendar",
+      "name": "Blacklink Calendar",
+      "url": "https://calendar.blacklink.net",
+      "icon": "📅",
+      "color": "#f59e0b",
+      "description": "Sync assignments, exams, and extracurriculars in one place.",
+      "category": "productivity",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["schedule", "deadlines", "planning"]
+    },
+    {
+      "id": "flashcards",
+      "name": "Flash Cards",
+      "url": "https://study.blacklink.net/flashcards",
+      "icon": "🗂️",
+      "color": "#ec4899",
+      "description": "Create and study with intelligent flashcard sets.",
+      "category": "education",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["study", "memorization", "review"]
+    },
+    {
+      "id": "library",
+      "name": "Resource Library",
+      "url": "https://library.blacklink.net",
+      "icon": "📚",
+      "color": "#8b5cf6",
+      "description": "Access educational resources, textbooks, and study guides.",
+      "category": "education",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["textbooks", "resources", "reference"]
+    }
+  ],
+  "categories": {
+    "productivity": {
+      "name": "Productivity",
+      "icon": "⚡",
+      "color": "#6366f1",
+      "sortOrder": 1
+    },
+    "education": {
+      "name": "Learning & Research",
+      "icon": "🎓",
+      "color": "#22c55e",
+      "sortOrder": 2
+    },
+    "organization": {
+      "name": "Organization",
+      "icon": "📁",
+      "color": "#f59e0b",
+      "sortOrder": 3
+    }
+  },
+  "recommendations": [
+    {
+      "condition": "tier === 'ULTRA'",
+      "apps": ["aero-ai", "premium-themes", "advanced-analytics"]
+    },
+    {
+      "condition": "hasUpcomingDeadlines",
+      "apps": ["calendar", "note26"]
+    }
+  ]
+}

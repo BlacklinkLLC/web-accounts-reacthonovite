@@ -1,0 +1,185 @@
+{
+  "presetId": "district-admin",
+  "name": "District Administration",
+  "description": "Administrative tools for district IT, principals, and school administrators.",
+  "version": "1.0.0",
+  "targetAudience": "administrators",
+  "icon": "🏛️",
+  "color": "#ef4444",
+  "apps": [
+    {
+      "id": "admin-dashboard",
+      "name": "Admin Dashboard",
+      "url": "https://accounts.blacklink.net/admin.html",
+      "icon": "🛡️",
+      "color": "#ef4444",
+      "description": "System administration, user management, and subscription oversight.",
+      "category": "administration",
+      "tier": "admin",
+      "pinned": true,
+      "tags": ["admin", "management", "oversight"],
+      "requiresAdmin": true
+    },
+    {
+      "id": "user-management",
+      "name": "User Management",
+      "url": "https://admin.blacklink.net/users",
+      "icon": "👥",
+      "color": "#3b82f6",
+      "description": "Manage student, teacher, and staff accounts across the district.",
+      "category": "administration",
+      "tier": "ultra",
+      "pinned": true,
+      "tags": ["users", "accounts", "provisioning"]
+    },
+    {
+      "id": "sso-config",
+      "name": "SSO Configuration",
+      "url": "https://admin.blacklink.net/sso",
+      "icon": "🔐",
+      "color": "#8b5cf6",
+      "description": "Configure ClassLink, Google, and Microsoft SSO integrations.",
+      "category": "infrastructure",
+      "tier": "ultra",
+      "pinned": true,
+      "tags": ["sso", "authentication", "integration"]
+    },
+    {
+      "id": "organizations",
+      "name": "Organizations",
+      "url": "https://accounts.blacklink.net/organizations.html",
+      "icon": "🏢",
+      "color": "#10b981",
+      "description": "Manage schools, departments, and district organizational structure.",
+      "category": "administration",
+      "tier": "ultra",
+      "pinned": false,
+      "tags": ["organizations", "schools", "structure"]
+    },
+    {
+      "id": "analytics-reporting",
+      "name": "District Analytics",
+      "url": "https://analytics.blacklink.net/district",
+      "icon": "📊",
+      "color": "#f59e0b",
+      "description": "Usage reports, adoption metrics, and district-wide insights.",
+      "category": "analytics",
+      "tier": "ultra",
+      "pinned": false,
+      "tags": ["analytics", "reports", "metrics"]
+    },
+    {
+      "id": "license-management",
+      "name": "License Management",
+      "url": "https://admin.blacklink.net/licenses",
+      "icon": "🎫",
+      "color": "#ec4899",
+      "description": "Allocate and track ULTRA licenses across schools.",
+      "category": "administration",
+      "tier": "ultra",
+      "pinned": false,
+      "tags": ["licenses", "subscriptions", "billing"]
+    },
+    {
+      "id": "rostering",
+      "name": "Rostering",
+      "url": "https://accounts.blacklink.net/sso/classlink/rostering.html",
+      "icon": "📋",
+      "color": "#06b6d4",
+      "description": "Sync rosters from ClassLink, Clever, or CSV imports.",
+      "category": "infrastructure",
+      "tier": "ultra",
+      "pinned": false,
+      "tags": ["rostering", "sync", "sis"]
+    },
+    {
+      "id": "support-tools",
+      "name": "Support Tools",
+      "url": "https://support.blacklink.net/admin",
+      "icon": "🛠️",
+      "color": "#64748b",
+      "description": "Troubleshoot issues, view logs, and access admin utilities.",
+      "category": "support",
+      "tier": "admin",
+      "pinned": false,
+      "tags": ["support", "troubleshooting", "logs"],
+      "requiresAdmin": true
+    },
+    {
+      "id": "security-audit",
+      "name": "Security & Compliance",
+      "url": "https://admin.blacklink.net/security",
+      "icon": "🔒",
+      "color": "#7c3aed",
+      "description": "Review security logs, data access, and compliance reports.",
+      "category": "administration",
+      "tier": "ultra",
+      "pinned": false,
+      "tags": ["security", "compliance", "audit"]
+    }
+  ],
+  "categories": {
+    "administration": {
+      "name": "Administration",
+      "icon": "🏛️",
+      "color": "#ef4444",
+      "sortOrder": 1
+    },
+    "infrastructure": {
+      "name": "Infrastructure & SSO",
+      "icon": "🔧",
+      "color": "#3b82f6",
+      "sortOrder": 2
+    },
+    "analytics": {
+      "name": "Analytics & Reporting",
+      "icon": "📊",
+      "color": "#f59e0b",
+      "sortOrder": 3
+    },
+    "support": {
+      "name": "Support & Tools",
+      "icon": "🛠️",
+      "color": "#64748b",
+      "sortOrder": 4
+    }
+  },
+  "quickActions": [
+    {
+      "id": "create-user",
+      "name": "Create User",
+      "icon": "➕",
+      "action": "createUser",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "bulk-import",
+      "name": "Bulk Import",
+      "icon": "📥",
+      "action": "bulkImport",
+      "color": "#10b981"
+    },
+    {
+      "id": "view-logs",
+      "name": "View Logs",
+      "icon": "📜",
+      "action": "viewLogs",
+      "color": "#64748b"
+    },
+    {
+      "id": "system-status",
+      "name": "System Status",
+      "icon": "💚",
+      "action": "checkStatus",
+      "color": "#10b981"
+    }
+  ],
+  "permissions": {
+    "viewAnalytics": true,
+    "manageUsers": true,
+    "configureSso": true,
+    "manageLicenses": true,
+    "viewLogs": true,
+    "bulkOperations": true
+  }
+}

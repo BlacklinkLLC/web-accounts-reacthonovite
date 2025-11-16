@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Invalid Request – Blacklink</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    /* Base reset */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Share+Tech+Mono&display=swap');
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background:
+        radial-gradient(circle at center, #101020 0%, #050512 100%),
+        url('https://www.transparenttextures.com/patterns/stardust.png');
+      background-repeat: repeat;
+      font-family: 'Inter', sans-serif;
+      color: #e6e6f5;
+      padding: 1.5rem;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #161633 0%, #1e1e44 100%);
+      border-radius: 16px;
+      box-shadow:
+        0 0 30px rgba(99, 102, 241, 0.45),
+        0 8px 24px rgba(20, 20, 40, 0.9);
+      max-width: 600px;
+      width: 100%;
+      padding: 2.5rem;
+      text-align: center;
+    }
+
+    .logo {
+      width: 80px;
+      margin-bottom: 1.5rem;
+      filter: drop-shadow(0 0 8px rgba(127, 127, 255, 0.7));
+    }
+
+    h1 {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 2.75rem;
+      font-weight: 700;
+      color: #8a80ff;
+      text-shadow: 0 0 6px rgba(126, 119, 255, 0.9);
+      margin-bottom: 1rem;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 500;
+      color: #b5b2ff;
+      margin-bottom: 2.5rem;
+      word-break: break-word;
+    }
+
+    code {
+      font-family: 'Share Tech Mono', monospace;
+      background: rgba(138, 128, 255, 0.1);
+      padding: 0.25rem 0.4rem;
+      border-radius: 6px;
+      color: #d0ceff;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .btn {
+      background-color: #5a52ff;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      display: inline-block;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      background-color: #7c75ff;
+      box-shadow: 0 0 14px rgba(124, 117, 255, 0.8);
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      background-color: #4a43d5;
+      transform: translateY(0);
+      box-shadow: none;
+    }
+
+    footer {
+      margin-top: 2.5rem;
+      font-size: 0.8rem;
+      color: #8b8ba5;
+      text-align: center;
+    }
+
+    footer img {
+      vertical-align: middle;
+      margin-left: 4px;
+      filter: brightness(0) invert(1);
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="card" role="alert" aria-live="assertive">
+    <img src="https://blacklink.net/assets/logo.svg" alt="Blacklink Logo" class="logo" width="80" height="80"
+      loading="lazy" />
+    <h1>Invalid Request</h1>
+    <h2>
+      <code id="current-path">accounts.blacklink.net/public</code> is not a valid endpoint.
+    </h2>
+    <div class="buttons">
+      <a href="https://accounts.blacklink.net/public/register" class="btn">Register</a>
+      <a href="https://accounts.blacklink.net/public/login" class="btn">Login</a>
+    </div>
+    <footer>
+      &copy; 2025 Blacklink Education. All rights reserved.<br />
+      Powered by Firebase <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3c/Google_Favicon_2025.svg/250px-Google_Favicon_2025.svg.png"
+        alt="Google G Logo" width="10" />
+    </footer>
+  </main>
+  <script>
+    const codeElem = document.getElementById('current-path');
+    codeElem.textContent = window.location.host + window.location.pathname;
+  </script>
+</body>
+
+</html>

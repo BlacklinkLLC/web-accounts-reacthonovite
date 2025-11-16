@@ -1,0 +1,283 @@
+{
+  "version": "1.1.2",
+  "lastUpdated": "2025-11-05",
+  "defaultApps": [
+    {
+      "id": "note25",
+      "name": "Note25",
+      "url": "https://note.blacklink.net/note",
+      "icon": "📝",
+      "color": "#6366f1",
+      "description": "Collaborative note-taking and document organization platform built on the Blacklink design system.",
+      "category": "productivity",
+      "tier": "free"
+    },
+    {
+      "id": "note26",
+      "name": "Note26",
+      "url": "https://note.blacklink.net/26",
+      "icon": "📝",
+      "color": "#6366f1",
+      "description": "Collaborative note-taking and document organization platform built on the Blacklink design system.",
+      "category": "productivity",
+      "tier": "free"
+    },
+    {
+      "id": "trust",
+      "name": "Blacklink Trust",
+      "url": "https://trust.blacklink.net",
+      "icon": "✅",
+      "color": "#22c55e",
+      "description": "Trusted source directory and credibility analyzer for students and educators.",
+      "category": "education",
+      "tier": "free"
+    },
+    {
+      "id": "accounts",
+      "name": "Blacklink Accounts",
+      "url": "https://accounts.blacklink.net",
+      "icon": "🔐",
+      "color": "#0ea5e9",
+      "description": "Unified authentication and subscription management for all Blacklink products.",
+      "category": "infrastructure",
+      "tier": "free"
+    },
+    {
+      "id": "legal-hub",
+      "name": "Legal & Compliance Hub",
+      "url": "https://blacklink.net/legal",
+      "icon": "⚖️",
+      "color": "#10b981",
+      "description": "Centralized access to Terms of Service, Privacy, FERPA/COPPA statements, and compliance attestations.",
+      "category": "compliance",
+      "tier": "free"
+    }
+  ],
+  "categories": {
+    "productivity": {
+      "name": "Productivity",
+      "icon": "⚡",
+      "color": "#6366f1"
+    },
+    "education": {
+      "name": "Education",
+      "icon": "🎓",
+      "color": "#22c55e"
+    },
+    "infrastructure": {
+      "name": "Core Infrastructure",
+      "icon": "🧩",
+      "color": "#0ea5e9"
+    },
+    "compliance": {
+      "name": "Legal & Compliance",
+      "icon": "⚖️",
+      "color": "#10b981"
+    }
+  },
+  "tierRequirements": {
+    "free": {
+      "name": "Free",
+      "description": "Access to all essential Blacklink tools and student services."
+    },
+    "ultra": {
+      "name": "ULTRA",
+      "description": "Advanced analytics, AI credits, premium themes, enhanced privacy, and profile customization."
+    }
+  },
+  "premiumFeatures": [
+    {
+      "id": "usage-analytics",
+      "name": "Usage Analytics & Insights",
+      "description": "Real-time usage tracking, productivity metrics, app launch patterns, and weekly insights reports.",
+      "url": "#",
+      "action": "openAnalytics",
+      "icon": "📊",
+      "color": "#f97316",
+      "category": "Analytics",
+      "tiers": ["ULTRA"]
+    },
+    {
+      "id": "custom-theme-builder",
+      "name": "Custom Theme Builder",
+      "description": "Create and save unlimited custom color themes with live preview and export capabilities.",
+      "url": "#",
+      "action": "openThemeBuilder",
+      "icon": "🎨",
+      "color": "#ec4899",
+      "category": "Customization",
+      "tiers": ["ULTRA_PLUS"]
+    },
+    {
+      "id": "ai-credits",
+      "name": "Aero AI Credits",
+      "description": "Monthly allocation of AI credits for use across Note, Trust, and other Blacklink AI features.",
+      "url": "settings.html#subscription",
+      "icon": "🤖",
+      "color": "#0ea5e9",
+      "category": "AI & Automation",
+      "tiers": ["ULTRA"]
+    },
+    {
+      "id": "premium-themes",
+      "name": "Premium Themes",
+      "description": "Access to 30+ exclusive color themes including Ocean, Forest, Sunset, Rose, and more.",
+      "url": "settings.html#appearance",
+      "icon": "🌈",
+      "color": "#a855f7",
+      "category": "Customization",
+      "tiers": ["ULTRA"]
+    },
+    {
+      "id": "advanced-automation",
+      "name": "Advanced Automations",
+      "description": "Create custom workflows, scheduled app launches, and productivity automation routines.",
+      "url": "#",
+      "action": "openAutomations",
+      "icon": "⚡",
+      "color": "#eab308",
+      "category": "Automation",
+      "tiers": ["ULTRA"]
+    },
+    {
+      "id": "enhanced-privacy",
+      "name": "Enhanced Privacy Controls",
+      "description": "Advanced privacy features including activity masking, data export scheduling, and granular permissions.",
+      "url": "privacy.html#controls",
+      "icon": "🔒",
+      "color": "#ef4444",
+      "category": "Security",
+      "tiers": ["ULTRA"]
+    },
+    {
+      "id": "profile-customization",
+      "name": "Profile Customization",
+      "description": "Custom avatars, profile decorations, tier badges, and personalized profile URLs.",
+      "url": "profile.html#customize",
+      "icon": "✨",
+      "color": "#8b5cf6",
+      "category": "Personalization",
+      "tiers": ["ULTRA"]
+    },
+    {
+      "id": "priority-support",
+      "name": "Priority Support",
+      "description": "Get faster response times, direct access to the Blacklink team, and early feature previews.",
+      "url": "mailto:support@blacklink.net",
+      "icon": "🎯",
+      "color": "#06b6d4",
+      "category": "Support",
+      "tiers": ["ULTRA", "ULTRA_PLUS"]
+    }
+  ],
+  "adminUtilities": [
+    {
+      "id": "admin-console",
+      "name": "Blacklink Admin Console",
+      "description": "Internal console for auditing users, subscriptions, and ULTRA allocations.",
+      "url": null,
+      "action": "openAdminInsights",
+      "icon": "🛠️",
+      "color": "#0f172a"
+    },
+    {
+      "id": "content-releases",
+      "name": "Release Manager",
+      "description": "Schedule feature rollouts and manage staged deployment tracks.",
+      "url": null,
+      "action": "openReleasePlanner",
+      "icon": "🚀",
+      "color": "#6366f1"
+    },
+    {
+      "id": "support-queue",
+      "name": "Support Queue",
+      "description": "Prioritize and resolve incoming ULTRA support tickets from Aero Desk.",
+      "url": null,
+      "action": "openSupportQueue",
+      "icon": "📬",
+      "color": "#ef4444"
+    }
+  ],
+  "legalDocumentation": {
+    "overview": {
+      "title": "Blacklink Legal Documentation",
+      "description": "Reference hub for policies, compliance attestations, and data-processing agreements required by districts and partners.",
+      "lastAudit": "2025-10-20",
+      "owner": "legal@blacklink.net"
+    },
+    "policies": [
+      {
+        "id": "terms",
+        "name": "Terms of Service",
+        "url": "https://blacklink.net/terms",
+        "lastUpdated": "2025-09-15",
+        "status": "active",
+        "jurisdictions": ["Global"],
+        "summary": "Defines user responsibilities, acceptable use, subscription tiers, and dispute resolution."
+      },
+      {
+        "id": "privacy",
+        "name": "Privacy Policy",
+        "url": "privacy.html",
+        "lastUpdated": "2025-10-01",
+        "status": "active",
+        "jurisdictions": ["GDPR", "CCPA", "FERPA", "COPPA"],
+        "summary": "Explains data collection, student data handling, retention windows, and individual rights."
+      },
+      {
+        "id": "dpa",
+        "name": "Data Processing Agreement",
+        "url": "https://blacklink.net/legal/dpa",
+        "lastUpdated": "2025-08-05",
+        "status": "active",
+        "jurisdictions": ["EU", "US"],
+        "summary": "Contract addendum covering controller/processor duties, SCC clauses, and breach notifications."
+      },
+      {
+        "id": "security-overview",
+        "name": "Security & Compliance Overview",
+        "url": "https://blacklink.net/legal/security",
+        "lastUpdated": "2025-07-22",
+        "status": "active",
+        "jurisdictions": ["Global"],
+        "summary": "Describes encryption standards, incident response timelines, annual audits, and penetration testing cadence."
+      }
+    ],
+    "complianceResources": [
+      {
+        "id": "ferpa-attestation",
+        "name": "FERPA Compliance Attestation",
+        "url": "https://blacklink.net/legal/ferpa",
+        "expires": "2026-07-01",
+        "notes": "Signed annually for K-12 deployments and includes directory data handling guidance."
+      },
+      {
+        "id": "coppa-promise",
+        "name": "COPPA Safe Harbor Statement",
+        "url": "https://blacklink.net/legal/coppa",
+        "expires": "2026-01-31",
+        "notes": "Outlines parental consent workflows and verifiable guardian review logs."
+      },
+      {
+        "id": "gdpr-addendum",
+        "name": "GDPR Addendum",
+        "url": "https://blacklink.net/legal/gdpr",
+        "expires": "2026-03-30",
+        "notes": "Includes SCC Module 2 clauses and EU representative contact details."
+      }
+    ],
+    "contacts": {
+      "primary": {
+        "team": "Legal & Compliance",
+        "email": "legal@blacklink.net",
+        "slaHours": 48
+      },
+      "security": {
+        "team": "Security Operations",
+        "email": "security@blacklink.net",
+        "slaHours": 24
+      }
+    }
+  }
+}

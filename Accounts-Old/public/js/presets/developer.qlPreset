@@ -1,0 +1,207 @@
+{
+  "presetId": "developer-tools",
+  "name": "Developer Tools",
+  "description": "Development tools, APIs, documentation, and system monitoring for Blacklink developers.",
+  "version": "1.0.0",
+  "targetAudience": "developers",
+  "icon": "👨‍💻",
+  "color": "#06b6d4",
+  "apps": [
+    {
+      "id": "api-docs",
+      "name": "API Documentation",
+      "url": "https://docs.blacklink.net/api",
+      "icon": "📖",
+      "color": "#3b82f6",
+      "description": "Complete API reference for all Blacklink services.",
+      "category": "development",
+      "tier": "free",
+      "pinned": true,
+      "tags": ["api", "documentation", "reference"]
+    },
+    {
+      "id": "developer-console",
+      "name": "Developer Console",
+      "url": "https://console.blacklink.net",
+      "icon": "⌨️",
+      "color": "#06b6d4",
+      "description": "Manage API keys, webhooks, and app integrations.",
+      "category": "development",
+      "tier": "free",
+      "pinned": true,
+      "tags": ["console", "api-keys", "webhooks"]
+    },
+    {
+      "id": "github",
+      "name": "GitHub Repository",
+      "url": "https://github.com/BlacklinkLLC",
+      "icon": "🐙",
+      "color": "#24292e",
+      "description": "Browse open-source projects and SDKs.",
+      "category": "development",
+      "tier": "free",
+      "pinned": true,
+      "tags": ["github", "source-code", "sdk"]
+    },
+    {
+      "id": "firebase-console",
+      "name": "Firebase Console",
+      "url": "https://console.firebase.google.com/project/blacklink-auth",
+      "icon": "🔥",
+      "color": "#FFA000",
+      "description": "Manage Firestore, authentication, and hosting.",
+      "category": "infrastructure",
+      "tier": "admin",
+      "pinned": false,
+      "tags": ["firebase", "database", "hosting"],
+      "requiresAdmin": true
+    },
+    {
+      "id": "monitoring",
+      "name": "System Monitoring",
+      "url": "https://monitor.blacklink.net",
+      "icon": "📡",
+      "color": "#10b981",
+      "description": "Real-time service health and performance metrics.",
+      "category": "infrastructure",
+      "tier": "admin",
+      "pinned": false,
+      "tags": ["monitoring", "uptime", "performance"],
+      "requiresAdmin": true
+    },
+    {
+      "id": "error-tracking",
+      "name": "Error Tracking",
+      "url": "https://sentry.io/organizations/blacklink",
+      "icon": "🐛",
+      "color": "#ef4444",
+      "description": "Track and debug production errors.",
+      "category": "development",
+      "tier": "admin",
+      "pinned": false,
+      "tags": ["errors", "debugging", "sentry"],
+      "requiresAdmin": true
+    },
+    {
+      "id": "design-system",
+      "name": "Design System",
+      "url": "https://design.blacklink.net",
+      "icon": "🎨",
+      "color": "#8b5cf6",
+      "description": "Component library, design tokens, and guidelines.",
+      "category": "design",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["design", "components", "ui"]
+    },
+    {
+      "id": "playground",
+      "name": "API Playground",
+      "url": "https://playground.blacklink.net",
+      "icon": "🧪",
+      "color": "#ec4899",
+      "description": "Test API endpoints interactively.",
+      "category": "development",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["testing", "api", "playground"]
+    },
+    {
+      "id": "sdk-generator",
+      "name": "SDK Generator",
+      "url": "https://sdk.blacklink.net",
+      "icon": "📦",
+      "color": "#f59e0b",
+      "description": "Generate client SDKs for various languages.",
+      "category": "development",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["sdk", "codegen", "client-library"]
+    },
+    {
+      "id": "changelog",
+      "name": "Changelog",
+      "url": "https://changelog.blacklink.net",
+      "icon": "📝",
+      "color": "#64748b",
+      "description": "Track feature releases and API changes.",
+      "category": "documentation",
+      "tier": "free",
+      "pinned": false,
+      "tags": ["changelog", "releases", "updates"]
+    }
+  ],
+  "categories": {
+    "development": {
+      "name": "Development",
+      "icon": "⚡",
+      "color": "#06b6d4",
+      "sortOrder": 1
+    },
+    "infrastructure": {
+      "name": "Infrastructure",
+      "icon": "🏗️",
+      "color": "#10b981",
+      "sortOrder": 2
+    },
+    "design": {
+      "name": "Design",
+      "icon": "🎨",
+      "color": "#8b5cf6",
+      "sortOrder": 3
+    },
+    "documentation": {
+      "name": "Documentation",
+      "icon": "📚",
+      "color": "#64748b",
+      "sortOrder": 4
+    }
+  },
+  "quickActions": [
+    {
+      "id": "generate-api-key",
+      "name": "Generate API Key",
+      "icon": "🔑",
+      "action": "generateApiKey",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "test-webhook",
+      "name": "Test Webhook",
+      "icon": "🪝",
+      "action": "testWebhook",
+      "color": "#10b981"
+    },
+    {
+      "id": "view-logs",
+      "name": "View Logs",
+      "icon": "📋",
+      "action": "viewLogs",
+      "color": "#64748b"
+    },
+    {
+      "id": "deploy",
+      "name": "Deploy",
+      "icon": "🚀",
+      "action": "deploy",
+      "color": "#ef4444"
+    }
+  ],
+  "codeSnippets": [
+    {
+      "name": "Initialize Firebase",
+      "language": "javascript",
+      "code": "const firebaseConfig = {\n  apiKey: 'YOUR_API_KEY',\n  authDomain: 'blacklink-auth.firebaseapp.com',\n  projectId: 'blacklink-auth'\n};\nfirebase.initializeApp(firebaseConfig);"
+    },
+    {
+      "name": "Subscribe to Auth State",
+      "language": "javascript",
+      "code": "auth.onAuthStateChanged((user) => {\n  if (user) {\n    console.log('User signed in:', user.uid);\n  } else {\n    console.log('User signed out');\n  }\n});"
+    },
+    {
+      "name": "Track Analytics Event",
+      "language": "javascript",
+      "code": "BlacklinkAnalytics.trackEvent('button_clicked', {\n  button_id: 'submit',\n  page: 'dashboard'\n});"
+    }
+  ]
+}

@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile - Blacklink Accounts</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet" referrerpolicy="no-referrer">
+
+  <!-- Modular CSS (v3.9) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/nav.css">
+
+  <!-- Page-specific styles -->
+  <style>
+    body {
+      min-height: 100vh;
+    }
+
+    /* Header Styles */
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .profile-header {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-header.ultra-profile::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--ultra) 0%, var(--primary) 50%, var(--ultra) 100%);
+      animation: shimmer 3s linear infinite;
+      background-size: 200% 100%;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    .profile-info {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      color: white;
+      position: relative;
+      flex-shrink: 0;
+      overflow: visible;
+      isolation: isolate;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+      border-radius: 50%;
+    }
+
+    .profile-avatar.has-image #profileAvatarImage {
+      display: block;
+    }
+
+    .profile-avatar.has-image #profileAvatarInitials {
+      display: none;
+    }
+
+    #profileAvatarInitials {
+      position: relative;
+      z-index: 1;
+    }
+
+    .avatar-edit-btn {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(15, 23, 42, 0.8);
+      background: linear-gradient(135deg, #1d4ed8, #4338ca);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition);
+      z-index: 2;
+    }
+
+    .avatar-edit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 18px rgba(79, 70, 229, 0.3);
+    }
+
+    .profile-avatar.ultra {
+      box-shadow: 0 0 40px rgba(251, 191, 36, 0.6);
+      border: 4px solid var(--ultra);
+    }
+
+    .profile-avatar.ultra-plus {
+      box-shadow: 0 0 50px rgba(245, 158, 11, 0.7);
+      border: 4px solid var(--ultra-plus);
+      animation: ultraPulse 2s ease-in-out infinite;
+    }
+
+    .profile-decoration {
+      position: absolute;
+      bottom: -5px;
+      right: -5px;
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--ultra), var(--ultra-plus));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      border: 3px solid var(--card-bg);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      z-index: 2;
+    }
+
+    .profile-details {
+      flex: 1;
+    }
+
+    .profile-name {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .tier-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.85rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .tier-badge.ultra {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(251, 191, 36, 0.1));
+      color: var(--ultra);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+    }
+
+    .tier-badge.ultra-plus {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(245, 158, 11, 0.15));
+      color: var(--ultra-plus);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { box-shadow: 0 0 10px rgba(245, 158, 11, 0.3); }
+      50% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.5); }
+    }
+
+    .profile-email {
+      color: var(--text-secondary);
+      margin-bottom: 1rem;
+    }
+
+    .profile-stats {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    /* Profile Sections */
+    .profile-section {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-note {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .section-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.25rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .profile-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .profile-feature-card {
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(30, 64, 175, 0.15));
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      transition: var(--transition);
+    }
+
+    .profile-feature-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .profile-feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.5);
+    }
+
+    .profile-feature-card.locked {
+      opacity: 0.8;
+      border-style: dashed;
+      background: linear-gradient(135deg, rgba(148, 163, 184, 0.12), rgba(148, 163, 184, 0.08));
+    }
+
+    .profile-feature-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.35rem;
+      background: rgba(15, 23, 42, 0.7);
+      border: 2px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .profile-feature-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .profile-feature-meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .profile-app-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .profile-app-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.25rem;
+      border-radius: var(--radius-sm);
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .profile-app-item:hover {
+      border-color: rgba(99, 102, 241, 0.5);
+      transform: translateY(-3px);
+    }
+
+    .profile-app-primary {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .app-rank {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: var(--primary-light);
+      font-size: 0.95rem;
+    }
+
+    .profile-app-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .profile-app-details span:first-child {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .profile-app-meta {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .empty-hint {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .security-card {
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      padding: 1.1rem;
+      background: rgba(15, 23, 42, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .security-card .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--text-muted);
+    }
+
+    .security-card .value {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .security-card .hint {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .admin-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.2rem;
+    }
+
+    .admin-card {
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(59, 130, 246, 0.35);
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(14, 165, 233, 0.2));
+      padding: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      color: var(--text);
+      transition: var(--transition);
+    }
+
+    .admin-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(59, 130, 246, 0.5);
+    }
+
+    .admin-card span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .badge-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      padding: 0.3rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary-light);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .info-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .info-value {
+      font-size: 1rem;
+      color: var(--text);
+      padding: 0.75rem;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .btn {
+      padding: 0.875rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 2px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary-light);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(10, 15, 30, 0.75);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      z-index: 3000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      width: min(580px, 100%);
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      flex-direction: column;
+      max-height: 90vh;
+      overflow: hidden;
+    }
+
+    .modal-header,
+    .modal-footer {
+      padding: 1.5rem 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: rgba(8, 12, 24, 0.65);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-footer {
+      border-bottom: none;
+      border-top: 1px solid var(--border);
+      justify-content: flex-end;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.25rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .modal-close:hover {
+      color: var(--text);
+    }
+
+    .modal-body {
+      padding: 1.75rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .cropper-wrapper {
+      background: rgba(10, 15, 30, 0.6);
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      min-height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .cropper-wrapper img {
+      display: block;
+      max-width: 100%;
+    }
+
+    .avatar-modal-instructions {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .modal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .modal-actions-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .modal-loading {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .modal-loading::before {
+      content: '';
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid rgba(99, 102, 241, 0.3);
+      border-top-color: var(--primary);
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .file-input {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px dashed var(--border);
+      background: rgba(10, 15, 30, 0.6);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: var(--transition);
+    }
+
+    .file-input:hover {
+      border-color: var(--primary-light);
+      color: var(--primary-light);
+    }
+
+    .file-input input {
+      display: none;
+    }
+
+    /* Toast */
+    .toast-container {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .toast {
+      background: var(--card-bg);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.5rem;
+      box-shadow: var(--shadow-lg);
+      border-left: 4px solid var(--primary);
+      min-width: 300px;
+      animation: slideInRight 0.3s ease;
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(400px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .toast.success { border-left-color: var(--success); }
+    .toast.error { border-left-color: var(--danger); }
+
+    @media (max-width: 768px) {
+      .profile-info {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .profile-stats {
+        justify-content: center;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar Container (populated by navbar.js) -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+    <!-- Profile Header -->
+    <div class="profile-header" id="profileHeader">
+      <div class="profile-info">
+        <div class="profile-avatar" id="profileAvatar">
+          <img id="profileAvatarImage" alt="Profile avatar" loading="lazy">
+          <span id="profileAvatarInitials">U</span>
+          <button class="avatar-edit-btn" type="button" id="openAvatarModal" aria-label="Change profile photo">
+            <i class="fas fa-camera"></i>
+          </button>
+          <div class="profile-decoration" id="profileDecoration" style="display: none;">⭐</div>
+        </div>
+        <div class="profile-details">
+          <div class="profile-name">
+            <span id="profileName">User</span>
+            <span class="tier-badge" id="tierBadge" style="display: none;"></span>
+          </div>
+          <div class="profile-email" id="profileEmail">user@example.com</div>
+          <div class="profile-stats">
+            <div class="stat">
+              <span class="stat-value" id="statApps">0</span>
+              <span class="stat-label">Apps</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="statDays">0</span>
+              <span class="stat-label">Days Active</span>
+            </div>
+            <div class="stat">
+              <span class="stat-value" id="statTokens">0</span>
+              <span class="stat-label">Aero Tokens</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account Information -->
+    <div class="profile-section">
+      <h2 class="section-title">
+        <div class="section-icon">👤</div>
+        Account Information
+      </h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Display Name</div>
+          <div class="info-value" id="infoName">Loading...</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Email Address</div>
+          <div class="info-value" id="infoEmail">Loading...</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Account Type</div>
+          <div class="info-value" id="infoType">Student</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Member Since</div>
+          <div class="info-value" id="infoMemberSince">Loading...</div>
+        </div>
+      </div>
+      <div class="btn-group" style="margin-top: 1.5rem;">
+        <button class="btn btn-primary" onclick="editProfile()">
+          <i class="fas fa-edit"></i> Edit Profile
+        </button>
+        <a href="settings.html" class="btn btn-secondary">
+          <i class="fas fa-cog"></i> Settings
+        </a>
+      </div>
+    </div>
+
+    <!-- Subscription Status -->
+    <div class="profile-section">
+      <h2 class="section-title">
+        <div class="section-icon">💎</div>
+        Subscription Status
+      </h2>
+      <div class="info-grid">
+        <div class="info-item">
+          <div class="info-label">Current Tier</div>
+          <div class="info-value" id="subTier">Free</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Aero AI Tokens</div>
+          <div class="info-value" id="subTokens">0 / 0</div>
+        </div>
+        <div class="info-item">
+          <div class="info-label">Status</div>
+          <div class="info-value" id="subStatus">Inactive</div>
+        </div>
+      </div>
+      <div class="btn-group" style="margin-top: 1.5rem;">
+        <a href="settings.html#subscription" class="btn btn-primary">
+          <i class="fas fa-crown"></i> Manage Subscription
+        </a>
+      </div>
+    </div>
+
+    <!-- ULTRA Access -->
+    <div class="profile-section" id="ultraFeatureSection" style="display: none;">
+      <h2 class="section-title">
+        <div class="section-icon">⚡</div>
+        ULTRA Access
+      </h2>
+      <p class="section-note" id="ultraFeatureNote">Preview the premium tools that unlock with ULTRA memberships.</p>
+      <div class="profile-feature-grid" id="profileUltraGrid"></div>
+    </div>
+
+    <!-- Workspace Snapshot -->
+    <div class="profile-section" id="workspaceSection">
+      <h2 class="section-title">
+        <div class="section-icon">🚀</div>
+        Workspace Snapshot
+      </h2>
+      <p class="section-note">Your most active QuickLaunch apps this month.</p>
+      <div class="profile-app-list" id="topAppsList">
+        <div class="empty-hint">Launch an app from the dashboard to start building your activity feed.</div>
+      </div>
+    </div>
+
+    <!-- Security & Activity -->
+    <div class="profile-section" id="securitySection">
+      <h2 class="section-title">
+        <div class="section-icon">🔐</div>
+        Security & Activity
+      </h2>
+      <div class="security-grid" id="securityGrid"></div>
+    </div>
+
+    <!-- Admin Controls -->
+    <div class="profile-section" id="adminSection" style="display: none;">
+      <h2 class="section-title">
+        <div class="section-icon">🛡️</div>
+        Admin Controls
+      </h2>
+      <p class="section-note">Monitor ULTRA capacity and jump into operations quicker.</p>
+      <div class="admin-grid" id="adminSummaryList"></div>
+      <div class="profile-feature-grid" id="adminUtilityGridProfile" style="margin-top: 1.25rem;"></div>
+    </div>
+  </main>
+
+  <div class="modal-overlay" id="avatarModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Update profile photo</h2>
+        <button class="modal-close" type="button" id="closeAvatarModal">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label class="file-input">
+          <i class="fas fa-upload"></i>
+          <span>Select image</span>
+          <input type="file" accept="image/*" id="avatarFileInput">
+        </label>
+        <div class="avatar-modal-instructions">Use a square image for the best fit. Minimum 400×400 pixels recommended.</div>
+        <div class="cropper-wrapper" id="avatarCropperWrapper">
+          <span class="empty-hint" id="avatarUploadStatus">Choose an image to start cropping.</span>
+          <img id="avatarCropperImage" alt="Avatar preview">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="modal-actions">
+          <div class="modal-actions-right">
+            <button class="btn btn-secondary" type="button" id="cancelAvatarButton">Cancel</button>
+            <button class="btn btn-primary" type="button" id="saveAvatarButton" disabled>
+              <i class="fas fa-save"></i>
+              Save photo
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modular JavaScript (v3.9) -->
+  <script src="js/navbar.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/analytics-compat.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-storage-compat.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js" referrerpolicy="no-referrer"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // Initialize modular navbar
+    Navbar.initNavbar(auth, db, 'profile');
+
+    const QUICK_LAUNCH_ROOT = 'product_pulse';
+    const QUICK_LAUNCH_SUBCOLLECTION = 'quicklaunch';
+
+    const state = {
+      currentUser: null,
+      userData: {},
+      premiumFeatures: [],
+      adminUtilities: [],
+      quickLaunchApps: [],
+      subscriptionTier: 'FREE',
+      adminSummaryLoaded: false,
+      cropper: null
+    };
+
+    const DOM = {
+      profileAvatar: document.getElementById('profileAvatar'),
+      profileAvatarImage: document.getElementById('profileAvatarImage'),
+      profileAvatarInitials: document.getElementById('profileAvatarInitials'),
+      profileHeader: document.getElementById('profileHeader'),
+      tierBadge: document.getElementById('tierBadge'),
+      profileDecoration: document.getElementById('profileDecoration'),
+      ultraFeatureSection: document.getElementById('ultraFeatureSection'),
+      ultraFeatureNote: document.getElementById('ultraFeatureNote'),
+      profileUltraGrid: document.getElementById('profileUltraGrid'),
+      topAppsList: document.getElementById('topAppsList'),
+      securityGrid: document.getElementById('securityGrid'),
+      adminSection: document.getElementById('adminSection'),
+      adminSummaryList: document.getElementById('adminSummaryList'),
+      adminUtilityGridProfile: document.getElementById('adminUtilityGridProfile'),
+      avatarModal: document.getElementById('avatarModal'),
+      avatarUploadStatus: document.getElementById('avatarUploadStatus'),
+      saveAvatarButton: document.getElementById('saveAvatarButton'),
+      cancelAvatarButton: document.getElementById('cancelAvatarButton'),
+      avatarFileInput: document.getElementById('avatarFileInput'),
+      avatarCropperImage: document.getElementById('avatarCropperImage'),
+      openAvatarModalButton: document.getElementById('openAvatarModal'),
+      closeAvatarModalButton: document.getElementById('closeAvatarModal')
+    };
+
+    registerNavbarHandlers();
+    setupAvatarModalListeners();
+
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        state.currentUser = user;
+        await loadProfile();
+      } else {
+        window.location.href = 'login.html';
+      }
+    });
+
+    async function loadProfile() {
+      try {
+        const userDocPromise = db.collection('users').doc(state.currentUser.uid).get();
+        const configPromise = fetch('./js/basic.qlConfig').then((response) => response.json()).catch(() => ({}));
+        const quickLaunchPromise = db
+          .collection(QUICK_LAUNCH_ROOT)
+          .doc(state.currentUser.uid)
+          .collection(QUICK_LAUNCH_SUBCOLLECTION)
+          .orderBy('usage', 'desc')
+          .limit(6)
+          .get()
+          .catch(() => null);
+
+        const [userDoc, configData, quickLaunchSnapshot] = await Promise.all([
+          userDocPromise,
+          configPromise,
+          quickLaunchPromise
+        ]);
+
+        state.userData = userDoc.data() || {};
+        state.premiumFeatures = Array.isArray(configData?.premiumFeatures) ? configData.premiumFeatures : [];
+        state.adminUtilities = Array.isArray(configData?.adminUtilities) ? configData.adminUtilities : [];
+
+        state.quickLaunchApps = quickLaunchSnapshot
+          ? quickLaunchSnapshot.docs.map((doc) => {
+              const data = doc.data() || {};
+              const app = {
+                id: doc.id,
+                name: data.name || 'Untitled',
+                url: data.url || '',
+                category: data.category || 'App',
+                usage: data.usage || 0
+              };
+              if (data.lastUsed && typeof data.lastUsed.toDate === 'function') {
+                app.lastUsed = data.lastUsed.toDate();
+              } else if (data.lastUsed?.seconds) {
+                app.lastUsed = new Date(data.lastUsed.seconds * 1000);
+              }
+              return app;
+            })
+          : [];
+
+        const displayName = state.userData.name || state.currentUser.displayName || state.currentUser.email?.split('@')[0] || 'User';
+        const initials = computeInitials(displayName);
+        const photoURL = state.userData.photoURL || state.currentUser.photoURL || null;
+
+        safeText('profileName', displayName);
+        safeText('profileEmail', state.currentUser.email);
+        safeText('infoName', displayName);
+        safeText('infoEmail', state.currentUser.email);
+
+        const memberSinceDate = getTimestampDate(state.userData.createdAt) || (state.currentUser.metadata.creationTime ? new Date(state.currentUser.metadata.creationTime) : null);
+        if (memberSinceDate) {
+          safeText('infoMemberSince', memberSinceDate.toLocaleDateString());
+          const daysActive = Math.max(0, Math.floor((Date.now() - memberSinceDate.getTime()) / (1000 * 60 * 60 * 24)));
+          safeText('statDays', String(daysActive));
+        }
+
+        safeText('infoType', state.userData.role || 'Student');
+        safeText('statApps', String(state.quickLaunchApps.length));
+
+        updateProfileAvatar(initials, photoURL);
+        window.Navbar?.setUser({ displayName, initials, photoURL, email: state.currentUser.email });
+
+        await loadSubscription(state.userData);
+
+        renderProfileFeatures();
+        renderWorkspaceSnapshot();
+        renderSecuritySection();
+        renderAdminSection();
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        showToast('Error loading profile data', 'error');
+      }
+    }
+
+    async function loadSubscription(userData) {
+      let subscription = userData.subscription || {};
+
+      try {
+        const subDoc = await db.collection('subscriptions').doc(state.currentUser.uid).get();
+        if (subDoc.exists) {
+          subscription = {
+            ...subscription,
+            ...(subDoc.data() || {})
+          };
+        }
+      } catch (error) {
+        console.warn('Unable to load subscription document:', error);
+      }
+
+      const tier = normalizeTier(subscription.tier || 'FREE');
+      state.subscriptionTier = tier;
+
+      let aeroTokens = typeof userData.aeroTokens === 'number'
+        ? userData.aeroTokens
+        : 0;
+
+      if (subscription.aeroTokens) {
+        const tokens = subscription.aeroTokens;
+        aeroTokens = tokens.remaining ?? tokens.balance ?? tokens;
+      } else if (typeof subscription.aeroTokensRemaining === 'number') {
+        aeroTokens = subscription.aeroTokensRemaining;
+      }
+
+      const tokenLimit = tier === 'ULTRA' ? 500 : tier === 'ULTRA_PLUS' ? Infinity : 0;
+
+      safeText('subTier', tier === 'ULTRA_PLUS' ? 'ULTRA+' : (tier === 'ULTRA' ? 'ULTRA' : 'Free'));
+      safeText('subTokens', tokenLimit === 0 ? `${aeroTokens} / 0` : `${aeroTokens} / ${tokenLimit === Infinity ? '∞' : tokenLimit}`);
+      safeText('subStatus', tier === 'FREE' ? 'Inactive' : 'Active');
+      safeText('statTokens', String(aeroTokens));
+
+      applyTierStyling(tier);
+      window.Navbar?.setUser({ tier, email: state.currentUser.email });
+    }
+
+    function applyTierStyling(tier) {
+      const profileHeader = DOM.profileHeader;
+      const profileAvatar = DOM.profileAvatar;
+      const tierBadge = DOM.tierBadge;
+      const decoration = DOM.profileDecoration;
+
+      if (profileHeader) {
+        profileHeader.classList.toggle('ultra-profile', tier === 'ULTRA' || tier === 'ULTRA_PLUS');
+      }
+
+      if (profileAvatar) {
+        profileAvatar.classList.remove('ultra', 'ultra-plus');
+        if (tier === 'ULTRA') {
+          profileAvatar.classList.add('ultra');
+        } else if (tier === 'ULTRA_PLUS') {
+          profileAvatar.classList.add('ultra-plus');
+        }
+      }
+
+      if (tierBadge) {
+        tierBadge.style.display = tier === 'FREE' ? 'none' : 'inline-flex';
+        tierBadge.classList.remove('ultra', 'ultra-plus');
+        if (tier === 'ULTRA') {
+          tierBadge.textContent = '⭐ ULTRA';
+          tierBadge.classList.add('ultra');
+        } else if (tier === 'ULTRA_PLUS') {
+          tierBadge.textContent = '⚡ ULTRA+';
+          tierBadge.classList.add('ultra-plus');
+        } else {
+          tierBadge.textContent = '';
+        }
+      }
+
+      if (decoration) {
+        if (tier === 'ULTRA') {
+          decoration.textContent = '⭐';
+          decoration.style.display = 'flex';
+        } else if (tier === 'ULTRA_PLUS') {
+          decoration.textContent = '⚡';
+          decoration.style.display = 'flex';
+        } else {
+          decoration.style.display = 'none';
+        }
+      }
+
+      if (DOM.ultraFeatureNote) {
+        if (tier === 'FREE') {
+          DOM.ultraFeatureNote.textContent = 'Preview the premium tools that unlock with ULTRA memberships.';
+        } else if (tier === 'ULTRA') {
+          DOM.ultraFeatureNote.textContent = 'ULTRA gives you these workspaces. Upgrade to ULTRA+ for experimental releases.';
+        } else {
+          DOM.ultraFeatureNote.textContent = 'Everything is unlocked with ULTRA+. Watch for early access drops each week.';
+        }
+      }
+    }
+
+    function updateProfileAvatar(initials, photoURL) {
+      if (DOM.profileAvatarInitials) {
+        DOM.profileAvatarInitials.textContent = initials || 'U';
+      }
+
+      if (DOM.profileAvatar && DOM.profileAvatarImage) {
+        if (photoURL) {
+          DOM.profileAvatar.classList.add('has-image');
+          DOM.profileAvatarImage.src = photoURL;
+          DOM.profileAvatarImage.style.display = 'block';
+        } else {
+          DOM.profileAvatar.classList.remove('has-image');
+          DOM.profileAvatarImage.removeAttribute('src');
+          DOM.profileAvatarImage.style.display = 'none';
+        }
+      }
+
+      window.Navbar?.setUser({ initials, photoURL, email: state.currentUser.email });
+    }
+
+    function renderProfileFeatures() {
+      if (!DOM.ultraFeatureSection || !DOM.profileUltraGrid) return;
+
+      if (!Array.isArray(state.premiumFeatures) || state.premiumFeatures.length === 0) {
+        DOM.ultraFeatureSection.style.display = 'none';
+        return;
+      }
+
+      DOM.ultraFeatureSection.style.display = 'block';
+      DOM.profileUltraGrid.innerHTML = '';
+
+      state.premiumFeatures
+        .map((feature) => createProfileFeatureCard(feature))
+        .forEach((card) => DOM.profileUltraGrid.appendChild(card));
+    }
+
+    function createProfileFeatureCard(feature) {
+      const unlocked = isFeatureUnlockedForTier(feature, state.subscriptionTier);
+      const tierLabel = determineFeatureTierLabel(feature);
+      const card = document.createElement('div');
+      card.className = 'profile-feature-card' + (unlocked ? '' : ' locked');
+
+      card.innerHTML = `
+        <div class="profile-feature-icon">${feature?.icon || '✨'}</div>
+        <div>
+          <div class="profile-feature-title">${feature?.name || 'Premium feature'}</div>
+          <p class="profile-app-meta">${feature?.description || 'Stay tuned for more information.'}</p>
+        </div>
+        <div class="profile-feature-meta">
+          <span><i class="fas ${unlocked ? 'fa-circle-check' : 'fa-lock'}"></i> ${unlocked ? 'Included' : tierLabel}</span>
+          <span><i class="fas ${unlocked && feature?.url ? 'fa-arrow-up-right-from-square' : 'fa-arrow-right'}"></i></span>
+        </div>
+      `;
+
+      if (unlocked && feature?.url) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => window.open(feature.url, '_blank', 'noopener'));
+      } else if (!unlocked) {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => {
+          window.location.href = 'settings.html#subscription';
+        });
+      }
+
+      return card;
+    }
+
+    function renderWorkspaceSnapshot() {
+      if (!DOM.topAppsList) return;
+
+      if (!state.quickLaunchApps.length) {
+        DOM.topAppsList.innerHTML = '<div class="empty-hint">Launch an app from the dashboard to start building your activity feed.</div>';
+        return;
+      }
+
+      DOM.topAppsList.innerHTML = '';
+      state.quickLaunchApps.slice(0, 5).forEach((app, index) => {
+        const metaParts = [];
+        const hostname = resolveHostname(app.url);
+        if (hostname) metaParts.push(hostname);
+        if (app.category) metaParts.push(app.category);
+        if (app.lastUsed instanceof Date) metaParts.push(`Last used ${formatRelativeTime(app.lastUsed)}`);
+
+        const item = document.createElement('div');
+        item.className = 'profile-app-item';
+        item.innerHTML = `
+          <div class="profile-app-primary">
+            <div class="app-rank">${index + 1}</div>
+            <div class="profile-app-details">
+              <span>${app.name}</span>
+              <span class="profile-app-meta">${metaParts.join(' • ') || 'Usage data coming soon'}</span>
+            </div>
+          </div>
+          <div class="profile-app-meta">${app.usage || 0} launch${app.usage === 1 ? '' : 'es'}</div>
+        `;
+        DOM.topAppsList.appendChild(item);
+      });
+    }
+
+    function renderSecuritySection() {
+      if (!DOM.securityGrid || !state.currentUser) return;
+
+      const lastSignIn = state.currentUser.metadata?.lastSignInTime ? new Date(state.currentUser.metadata.lastSignInTime) : null;
+      const memberSinceDate = getTimestampDate(state.userData.createdAt) || (state.currentUser.metadata.creationTime ? new Date(state.currentUser.metadata.creationTime) : null);
+      const providers = state.currentUser.providerData?.length
+        ? state.currentUser.providerData.map((provider) => provider.providerId.replace('.com', '').replace('_', ' ')).join(', ')
+        : 'Password';
+      const mfaEnabled = state.currentUser.multiFactor?.enrolledFactors?.length > 0;
+
+      const details = [
+        {
+          label: 'Last sign in',
+          value: lastSignIn ? `${formatDate(lastSignIn)} (${formatRelativeTime(lastSignIn)})` : '—',
+          hint: 'Based on your most recent login.'
+        },
+        {
+          label: 'Account created',
+          value: memberSinceDate ? `${formatDate(memberSinceDate)} (${formatRelativeTime(memberSinceDate)})` : '—',
+          hint: 'Creation date from your user record.'
+        },
+        {
+          label: 'Email verification',
+          value: state.currentUser.emailVerified ? 'Verified' : 'Not verified',
+          hint: state.currentUser.emailVerified ? 'Your sign-in email is confirmed.' : 'Verify your email from the Settings page.'
+        },
+        {
+          label: 'Authentication providers',
+          value: providers,
+          hint: 'Linked providers for your Blacklink account.'
+        },
+        {
+          label: 'Multi-factor auth',
+          value: mfaEnabled ? `Enabled (${state.currentUser.multiFactor.enrolledFactors.length} factor${state.currentUser.multiFactor.enrolledFactors.length === 1 ? '' : 's'})` : 'Not configured',
+          hint: mfaEnabled ? 'Manage enrolled factors in Settings.' : 'Enable multi-factor authentication to harden access.'
+        }
+      ];
+
+      DOM.securityGrid.innerHTML = details.map((detail) => `
+        <div class="security-card">
+          <div class="label">${detail.label}</div>
+          <div class="value">${detail.value}</div>
+          <div class="hint">${detail.hint}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderAdminSection() {
+      const isAdmin = state.userData?.isAdmin === true;
+      if (!DOM.adminSection) return;
+
+      if (!isAdmin) {
+        DOM.adminSection.style.display = 'none';
+        return;
+      }
+
+      DOM.adminSection.style.display = 'block';
+      renderAdminUtilitiesProfile();
+      loadAdminSummary();
+    }
+
+    async function loadAdminSummary(force = false) {
+      if (!DOM.adminSummaryList || !(state.userData?.isAdmin)) return;
+      if (state.adminSummaryLoaded && !force) return;
+
+      DOM.adminSummaryList.innerHTML = '<div class="modal-loading">Gathering ULTRA metrics…</div>';
+
+      try {
+        const [usersSnapshot, subscriptionsSnapshot, tokensSnapshot, ticketsSnapshot] = await Promise.all([
+          db.collection('users').get(),
+          db.collection('subscriptions').get(),
+          db.collection('aero_tokens').get(),
+          db.collection('support_tickets').where('status', '==', 'open').get().catch(() => null)
+        ]);
+
+        let adminCount = 0;
+        const usersList = [];
+        usersSnapshot.forEach((doc) => {
+          const data = doc.data() || {};
+          if (data.isAdmin) adminCount += 1;
+          const createdAt = getTimestampDate(data.createdAt) || getTimestampDate(doc.createTime);
+          usersList.push({
+            name: data.name || data.email || 'Member',
+            tier: normalizeTier(data.subscription?.tier),
+            createdAt
+          });
+        });
+        usersList.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0));
+
+        let ultraCount = 0;
+        let ultraPlusCount = 0;
+        subscriptionsSnapshot.forEach((doc) => {
+          const tier = normalizeTier(doc.data()?.tier);
+          if (tier === 'ULTRA') ultraCount += 1;
+          if (tier === 'ULTRA_PLUS') ultraPlusCount += 1;
+        });
+
+        let monthlyAllocation = 0;
+        let remainingAllocation = 0;
+        tokensSnapshot.forEach((doc) => {
+          const data = doc.data() || {};
+          monthlyAllocation += Number(data.monthlyAllocation || 0);
+          remainingAllocation += Number(data.remaining || 0);
+        });
+
+        const openTickets = ticketsSnapshot ? ticketsSnapshot.size : 0;
+
+        const summary = [
+          {
+            icon: '👥',
+            label: 'Premium seats',
+            value: ultraCount + ultraPlusCount,
+            hint: `${ultraPlusCount} ULTRA+ / ${ultraCount} ULTRA`
+          },
+          {
+            icon: '🎟️',
+            label: 'Monthly Aero credits',
+            value: formatCurrency(monthlyAllocation),
+            hint: `${formatCurrency(remainingAllocation)} remaining`
+          },
+          {
+            icon: '📬',
+            label: 'Open ULTRA tickets',
+            value: openTickets,
+            hint: 'Support queue items awaiting response'
+          }
+        ];
+
+        DOM.adminSummaryList.innerHTML = summary.map((item) => `
+          <div class="admin-card">
+            <div class="profile-feature-icon" style="width: 36px; height: 36px;">${item.icon}</div>
+            <div class="profile-feature-title">${item.label}</div>
+            <span>${item.value}</span>
+            <span>${item.hint}</span>
+          </div>
+        `).join('');
+
+        state.adminSummaryLoaded = true;
+      } catch (error) {
+        console.error('Error loading admin summary:', error);
+        DOM.adminSummaryList.innerHTML = '<div class="empty-hint">Unable to load admin metrics.</div>';
+      }
+    }
+
+    function renderAdminUtilitiesProfile() {
+      if (!DOM.adminUtilityGridProfile) return;
+
+      if (!Array.isArray(state.adminUtilities) || state.adminUtilities.length === 0) {
+        DOM.adminUtilityGridProfile.style.display = 'none';
+        return;
+      }
+
+      DOM.adminUtilityGridProfile.style.display = 'grid';
+      DOM.adminUtilityGridProfile.innerHTML = '';
+
+      state.adminUtilities.forEach((utility) => {
+        const card = document.createElement('div');
+        card.className = 'profile-feature-card';
+        card.innerHTML = `
+          <div class="profile-feature-icon">${utility?.icon || '🛠️'}</div>
+          <div>
+            <div class="profile-feature-title">${utility?.name || 'Admin tool'}</div>
+            <p class="profile-app-meta">${utility?.description || ''}</p>
+          </div>
+          <div class="profile-feature-meta">
+            <span><i class="fas fa-arrow-right"></i> Open</span>
+            <span></span>
+          </div>
+        `;
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', () => handleAdminUtilityProfile(utility));
+        DOM.adminUtilityGridProfile.appendChild(card);
+      });
+    }
+
+    function handleAdminUtilityProfile(utility) {
+      if (!utility) return;
+      if (utility.url) {
+        window.open(utility.url, '_blank', 'noopener');
+        return;
+      }
+
+      const destinations = {
+        openAdminInsights: 'dashboard.html#admin-insights',
+        openReleasePlanner: 'dashboard.html#admin-release',
+        openSupportQueue: 'dashboard.html#admin-support'
+      };
+
+      const target = destinations[utility.action] || 'dashboard.html#admin';
+      window.location.href = target;
+    }
+
+    function setupAvatarModalListeners() {
+      DOM.openAvatarModalButton?.addEventListener('click', openAvatarModal);
+      DOM.closeAvatarModalButton?.addEventListener('click', closeAvatarModal);
+      DOM.cancelAvatarButton?.addEventListener('click', closeAvatarModal);
+      DOM.avatarFileInput?.addEventListener('change', handleAvatarFileChange);
+      DOM.saveAvatarButton?.addEventListener('click', saveAvatar);
+      DOM.avatarModal?.addEventListener('click', (event) => {
+        if (event.target === DOM.avatarModal) {
+          closeAvatarModal();
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && DOM.avatarModal?.classList.contains('active')) {
+          closeAvatarModal();
+        }
+      });
+    }
+
+    function openAvatarModal() {
+      resetCropper();
+      if (DOM.avatarFileInput) {
+        DOM.avatarFileInput.value = '';
+      }
+      if (DOM.avatarCropperImage) {
+        DOM.avatarCropperImage.removeAttribute('src');
+        DOM.avatarCropperImage.style.display = 'none';
+      }
+      if (DOM.avatarUploadStatus) {
+        DOM.avatarUploadStatus.textContent = 'Choose an image to start cropping.';
+      }
+      if (DOM.saveAvatarButton) {
+        DOM.saveAvatarButton.disabled = true;
+        DOM.saveAvatarButton.innerHTML = originalSaveButtonContent;
+      }
+      DOM.avatarModal?.classList.add('active');
+    }
+
+    function closeAvatarModal() {
+      DOM.avatarModal?.classList.remove('active');
+      resetCropper();
+      if (DOM.avatarFileInput) {
+        DOM.avatarFileInput.value = '';
+      }
+      if (DOM.avatarCropperImage) {
+        DOM.avatarCropperImage.removeAttribute('src');
+        DOM.avatarCropperImage.style.display = 'none';
+      }
+      if (DOM.avatarUploadStatus) {
+        DOM.avatarUploadStatus.textContent = 'Choose an image to start cropping.';
+      }
+      if (DOM.saveAvatarButton) {
+        DOM.saveAvatarButton.disabled = true;
+        DOM.saveAvatarButton.innerHTML = originalSaveButtonContent;
+      }
+    }
+
+    function resetCropper() {
+      if (state.cropper) {
+        state.cropper.destroy();
+        state.cropper = null;
+      }
+    }
+
+    function handleAvatarFileChange(event) {
+      const file = event.target?.files?.[0];
+      if (!file) return;
+
+      if (!file.type.startsWith('image/')) {
+        showToast('Please select an image file.', 'error');
+        return;
+      }
+
+      const objectUrl = URL.createObjectURL(file);
+
+      if (DOM.avatarCropperImage) {
+        DOM.avatarCropperImage.onload = () => {
+          DOM.avatarCropperImage.onload = null;
+          resetCropper();
+          state.cropper = new Cropper(DOM.avatarCropperImage, {
+            aspectRatio: 1,
+            viewMode: 1,
+            background: false,
+            autoCropArea: 1
+          });
+          if (DOM.saveAvatarButton) {
+            DOM.saveAvatarButton.disabled = false;
+          }
+          if (DOM.avatarUploadStatus) {
+            DOM.avatarUploadStatus.textContent = 'Adjust the crop preview before saving.';
+          }
+          URL.revokeObjectURL(objectUrl);
+        };
+        DOM.avatarCropperImage.src = objectUrl;
+        DOM.avatarCropperImage.style.display = 'block';
+      }
+    }
+
+    async function saveAvatar() {
+      if (!state.cropper || !DOM.saveAvatarButton) return;
+
+      try {
+        DOM.saveAvatarButton.disabled = true;
+        DOM.saveAvatarButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving…';
+        if (DOM.avatarUploadStatus) {
+          DOM.avatarUploadStatus.textContent = 'Uploading optimized image…';
+        }
+
+        const canvas = state.cropper.getCroppedCanvas({
+          width: 600,
+          height: 600,
+          imageSmoothingQuality: 'high'
+        });
+
+        if (!canvas) {
+          throw new Error('Unable to crop image');
+        }
+
+        const blob = await new Promise((resolve, reject) => {
+          canvas.toBlob((result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(new Error('Failed to build image blob'));
+            }
+          }, 'image/jpeg', 0.92);
+        });
+
+        const avatarRef = storage.ref().child(`avatars/${state.currentUser.uid}.jpg`);
+        await avatarRef.put(blob, {
+          contentType: 'image/jpeg',
+          cacheControl: 'public,max-age=3600'
+        });
+
+        const photoURL = await avatarRef.getDownloadURL();
+
+        await db.collection('users').doc(state.currentUser.uid).set({
+          photoURL,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        await state.currentUser.updateProfile({ photoURL });
+        state.userData.photoURL = photoURL;
+
+        updateProfileAvatar(computeInitials(state.userData.name || state.currentUser.displayName || state.currentUser.email || 'User'), photoURL);
+        showToast('Profile photo updated successfully.', 'success');
+        closeAvatarModal();
+      } catch (error) {
+        console.error('Error updating avatar:', error);
+        showToast('Unable to update profile photo.', 'error');
+        if (DOM.saveAvatarButton) {
+          DOM.saveAvatarButton.disabled = false;
+          DOM.saveAvatarButton.innerHTML = originalSaveButtonContent;
+        }
+        return;
+      }
+
+      if (DOM.saveAvatarButton) {
+        DOM.saveAvatarButton.innerHTML = originalSaveButtonContent;
+      }
+    }
+
+    function registerNavbarHandlers() {
+      if (!window.Navbar || typeof window.Navbar.setLogoutHandler !== 'function') {
+        document.addEventListener('navbar:ready', registerNavbarHandlers, { once: true });
+        return;
+      }
+      window.Navbar.setLogoutHandler(async () => {
+        try {
+          const shouldLogout = window.confirm('Sign out of Blacklink?');
+          if (!shouldLogout) {
+            return;
+          }
+          await auth.signOut();
+          window.location.href = 'login.html';
+        } catch (error) {
+          console.error('Error signing out:', error);
+          showToast('Error signing out', 'error');
+        }
+      });
+    }
+
+    function setupAvatarModalListeners() {
+      DOM.openAvatarModalButton?.addEventListener('click', openAvatarModal);
+      DOM.closeAvatarModalButton?.addEventListener('click', closeAvatarModal);
+      DOM.cancelAvatarButton?.addEventListener('click', closeAvatarModal);
+      DOM.avatarFileInput?.addEventListener('change', handleAvatarFileChange);
+      DOM.saveAvatarButton?.addEventListener('click', saveAvatar);
+      DOM.avatarModal?.addEventListener('click', (event) => {
+        if (event.target === DOM.avatarModal) {
+          closeAvatarModal();
+        }
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && DOM.avatarModal?.classList.contains('active')) {
+          closeAvatarModal();
+        }
+      });
+    }
+
+    function computeInitials(name, fallback = 'U') {
+      if (!name) return fallback;
+      const parts = String(name).trim().split(/\s+/);
+      const chars = parts.slice(0, 2).map((part) => part.charAt(0).toUpperCase());
+      return chars.join('') || fallback;
+    }
+
+    function safeText(id, value) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = value ?? '';
+      }
+    }
+
+    function getTimestampDate(timestamp) {
+      if (!timestamp) return null;
+      if (timestamp instanceof Date) return timestamp;
+      if (timestamp.toDate && typeof timestamp.toDate === 'function') {
+        return timestamp.toDate();
+      }
+      if (timestamp.seconds) {
+        return new Date(timestamp.seconds * 1000);
+      }
+      if (typeof timestamp === 'string' || typeof timestamp === 'number') {
+        return new Date(timestamp);
+      }
+      return null;
+    }
+
+    function formatDate(date) {
+      const instance = date instanceof Date ? date : getTimestampDate(date);
+      if (!instance) return '—';
+      try {
+        return instance.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      } catch {
+        return instance.toDateString();
+      }
+    }
+
+    function formatRelativeTime(date) {
+      if (!(date instanceof Date)) {
+        return 'Recently';
+      }
+      const diffMs = Date.now() - date.getTime();
+      const minutes = Math.round(diffMs / 60000);
+      if (minutes < 1) return 'Just now';
+      if (minutes < 60) return `${minutes} min${minutes === 1 ? '' : 's'} ago`;
+      const hours = Math.round(minutes / 60);
+      if (hours < 24) return `${hours} hr${hours === 1 ? '' : 's'} ago`;
+      const days = Math.round(hours / 24);
+      if (days < 7) return `${days} day${days === 1 ? '' : 's'} ago`;
+      const weeks = Math.round(days / 7);
+      if (weeks < 4) return `${weeks} week${weeks === 1 ? '' : 's'} ago`;
+      const months = Math.round(days / 30);
+      if (months < 12) return `${months} mo${months === 1 ? '' : 's'} ago`;
+      const years = Math.round(days / 365);
+      return `${years} yr${years === 1 ? '' : 's'} ago`;
+    }
+
+    function resolveHostname(url) {
+      if (!url) return 'blacklink.app';
+      try {
+        return new URL(url).hostname.replace(/^www\./, '');
+      } catch (error) {
+        return url.replace(/^https?:\/\//i, '').split('/')[0];
+      }
+    }
+
+    function normalizeTier(tier) {
+      if (!tier) return 'FREE';
+      const value = String(tier).toUpperCase().replace(/\s+/g, '_');
+      // Employee tier gets ULTRA_PLUS access
+      if (value.includes('EMPLOYEE')) return 'ULTRA_PLUS';
+      if (value === 'ULTRA_PLUS' || value === 'ULTRA+') return 'ULTRA_PLUS';
+      if (value === 'ULTRA' || value.includes('DISTRICT')) return 'ULTRA';
+      return 'FREE';
+    }
+
+    function ensureArray(value) {
+      if (Array.isArray(value)) return value;
+      if (value === undefined || value === null) return [];
+      return [value];
+    }
+
+    function determineFeatureTierLabel(feature) {
+      const tiers = ensureArray(feature?.tiers).map(normalizeTier);
+      if (!tiers.length) return 'ULTRA';
+      if (tiers.includes('ULTRA_PLUS') && !tiers.includes('ULTRA')) {
+        return 'ULTRA+';
+      }
+      return 'ULTRA';
+    }
+
+    function isFeatureUnlockedForTier(feature, tier) {
+      const tiers = ensureArray(feature?.tiers).map(normalizeTier);
+      if (!tiers.length) {
+        return tier !== 'FREE';
+      }
+      if (tier === 'ULTRA_PLUS') {
+        return tiers.includes('ULTRA_PLUS') || tiers.includes('ULTRA');
+      }
+      if (tier === 'ULTRA') {
+        return tiers.includes('ULTRA');
+      }
+      return false;
+    }
+
+    function formatCurrency(amount) {
+      if (typeof amount !== 'number' || Number.isNaN(amount)) {
+        return '$0';
+      }
+      try {
+        return currencyFormatter.format(Math.max(0, amount));
+      } catch {
+        return `$${Math.max(0, Math.round(amount))}`;
+      }
+    }
+
+    function editProfile() {
+      showToast('Profile editing coming soon!', 'info');
+    }
+
+    function showToast(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <div class="toast-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+        <div class="toast-message">${message}</div>
+      `;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+
+</html>

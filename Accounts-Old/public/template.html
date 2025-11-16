@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  Blacklink Accounts v3.9 - Page Template
+  This is an example template showing the new modular structure
+-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page Title - Blacklink Accounts</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Modular CSS (v3.9) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/nav.css">
+
+  <!-- Page-specific styles (optional) -->
+  <style>
+    /* Add page-specific styles here if needed */
+    .page-specific-class {
+      /* Your custom styles */
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar (automatically rendered by navbar.js) -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content -->
+  <main class="container" style="padding-top: 80px;">
+
+    <!-- Page Header -->
+    <div style="margin-bottom: 3rem;">
+      <h1 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 0.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        Page Title
+      </h1>
+      <p class="text-secondary" style="font-size: 1.125rem;">
+        Page description goes here
+      </p>
+    </div>
+
+    <!-- Example Card -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <i class="fas fa-star"></i>
+          Card Title
+        </div>
+        <span class="badge badge-ultra-plus">ULTRA+</span>
+      </div>
+      <div class="card-content">
+        <p>This is an example card using the new modular component system.</p>
+      </div>
+    </div>
+
+    <!-- Example Grid -->
+    <div class="grid grid-auto" style="margin-top: 2rem;">
+      <div class="card">
+        <h3 style="margin-bottom: 1rem;">Grid Item 1</h3>
+        <p class="text-muted">Content here</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom: 1rem;">Grid Item 2</h3>
+        <p class="text-muted">Content here</p>
+      </div>
+      <div class="card">
+        <h3 style="margin-bottom: 1rem;">Grid Item 3</h3>
+        <p class="text-muted">Content here</p>
+      </div>
+    </div>
+
+    <!-- Example Form -->
+    <div class="card" style="margin-top: 2rem;">
+      <div class="card-header">
+        <div class="card-title">Example Form</div>
+      </div>
+      <form>
+        <div class="form-group">
+          <label for="example-input">Input Label</label>
+          <input type="text" id="example-input" placeholder="Enter text here">
+          <div class="form-help">This is a help text</div>
+        </div>
+        <div class="form-group">
+          <label for="example-textarea">Textarea Label</label>
+          <textarea id="example-textarea" placeholder="Enter long text here"></textarea>
+        </div>
+        <div class="flex gap-md">
+          <button type="submit" class="btn">Submit</button>
+          <button type="button" class="btn btn-secondary">Cancel</button>
+        </div>
+      </form>
+    </div>
+
+  </main>
+
+  <!-- Toast Container (automatically created by utils.js) -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Example Modal -->
+  <div id="exampleModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Modal Title</h2>
+        <button class="close-btn" onclick="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <p>Modal content goes here.</p>
+      <div class="flex gap-md" style="margin-top: 1.5rem;">
+        <button class="btn">Confirm</button>
+        <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modular JavaScript (v3.9) -->
+  <script src="js/navbar.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/analytics-compat.js"></script>
+
+  <!-- Firebase (Compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Initialize navbar
+    Navbar.initNavbar(auth, db, 'template');
+
+    let currentUser = null;
+
+    // Auth state observer
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        currentUser = user;
+
+        // Initialize analytics
+        if (window.BlacklinkAnalytics) {
+          BlacklinkAnalytics.init(db, user);
+          BlacklinkAnalytics.trackPageView('template');
+        }
+
+        // Load your page-specific data here
+        console.log('User logged in:', user.email);
+      } else {
+        // Redirect to login if authentication is required
+        window.location.href = '/login.html';
+      }
+    });
+
+    // Example functions
+    function openModal() {
+      document.getElementById('exampleModal').classList.add('active');
+    }
+
+    function closeModal() {
+      document.getElementById('exampleModal').classList.remove('active');
+    }
+
+    // Example: Show a toast notification
+    // BlacklinkUtils.showToast('Welcome to Blacklink!', 'success');
+
+    // Example: Use utility functions
+    // const tier = BlacklinkUtils.normalizeTier('ULTRA+');
+    // const initials = BlacklinkUtils.getUserInitials('John Doe', 'john@example.com');
+  </script>
+</body>
+
+</html>

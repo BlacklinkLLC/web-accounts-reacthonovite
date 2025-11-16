@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Blacklink Accounts Documentation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --primary-light: #a5b4fc;
+      --secondary: #0f172a;
+      --accent: #f59e0b;
+      --accent-secondary: #ec4899;
+      --bg: #fafbfc;
+      --bg-secondary: #f1f5f9;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-secondary: #64748b;
+      --text-muted: #94a3b8;
+      --border: #e2e8f0;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --danger-hover: #dc2626;
+      --radius: 20px;
+      --radius-sm: 12px;
+      --radius-lg: 28px;
+      --shadow: 0 2px 8px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.08);
+      --shadow-md: 0 8px 16px rgba(15, 23, 42, 0.08), 0 3px 6px rgba(15, 23, 42, 0.12);
+      --shadow-lg: 0 24px 48px rgba(15, 23, 42, 0.12), 0 12px 24px rgba(15, 23, 42, 0.08);
+      --shadow-xl: 0 32px 64px rgba(15, 23, 42, 0.16), 0 16px 32px rgba(15, 23, 42, 0.12);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-fast: all 0.15s ease-out;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0a0f1e;
+      --bg-secondary: #1a1f35;
+      --card-bg: #1a1f35;
+      --text: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border: #2d3548;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 8px 16px rgba(0, 0, 0, 0.4), 0 3px 6px rgba(0, 0, 0, 0.5);
+      --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.5), 0 12px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: var(--transition);
+      overflow-x: hidden;
+      min-height: 100vh;
+      padding: 2rem;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translate(0, 0);
+      }
+
+      50% {
+        transform: translate(-100px, -100px);
+      }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+      text-align: center;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    .header-main {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .header-main-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: left;
+    }
+
+    .logo {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      display: block;
+      filter: drop-shadow(0 8px 16px rgba(99, 102, 241, 0.3));
+      transition: var(--transition);
+    }
+
+    .logo:hover {
+      transform: scale(1.05) translateY(-4px);
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 1.25rem;
+      max-width: 640px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1rem 1.25rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .doc-search {
+      flex: 1;
+      min-width: 240px;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      transition: var(--transition);
+    }
+
+    .doc-search:focus-within {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    .doc-search-icon {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
+
+    .doc-search input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .btn-small {
+      padding: 0.6rem 1.2rem;
+      font-size: 0.85rem;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 1rem;
+      border-bottom: 2px solid var(--border);
+      margin-bottom: 3rem;
+      overflow-x: auto;
+      padding-bottom: 0;
+    }
+
+    .tab-button {
+      padding: 1rem 1.5rem;
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: var(--transition);
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tab-button:hover {
+      color: var(--primary);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .tab-button.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .cards-grid {
+      display: grid;
+      gap: 2rem;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      margin-bottom: 3rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(102, 126, 234, 0.2);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-header {
+      padding: 2rem 2rem 1.25rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .card-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+      box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .card-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-content {
+      padding: 2rem;
+    }
+
+    .card-content p {
+      margin-bottom: 1rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    .card-content ul {
+      margin-bottom: 1.5rem;
+      padding-left: 1.5rem;
+    }
+
+    .card-content li {
+      margin-bottom: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .card-content li strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    code {
+      background: rgba(99, 102, 241, 0.1);
+      padding: 0.2em 0.5em;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9em;
+      color: var(--primary);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.85rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-warning {
+      background: rgba(245, 158, 11, 0.15);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-primary {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      margin-bottom: 1.5rem;
+    }
+
+    .status-success {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+    }
+
+    .status-success::before {
+      content: '✓';
+      font-weight: 700;
+    }
+
+    a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      transition: var(--transition);
+    }
+
+    a:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+      text-decoration: none;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--primary);
+      border: 2px solid var(--primary);
+    }
+
+    .btn-outline:hover {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-3px);
+      text-decoration: none;
+    }
+
+    .search-meta {
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .search-meta strong {
+      color: var(--text);
+    }
+
+    .cta-section {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+      border-radius: var(--radius);
+      border: 2px solid rgba(102, 126, 234, 0.2);
+      margin: 3rem 0;
+    }
+
+    .cta-section h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .cta-section p {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 2px solid var(--border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .feature-list li {
+      padding-left: 2rem;
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .feature-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .whats-new {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      margin: 3rem 0;
+      box-shadow: var(--shadow);
+    }
+
+    .whats-new h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 1.5rem;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .timeline-date {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .timeline-content {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+
+    .timeline-content p {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .integration-checklist {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+      margin: 3rem 0;
+    }
+
+    .integration-checklist h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .checklist-progress {
+      height: 10px;
+      border-radius: 999px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      position: relative;
+      margin: 1rem 0 1.5rem;
+      overflow: hidden;
+    }
+
+    .checklist-progress-bar {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .checklist-meta {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.25rem;
+    }
+
+    .checklist {
+      list-style: none;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .checklist-item {
+      display: grid;
+      gap: 0.5rem;
+      padding: 1.25rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg-secondary);
+    }
+
+    .checklist-item label {
+      display: flex;
+      gap: 0.75rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .checklist-item input {
+      margin-top: 0.2rem;
+      cursor: pointer;
+    }
+
+    .checklist-item p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-left: 1.9rem;
+    }
+
+    .checklist-item[data-state="done"] {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.4);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+    }
+
+    .checklist-item[data-state="done"] .pill {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .empty-state {
+      display: none;
+      padding: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        align-items: stretch;
+      }
+
+      .header-main {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .header-main-text {
+        text-align: center;
+      }
+
+      .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .toolbar-actions {
+        justify-content: stretch;
+      }
+
+      .timeline-item {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+      }
+
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-tabs {
+        flex-wrap: wrap;
+      }
+
+      body {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <script src="https://blacklinkeducation.statuspage.io/embed/script.js"></script>
+
+  <div class="container">
+    <header class="header">
+      <div class="header-main">
+        <img src="https://blacklink.net/assets/logo.svg" alt="Blacklink Logo" class="logo" width="80" height="80"
+          loading="lazy" />
+        <div class="header-main-text">
+          <h1>Blacklink Accounts</h1>
+          <p class="subtitle">Comprehensive documentation for managing your Blacklink account securely and efficiently</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn btn-outline btn-small" id="theme-toggle">
+          🌗 Toggle theme
+        </button>
+        <button type="button" class="btn btn-outline btn-small" id="copy-support-email">
+          📋 Copy support email
+        </button>
+      </div>
+    </header>
+
+    <div class="toolbar" role="search">
+      <div class="doc-search">
+        <span class="doc-search-icon" aria-hidden="true">🔍</span>
+        <input type="search" id="docs-search" placeholder="Search documentation cards by keyword…" autocomplete="off"
+          aria-label="Search documentation cards">
+      </div>
+      <div class="toolbar-actions">
+        <button type="button" class="btn btn-outline btn-small" id="jump-getting-started">📚 Getting Started</button>
+        <button type="button" class="btn btn-outline btn-small" id="jump-api">⚡ Jump to API</button>
+      </div>
+    </div>
+
+    <p class="search-meta" id="search-meta" aria-live="polite"></p>
+
+    <nav class="nav-tabs" role="tablist">
+      <button class="tab-button active" data-tab="getting-started" role="tab">
+        <span>🚀</span> Getting Started
+      </button>
+      <button class="tab-button" data-tab="authentication" role="tab">
+        <span>🔐</span> Authentication
+      </button>
+      <button class="tab-button" data-tab="security" role="tab">
+        <span>🛡️</span> Security
+      </button>
+      <button class="tab-button" data-tab="troubleshooting" role="tab">
+        <span>🔧</span> Troubleshooting
+      </button>
+      <button class="tab-button" data-tab="api" role="tab">
+        <span>⚡</span> API Reference
+      </button>
+    </nav>
+
+    <div id="getting-started" class="tab-content active">
+      <div class="status-indicator status-success">
+        All systems operational • Real-time sync enabled
+      </div>
+
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">📝</div>
+            <h2 class="card-title">Account Creation</h2>
+          </div>
+          <div class="card-content">
+            <p>Create your Blacklink account in seconds using multiple authentication methods designed for educational
+              institutions.</p>
+            <ul class="feature-list">
+              <li>Email and password registration</li>
+              <li>Google Sign-In (OAuth 2.0)</li>
+              <li>School district domain validation</li>
+              <li>Instant account activation</li>
+              <li>Multi-device synchronization</li>
+            </ul>
+            <p><strong>Important:</strong> Users must register with their school-provided email domain when required by
+              district policy. This ensures proper access control and compliance with educational data privacy
+              regulations.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">💾</div>
+            <h2 class="card-title">Data Storage & Sync</h2>
+          </div>
+          <div class="card-content">
+            <p>Blacklink uses <code>Firebase Firestore</code> for cloud-based data storage, providing seamless access
+              across all your devices.</p>
+            <ul class="feature-list">
+              <li>Real-time synchronization across devices</li>
+              <li>Automatic backup and recovery</li>
+              <li>Offline mode with smart caching</li>
+              <li>Cross-platform compatibility</li>
+              <li>End-to-end encryption</li>
+            </ul>
+            <span class="badge badge-primary">Cloud-Native</span>
+            <span class="badge badge-success">Real-Time</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🎯</div>
+            <h2 class="card-title">Key Features</h2>
+          </div>
+          <div class="card-content">
+            <p>Experience the full power of Blacklink Education's account system with advanced features designed for
+              modern learning.</p>
+            <ul class="feature-list">
+              <li>Single Sign-On (SSO) integration</li>
+              <li>Role-based access control (Student/Teacher/Admin)</li>
+              <li>Customizable user profiles with avatars</li>
+              <li>Activity logging and audit trails</li>
+              <li>Privacy controls and data export tools</li>
+              <li>Integration with Note25/Note26 platforms</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="authentication" class="tab-content">
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🔑</div>
+            <h2 class="card-title">Authentication Methods</h2>
+          </div>
+          <div class="card-content">
+            <p>Blacklink supports multiple secure authentication methods powered by Firebase Authentication:</p>
+            <ul>
+              <li><strong>Email & Password:</strong> Traditional authentication with strong password requirements</li>
+              <li><strong>Google OAuth:</strong> Seamless sign-in with your Google Workspace account</li>
+              <li><strong>Domain Validation:</strong> Automatic verification of school email domains</li>
+              <li><strong>Multi-Factor Authentication (MFA):</strong> Optional additional security layer <span
+                  class="badge badge-warning">Coming Soon</span></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🔒</div>
+            <h2 class="card-title">Password Requirements</h2>
+          </div>
+          <div class="card-content">
+            <p>To maintain security, all passwords must meet these requirements:</p>
+            <ul>
+              <li><strong>Minimum length:</strong> 8 characters</li>
+              <li><strong>Complexity:</strong> At least one uppercase letter</li>
+              <li><strong>Special characters:</strong> At least one number or symbol</li>
+              <li><strong>Validation:</strong> Real-time password strength indicator</li>
+            </ul>
+            <p>Users can reset their password anytime using the "Forgot Password" feature. A secure reset link will be
+              sent to the registered email address.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🏫</div>
+            <h2 class="card-title">District Integration</h2>
+          </div>
+          <div class="card-content">
+            <p>Blacklink validates email domains against approved school districts to ensure authorized access:</p>
+            <ul class="feature-list">
+              <li>Automatic domain whitelist checking</li>
+              <li>Support for multiple district domains</li>
+              <li>Custom subdomain configurations</li>
+              <li>Administrator-managed access lists</li>
+              <li>Student data privacy compliance (FERPA/COPPA)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="security" class="tab-content">
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🛡️</div>
+            <h2 class="card-title">Security Infrastructure</h2>
+          </div>
+          <div class="card-content">
+            <p>Blacklink leverages enterprise-grade security powered by Google Cloud Platform:</p>
+            <ul class="feature-list">
+              <li><strong>Firebase Authentication:</strong> Industry-leading identity management</li>
+              <li><strong>TLS/SSL Encryption:</strong> All data encrypted in transit</li>
+              <li><strong>Firestore Security Rules:</strong> Server-side access control</li>
+              <li><strong>Regular Security Audits:</strong> Continuous monitoring and testing</li>
+              <li><strong>GDPR & COPPA Compliance:</strong> Full data protection compliance</li>
+            </ul>
+            <span class="badge badge-success">SOC 2 Certified</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🔐</div>
+            <h2 class="card-title">Data Privacy</h2>
+          </div>
+          <div class="card-content">
+            <p>Your privacy is our top priority. Blacklink adheres to strict data protection standards:</p>
+            <ul class="feature-list">
+              <li>Minimal data collection principles</li>
+              <li>No third-party data sharing without consent</li>
+              <li>Student data stored in compliance with FERPA</li>
+              <li>Right to access and delete personal data</li>
+              <li>Transparent privacy policy and data usage</li>
+            </ul>
+            <p>For detailed information, review our <a href="https://blacklink.net/privacy">Privacy Policy</a> and <a
+                href="https://blacklink.net/terms">Terms of Service</a>.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">📋</div>
+            <h2 class="card-title">Compliance Standards</h2>
+          </div>
+          <div class="card-content">
+            <p>Blacklink meets or exceeds industry standards for educational technology:</p>
+            <ul>
+              <li><strong>FERPA:</strong> Family Educational Rights and Privacy Act compliance</li>
+              <li><strong>COPPA:</strong> Children's Online Privacy Protection Act certified</li>
+              <li><strong>GDPR:</strong> General Data Protection Regulation ready</li>
+              <li><strong>CCPA:</strong> California Consumer Privacy Act compliant</li>
+              <li><strong>SOC 2 Type II:</strong> Independent security audit certification</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="troubleshooting" class="tab-content">
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">⚠️</div>
+            <h2 class="card-title">Common Issues</h2>
+          </div>
+          <div class="card-content">
+            <p><strong>Invalid email domain error:</strong></p>
+            <ul>
+              <li>Verify your email matches your district's approved domain</li>
+              <li>Check for typos in your email address</li>
+              <li>Contact your school administrator to confirm domain whitelist</li>
+              <li>Try using your school's Google Workspace account</li>
+            </ul>
+
+            <p><strong>Google Sign-In not working:</strong></p>
+            <ul>
+              <li>Ensure you're using an approved Google account</li>
+              <li>Clear browser cookies and cache</li>
+              <li>Try a different browser or incognito mode</li>
+              <li>Check that pop-ups are enabled for blacklink.net</li>
+              <li>Verify your network doesn't block Google OAuth</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">📧</div>
+            <h2 class="card-title">Password & Account Recovery</h2>
+          </div>
+          <div class="card-content">
+            <p><strong>Forgot password link not received:</strong></p>
+            <ul>
+              <li>Check your spam/junk folder</li>
+              <li>Wait 5-10 minutes for email delivery</li>
+              <li>Verify the email address is correct</li>
+              <li>Add noreply@blacklink.net to your contacts</li>
+              <li>Request a new reset link if needed</li>
+            </ul>
+
+            <p><strong>Account locked or suspended:</strong></p>
+            <ul>
+              <li>Too many failed login attempts (auto-unlock after 30 minutes)</li>
+              <li>Violation of Terms of Service</li>
+              <li>Contact support at <a href="mailto:contact@blacklink.net">contact@blacklink.net</a></li>
+              <li>Include your username and registered email</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🔄</div>
+            <h2 class="card-title">Sync & Data Issues</h2>
+          </div>
+          <div class="card-content">
+            <p><strong>Data not syncing across devices:</strong></p>
+            <ul>
+              <li>Check your internet connection</li>
+              <li>Sign out and sign back in</li>
+              <li>Verify you're using the same account on all devices</li>
+              <li>Clear app cache (Settings → Storage → Clear Cache)</li>
+              <li>Update to the latest version of the app</li>
+            </ul>
+
+            <p><strong>Missing data or settings:</strong></p>
+            <ul>
+              <li>Allow 2-3 minutes for cloud sync to complete</li>
+              <li>Check Firestore connection status in settings</li>
+              <li>Ensure you're not in offline mode</li>
+              <li>Contact support if data loss persists</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <h2>Still Need Help?</h2>
+        <p>Our support team is here to assist you with any account-related issues</p>
+        <div class="btn-group">
+          <a href="mailto:contact@blacklink.net" class="btn btn-primary">📧 Email Support</a>
+          <a href="https://blacklink.net/support" class="btn btn-outline">📚 Help Center</a>
+        </div>
+      </div>
+    </div>
+
+    <div id="api" class="tab-content">
+      <div class="cards-grid">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">⚡</div>
+            <h2 class="card-title">Firebase Authentication API</h2>
+          </div>
+          <div class="card-content">
+            <p>Blacklink uses Firebase Authentication SDK for all account operations:</p>
+
+            <p><strong>Initialize Firebase:</strong></p>
+            <code>import { initializeApp } from 'firebase/app';<br>
+            import { getAuth } from 'firebase/auth';</code>
+
+            <p style="margin-top: 1.5rem;"><strong>Sign Up with Email:</strong></p>
+            <code>createUserWithEmailAndPassword(auth, email, password)</code>
+
+            <p style="margin-top: 1.5rem;"><strong>Sign In with Google:</strong></p>
+            <code>signInWithPopup(auth, googleProvider)</code>
+
+            <p style="margin-top: 1.5rem;"><strong>Password Reset:</strong></p>
+            <code>sendPasswordResetEmail(auth, email)</code>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">💾</div>
+            <h2 class="card-title">Firestore Data Structure</h2>
+          </div>
+          <div class="card-content">
+            <p>User data is stored in Firestore with the following structure:</p>
+
+            <p><strong>Users Collection:</strong></p>
+            <code>users/{userId}/<br>
+            &nbsp;&nbsp;displayName: string<br>
+            &nbsp;&nbsp;email: string<br>
+            &nbsp;&nbsp;photoURL: string<br>
+            &nbsp;&nbsp;role: "student" | "teacher" | "admin"<br>
+            &nbsp;&nbsp;district: string<br>
+            &nbsp;&nbsp;createdAt: timestamp<br>
+            &nbsp;&nbsp;lastLogin: timestamp</code>
+
+            <p style="margin-top: 1.5rem;"><strong>Security Rules Example:</strong></p>
+            <code>match /users/{userId} {<br>
+            &nbsp;&nbsp;allow read, write: if request.auth.uid == userId;<br>
+            }</code>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">🔗</div>
+            <h2 class="card-title">Integration Examples</h2>
+          </div>
+          <div class="card-content">
+            <p>Quick examples for common integration scenarios:</p>
+
+            <p><strong>Get Current User:</strong></p>
+            <code>const user = auth.currentUser;<br>
+            if (user) {<br>
+            &nbsp;&nbsp;console.log(user.email, user.displayName);<br>
+            }</code>
+
+            <p style="margin-top: 1.5rem;"><strong>Listen to Auth State:</strong></p>
+            <code>onAuthStateChanged(auth, (user) => {<br>
+            &nbsp;&nbsp;if (user) {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;// User is signed in<br>
+            &nbsp;&nbsp;} else {<br>
+            &nbsp;&nbsp;&nbsp;&nbsp;// User is signed out<br>
+            &nbsp;&nbsp;}<br>
+            });</code>
+
+            <p style="margin-top: 1.5rem;"><strong>Update Profile:</strong></p>
+            <code>updateProfile(auth.currentUser, {<br>
+            &nbsp;&nbsp;displayName: "New Name",<br>
+            &nbsp;&nbsp;photoURL: "https://example.com/photo.jpg"<br>
+            });</code>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-icon">📖</div>
+            <h2 class="card-title">API Resources</h2>
+          </div>
+          <div class="card-content">
+            <p>Additional resources for developers integrating with Blacklink Accounts:</p>
+            <ul class="feature-list">
+              <li><a href="https://firebase.google.com/docs/auth">Firebase Authentication Documentation</a></li>
+              <li><a href="https://firebase.google.com/docs/firestore">Cloud Firestore Documentation</a></li>
+              <li><a href="https://blacklink.net/api">Blacklink API Reference</a> <span
+                  class="badge badge-primary">New</span></li>
+              <li><a href="https://github.com/blacklink-edu">GitHub Examples Repository</a></li>
+              <li><a href="https://blacklink.net/sdk">JavaScript SDK Documentation</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <h2>Build with Blacklink</h2>
+        <p>Start integrating Blacklink Accounts into your educational applications today</p>
+        <div class="btn-group">
+          <a href="https://blacklink.net/developers" class="btn btn-primary">🚀 Developer Portal</a>
+          <a href="https://blacklink.net/api-keys" class="btn btn-outline">🔑 Get API Keys</a>
+        </div>
+      </div>
+    </div>
+
+    <section class="whats-new" id="whats-new">
+      <h2>What&rsquo;s new</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">May 2025</div>
+          <div class="timeline-content">
+            <p><strong>ClassLink SSO beta</strong> is now available for early adopters.</p>
+            <p>Invite stakeholders through the dashboard to enable ClassLink launchpads for your district.</p>
+            <span class="pill">Early Access</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">April 2025</div>
+          <div class="timeline-content">
+            <p>New <strong>Security Event Center</strong> surfaces risky login activity and recommended actions.</p>
+            <p>Access the feed from the dashboard to triage events in real-time.</p>
+            <span class="pill">Security</span>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-date">March 2025</div>
+          <div class="timeline-content">
+            <p>Added <strong>District provisioning API</strong> endpoints to automate roster imports.</p>
+            <p>Generate scoped API keys and automate account onboarding directly from SIS exports.</p>
+            <span class="pill">API</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="integration-checklist" aria-labelledby="integration-checklist-title">
+      <h2 id="integration-checklist-title">Integration checklist</h2>
+      <p class="checklist-meta">
+        Track your rollout tasks. Progress is stored locally for your browser and updates automatically.
+      </p>
+      <div class="checklist-progress" role="progressbar" aria-labelledby="integration-checklist-title"
+        aria-live="polite" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="checklist-progress">
+        <div class="checklist-progress-bar" id="checklist-progress-bar"></div>
+      </div>
+      <p class="checklist-meta"><strong id="checklist-progress-text">0%</strong> complete • 4 tasks total</p>
+      <ul class="checklist" id="integration-checklist-items">
+        <li class="checklist-item" data-key="firebase-config">
+          <label>
+            <input type="checkbox" data-key="firebase-config">
+            Connect Firebase project
+            <span class="pill">Required</span>
+          </label>
+          <p>Review <code>firebaseConfig</code>, rotate API keys and confirm Firestore rules are deployed.</p>
+        </li>
+        <li class="checklist-item" data-key="sso">
+          <label>
+            <input type="checkbox" data-key="sso">
+            Enable at least one SSO provider
+            <span class="pill">Security</span>
+          </label>
+          <p>Test Google, Microsoft or ClassLink sign-in flows from the staging dashboard.</p>
+        </li>
+        <li class="checklist-item" data-key="monitoring">
+          <label>
+            <input type="checkbox" data-key="monitoring">
+            Configure monitoring webhooks
+            <span class="pill">Ops</span>
+          </label>
+          <p>Send auth events to your incident channel or SIEM via the new webhook dispatcher.</p>
+        </li>
+        <li class="checklist-item" data-key="launch">
+          <label>
+            <input type="checkbox" data-key="launch">
+            Publish a launch plan
+            <span class="pill">Adoption</span>
+          </label>
+          <p>Share timelines, support contacts and onboarding docs with your pilot school admins.</p>
+        </li>
+      </ul>
+      <div class="empty-state" id="checklist-empty-state">Search filtering is hiding all checklist tasks.</div>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 Blacklink Education. All rights reserved.</p>
+      <p style="margin-top: 0.5rem;">
+        <a href="https://blacklink.net/privacy">Privacy Policy</a> •
+        <a href="https://blacklink.net/terms">Terms of Service</a> •
+        <a href="https://blacklink.net/status">System Status</a> •
+        <a href="mailto:contact@blacklink.net">Contact</a>
+      </p>
+    </footer>
+  </div>
+
+  <script>
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const docsSearchInput = document.getElementById('docs-search');
+    const searchMeta = document.getElementById('search-meta');
+    const checklistList = document.getElementById('integration-checklist-items');
+    const checklistItems = checklistList ? checklistList.querySelectorAll('input[type="checkbox"]') : [];
+    const checklistProgress = document.getElementById('checklist-progress');
+    const checklistProgressBar = document.getElementById('checklist-progress-bar');
+    const checklistProgressText = document.getElementById('checklist-progress-text');
+    const checklistEmptyState = document.getElementById('checklist-empty-state');
+    const checklistStorageKey = 'blacklink-integration-checklist';
+    const themeToggleButton = document.getElementById('theme-toggle');
+    const supportButton = document.getElementById('copy-support-email');
+    const jumpGettingStarted = document.getElementById('jump-getting-started');
+    const jumpApi = document.getElementById('jump-api');
+
+    const toggleTheme = () => {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme') || 'dark';
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      return newTheme;
+    };
+
+    const updateThemeToggleLabel = () => {
+      if (!themeToggleButton) return;
+      const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+      themeToggleButton.textContent = theme === 'dark' ? '🌞 Light theme' : '🌙 Dark theme';
+    };
+
+    const applyDocsSearch = (term = '') => {
+      const normalized = term.trim().toLowerCase();
+      let cardMatches = 0;
+      const activeTab = document.querySelector('.tab-content.active');
+
+      if (activeTab) {
+        const cards = activeTab.querySelectorAll('.card');
+        cards.forEach(card => {
+          const match = !normalized || card.textContent.toLowerCase().includes(normalized);
+          card.style.display = match ? '' : 'none';
+          if (match) {
+            cardMatches += 1;
+          }
+        });
+      }
+
+      let checklistMatches = 0;
+      if (checklistItems.length) {
+        checklistItems.forEach(input => {
+          const container = input.closest('.checklist-item');
+          if (!container) return;
+          const match = !normalized || container.textContent.toLowerCase().includes(normalized);
+          container.style.display = match ? '' : 'none';
+          if (match) {
+            checklistMatches += 1;
+          }
+        });
+      }
+
+      if (checklistEmptyState) {
+        const shouldShowEmpty = Boolean(normalized) && checklistMatches === 0;
+        checklistEmptyState.style.display = shouldShowEmpty ? 'block' : 'none';
+      }
+
+      if (!searchMeta) {
+        return;
+      }
+
+      if (normalized) {
+        const total = cardMatches + checklistMatches;
+        const label = total === 1 ? 'result' : 'results';
+        searchMeta.style.display = 'block';
+        searchMeta.innerHTML = `<strong>${total}</strong> ${label} for “${term}”`;
+      } else {
+        searchMeta.style.display = 'none';
+        searchMeta.textContent = '';
+      }
+    };
+
+    const updateChecklistProgress = () => {
+      if (!checklistItems.length || !checklistProgress || !checklistProgressBar || !checklistProgressText) return;
+      const total = checklistItems.length;
+      const completed = Array.from(checklistItems).filter(cb => cb.checked).length;
+      const percentage = Math.round((completed / total) * 100);
+
+      checklistProgressBar.style.width = `${percentage}%`;
+      checklistProgress.setAttribute('aria-valuenow', String(percentage));
+      checklistProgressText.textContent = `${percentage}%`;
+
+      checklistItems.forEach(cb => {
+        const container = cb.closest('.checklist-item');
+        if (container) {
+          container.dataset.state = cb.checked ? 'done' : 'todo';
+        }
+      });
+    };
+
+    const activateTab = (tabId) => {
+      const targetButton = document.querySelector(`.tab-button[data-tab="${tabId}"]`);
+      if (targetButton) {
+        targetButton.click();
+        const targetContent = document.getElementById(tabId);
+        if (targetContent) {
+          targetContent.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    };
+
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const tabId = button.getAttribute('data-tab');
+
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        button.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+
+        if (docsSearchInput) {
+          applyDocsSearch(docsSearchInput.value);
+        }
+      });
+    });
+
+    if (docsSearchInput) {
+      docsSearchInput.addEventListener('input', (event) => {
+        applyDocsSearch(event.target.value);
+      });
+    }
+
+    if (themeToggleButton) {
+      updateThemeToggleLabel();
+      themeToggleButton.addEventListener('click', () => {
+        toggleTheme();
+        updateThemeToggleLabel();
+      });
+    }
+
+    if (supportButton) {
+      const defaultLabel = supportButton.innerHTML;
+      supportButton.addEventListener('click', async () => {
+        const supportAddress = 'contact@blacklink.net';
+        const copySucceeded = await (async () => {
+          if (!navigator.clipboard || !navigator.clipboard.writeText) {
+            return false;
+          }
+          try {
+            await navigator.clipboard.writeText(supportAddress);
+            return true;
+          } catch (error) {
+            console.warn('Clipboard unavailable', error);
+            return false;
+          }
+        })();
+
+        if (copySucceeded) {
+          supportButton.innerHTML = '✅ Copied!';
+          setTimeout(() => {
+            supportButton.innerHTML = defaultLabel;
+          }, 1600);
+        } else {
+          window.open(`mailto:${supportAddress}`, '_blank');
+        }
+      });
+    }
+
+    if (jumpGettingStarted) {
+      jumpGettingStarted.addEventListener('click', () => activateTab('getting-started'));
+    }
+
+    if (jumpApi) {
+      jumpApi.addEventListener('click', () => activateTab('api'));
+    }
+
+    if (checklistItems.length) {
+      let storedChecklist = {};
+      try {
+        storedChecklist = JSON.parse(localStorage.getItem(checklistStorageKey)) || {};
+      } catch (error) {
+        console.warn('Unable to load checklist preferences', error);
+      }
+
+      checklistItems.forEach(input => {
+        const key = input.dataset.key;
+        if (!key) return;
+
+        if (storedChecklist[key]) {
+          input.checked = true;
+        }
+
+        input.addEventListener('change', () => {
+          if (input.checked) {
+            storedChecklist[key] = true;
+          } else {
+            delete storedChecklist[key];
+          }
+
+          try {
+            localStorage.setItem(checklistStorageKey, JSON.stringify(storedChecklist));
+          } catch (error) {
+            console.warn('Unable to persist checklist state', error);
+          }
+
+          updateChecklistProgress();
+        });
+      });
+
+      updateChecklistProgress();
+    }
+
+    if (docsSearchInput) {
+      applyDocsSearch(docsSearchInput.value);
+    }
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Add loading animation on card hover
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('mouseenter', function () {
+        this.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+      });
+    });
+  </script>
+</body>
+
+</html>

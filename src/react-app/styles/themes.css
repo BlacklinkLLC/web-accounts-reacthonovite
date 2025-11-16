@@ -1,0 +1,485 @@
+/**
+ * Blacklink Accounts v4.0 - Theme System
+ * Ported palette collection from Accounts-Old
+ */
+
+/* Light Theme */
+[data-theme="light"] {
+  --bg: #f8fafc;
+  --bg-secondary: #ffffff;
+  --card-bg: #ffffff;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border: #e2e8f0;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.15),
+    0 12px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* Ocean Theme */
+[data-theme="ocean"] {
+  --primary: #0ea5e9;
+  --primary-hover: #0284c7;
+  --primary-light: #7dd3fc;
+  --bg: #0c1e2e;
+  --bg-secondary: #1a2f42;
+  --card-bg: #1a2f42;
+  --border: #2d4a5e;
+}
+
+/* Forest Theme */
+[data-theme="forest"] {
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: #6ee7b7;
+  --bg: #0a1f1a;
+  --bg-secondary: #1a3329;
+  --card-bg: #1a3329;
+  --border: #2d4a3f;
+}
+
+/* Sunset Theme */
+[data-theme="sunset"] {
+  --primary: #f59e0b;
+  --primary-hover: #d97706;
+  --primary-light: #fbbf24;
+  --bg: #1f1408;
+  --bg-secondary: #2d1f10;
+  --card-bg: #2d1f10;
+  --border: #4a3520;
+}
+
+/* Rose Theme */
+[data-theme="rose"] {
+  --primary: #f43f5e;
+  --primary-hover: #e11d48;
+  --primary-light: #fb7185;
+  --bg: #1f0a12;
+  --bg-secondary: #2d1a20;
+  --card-bg: #2d1a20;
+  --border: #4a2d35;
+}
+
+/* Midnight Theme */
+[data-theme="midnight"] {
+  --primary: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --primary-light: #a78bfa;
+  --bg: #000000;
+  --bg-secondary: #0a0a0a;
+  --card-bg: #0a0a0a;
+  --border: #1a1a1a;
+}
+
+/* Nord Theme */
+[data-theme="nord"] {
+  --primary: #88c0d0;
+  --primary-hover: #81a1c1;
+  --primary-light: #8fbcbb;
+  --bg: #2e3440;
+  --bg-secondary: #3b4252;
+  --card-bg: #3b4252;
+  --text: #eceff4;
+  --text-secondary: #d8dee9;
+  --text-muted: #a3be8c;
+  --border: #4c566a;
+}
+
+/* Aurora Theme (ULTRA) */
+[data-theme="aurora"] {
+  --primary: #a78bfa;
+  --primary-hover: #8b5cf6;
+  --primary-light: #c4b5fd;
+  --bg: #0f0a1e;
+  --bg-secondary: #1a1333;
+  --card-bg: #1a1333;
+  --text: #f0e7ff;
+  --text-secondary: #d8c7ff;
+  --text-muted: #b399ff;
+  --border: #3d2d5e;
+  --success: #34d399;
+  --warning: #fbbf24;
+  --danger: #f87171;
+}
+
+/* Crimson Theme (ULTRA) */
+[data-theme="crimson"] {
+  --primary: #dc2626;
+  --primary-hover: #b91c1c;
+  --primary-light: #f87171;
+  --bg: #1a0505;
+  --bg-secondary: #2d0a0a;
+  --card-bg: #2d0a0a;
+  --text: #ffe5e5;
+  --text-secondary: #ffc7c7;
+  --text-muted: #ff9999;
+  --border: #4a1515;
+}
+
+/* Monokai Theme (ULTRA) */
+[data-theme="monokai"] {
+  --primary: #a6e22e;
+  --primary-hover: #8fd12b;
+  --primary-light: #b8f442;
+  --bg: #272822;
+  --bg-secondary: #34352f;
+  --card-bg: #34352f;
+  --text: #f8f8f2;
+  --text-secondary: #cfcfc2;
+  --text-muted: #75715e;
+  --border: #49483e;
+}
+
+/* Dracula Theme (ULTRA) */
+[data-theme="dracula"] {
+  --primary: #bd93f9;
+  --primary-hover: #a678e8;
+  --primary-light: #d7bbff;
+  --bg: #282a36;
+  --bg-secondary: #343746;
+  --card-bg: #343746;
+  --text: #f8f8f2;
+  --text-secondary: #e6e6e2;
+  --text-muted: #6272a4;
+  --border: #44475a;
+}
+
+/* Gruvbox Theme (ULTRA) */
+[data-theme="gruvbox"] {
+  --primary: #b8bb26;
+  --primary-hover: #98971a;
+  --primary-light: #d5c4a1;
+  --bg: #282828;
+  --bg-secondary: #3c3836;
+  --card-bg: #3c3836;
+  --text: #ebdbb2;
+  --text-secondary: #d5c4a1;
+  --text-muted: #928374;
+  --border: #504945;
+}
+
+/* Solarized Dark Theme (ULTRA) */
+[data-theme="solarized"] {
+  --primary: #268bd2;
+  --primary-hover: #2075ba;
+  --primary-light: #4fa5e7;
+  --bg: #002b36;
+  --bg-secondary: #073642;
+  --card-bg: #073642;
+  --text: #fdf6e3;
+  --text-secondary: #eee8d5;
+  --text-muted: #657b83;
+  --border: #586e75;
+}
+
+/* Tokyo Night Theme (ULTRA) */
+[data-theme="tokyo"] {
+  --primary: #7aa2f7;
+  --primary-hover: #5e8ce0;
+  --primary-light: #a9c5ff;
+  --bg: #1a1b26;
+  --bg-secondary: #24283b;
+  --card-bg: #24283b;
+  --text: #c0caf5;
+  --text-secondary: #a9b1d6;
+  --text-muted: #565f89;
+  --border: #414868;
+}
+
+/* Catppuccin Mocha Theme (ULTRA) */
+[data-theme="catppuccin"] {
+  --primary: #89b4fa;
+  --primary-hover: #6c9ce8;
+  --primary-light: #a6ccff;
+  --bg: #1e1e2e;
+  --bg-secondary: #313244;
+  --card-bg: #313244;
+  --text: #cdd6f4;
+  --text-secondary: #bac2de;
+  --text-muted: #6c7086;
+  --border: #45475a;
+}
+
+/* Cyberpunk Theme (ULTRA) */
+[data-theme="cyberpunk"] {
+  --primary: #ff2a6d;
+  --primary-hover: #d11753;
+  --primary-light: #ff5c8a;
+  --bg: #05010d;
+  --bg-secondary: #1a0f2e;
+  --card-bg: #1a0f2e;
+  --text: #05d9e8;
+  --text-secondary: #01cdfe;
+  --text-muted: #b967ff;
+  --border: #7209b7;
+}
+
+/* Lavender Theme (ULTRA) */
+[data-theme="lavender"] {
+  --primary: #c4b5fd;
+  --primary-hover: #a78bfa;
+  --primary-light: #e9d5ff;
+  --bg: #1e1b2e;
+  --bg-secondary: #2d2640;
+  --card-bg: #2d2640;
+  --text: #f5f3ff;
+  --text-secondary: #e9d5ff;
+  --text-muted: #c4b5fd;
+  --border: #4c1d95;
+}
+
+/* Emerald Theme (ULTRA) */
+[data-theme="emerald"] {
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --primary-light: #34d399;
+  --bg: #022c22;
+  --bg-secondary: #064e3b;
+  --card-bg: #064e3b;
+  --text: #d1fae5;
+  --text-secondary: #a7f3d0;
+  --text-muted: #6ee7b7;
+  --border: #065f46;
+}
+
+/* Amber Theme (ULTRA) */
+[data-theme="amber"] {
+  --primary: #f59e0b;
+  --primary-hover: #d97706;
+  --primary-light: #fbbf24;
+  --bg: #1c1108;
+  --bg-secondary: #2d1b08;
+  --card-bg: #2d1b08;
+  --text: #fef3c7;
+  --text-secondary: #fde68a;
+  --text-muted: #fcd34d;
+  --border: #78350f;
+}
+
+/* Coral Theme (ULTRA) */
+[data-theme="coral"] {
+  --primary: #ff6b6b;
+  --primary-hover: #ee5a5a;
+  --primary-light: #ff8787;
+  --bg: #1a0a0a;
+  --bg-secondary: #2d1515;
+  --card-bg: #2d1515;
+  --text: #ffe0e0;
+  --text-secondary: #ffc7c7;
+  --text-muted: #ffb3b3;
+  --border: #4a2020;
+}
+
+/* Slate Theme */
+[data-theme="slate"] {
+  --primary: #94a3b8;
+  --primary-hover: #64748b;
+  --primary-light: #cbd5e1;
+  --bg: #0f172a;
+  --bg-secondary: #1e293b;
+  --card-bg: #1e293b;
+  --text: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border: #334155;
+}
+
+/* Mint Theme (ULTRA) */
+[data-theme="mint"] {
+  --primary: #00d4aa;
+  --primary-hover: #00b894;
+  --primary-light: #20e3c4;
+  --bg: #0a1f1c;
+  --bg-secondary: #133632;
+  --card-bg: #133632;
+  --text: #e0fff8;
+  --text-secondary: #b8f5e8;
+  --text-muted: #7fede0;
+  --border: #1e5449;
+}
+
+/* Volcano Theme (ULTRA) */
+[data-theme="volcano"] {
+  --primary: #fa541c;
+  --primary-hover: #d4380d;
+  --primary-light: #ff7a45;
+  --bg: #1f0b05;
+  --bg-secondary: #331209;
+  --card-bg: #331209;
+  --text: #fff2e8;
+  --text-secondary: #ffd8bf;
+  --text-muted: #ffbb96;
+  --border: #7c2d12;
+}
+
+/* Berry Theme (ULTRA) */
+[data-theme="berry"] {
+  --primary: #ec4899;
+  --primary-hover: #db2777;
+  --primary-light: #f472b6;
+  --bg: #1a0514;
+  --bg-secondary: #2d0a24;
+  --card-bg: #2d0a24;
+  --text: #fce7f3;
+  --text-secondary: #fbcfe8;
+  --text-muted: #f9a8d4;
+  --border: #831843;
+}
+
+[data-theme="desert"] {
+  --primary: #f4a261;
+  --primary-hover: #e76f51;
+  --primary-light: #ffe5c1;
+  --bg: #1f140c;
+  --bg-secondary: #2b1c11;
+  --card-bg: #2b1c11;
+  --text: #ffe8d6;
+  --text-secondary: #ffd4aa;
+  --text-muted: #f1ba89;
+  --border: #8c4b22;
+}
+
+[data-theme="matrix"] {
+  --primary: #00ff90;
+  --primary-hover: #00c46b;
+  --primary-light: #66ffbf;
+  --bg: #010a05;
+  --bg-secondary: #031208;
+  --card-bg: #031208;
+  --text: #e0ffe5;
+  --text-secondary: #79ffb8;
+  --text-muted: #45d890;
+  --border: #0b3923;
+}
+
+[data-theme="horizon"] {
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  --primary-light: #93c5fd;
+  --bg: #0a101f;
+  --bg-secondary: #111b2f;
+  --card-bg: #111b2f;
+  --text: #e2e8f0;
+  --text-secondary: #bcd0f8;
+  --text-muted: #8fb2f0;
+  --border: #223153;
+}
+
+[data-theme="pastel"] {
+  --primary: #fb7185;
+  --primary-hover: #f43f5e;
+  --primary-light: #ffd6e0;
+  --bg: #fdf2f8;
+  --bg-secondary: #ffe6f1;
+  --card-bg: #ffe6f1;
+  --text: #872341;
+  --text-secondary: #ba4a70;
+  --text-muted: #d68098;
+  --border: #ffc7dd;
+}
+
+/* Dusk Theme (Free) */
+[data-theme="dusk"] {
+  --primary: #c084fc;
+  --primary-hover: #a855f7;
+  --primary-light: #ddd6fe;
+  --bg: #120c1c;
+  --bg-secondary: #1e1a2e;
+  --card-bg: #1e1a2e;
+  --text: #f5f3ff;
+  --text-secondary: #d8b4fe;
+  --text-muted: #a78bfa;
+  --border: #31274b;
+}
+
+/* Noir Theme (Free) */
+[data-theme="noir"] {
+  --primary: #f5f5f4;
+  --primary-hover: #e4e4e7;
+  --primary-light: #fafafa;
+  --bg: #020202;
+  --bg-secondary: #111111;
+  --card-bg: #131313;
+  --text: #f5f5f4;
+  --text-secondary: #d4d4d8;
+  --text-muted: #a1a1aa;
+  --border: #27272a;
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+}
+
+/* Glacier Theme (ULTRA) */
+[data-theme="glacier"] {
+  --primary: #38bdf8;
+  --primary-hover: #0ea5e9;
+  --primary-light: #bae6fd;
+  --bg: #02121f;
+  --bg-secondary: #062132;
+  --card-bg: #0b2c44;
+  --text: #e0f2ff;
+  --text-secondary: #bae6fd;
+  --text-muted: #7dd3fc;
+  --border: #123d58;
+}
+
+/* Ember Theme (ULTRA) */
+[data-theme="ember"] {
+  --primary: #fb5607;
+  --primary-hover: #d9480f;
+  --primary-light: #ffc078;
+  --bg: #140705;
+  --bg-secondary: #1f0e0a;
+  --card-bg: #2a140f;
+  --text: #fff1e6;
+  --text-secondary: #ffd7ba;
+  --text-muted: #ffb4a2;
+  --border: #3b1b14;
+  --success: #10b981;
+  --warning: #f59e0b;
+}
+
+/* Accessibility Modes */
+[data-contrast="high"] {
+  --text: #ffffff;
+  --text-secondary: #ffffff;
+  --border: #ffffff;
+  filter: contrast(1.2);
+}
+
+[data-motion="reduce"] * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Large Text Mode */
+[data-text-size="large"] {
+  --text-xs: 0.875rem;
+  --text-sm: 1rem;
+  --text-base: 1.125rem;
+  --text-lg: 1.25rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+}
+
+/* Extra Large Text Mode */
+[data-text-size="xl"] {
+  --text-xs: 1rem;
+  --text-sm: 1.125rem;
+  --text-base: 1.25rem;
+  --text-lg: 1.5rem;
+  --text-xl: 1.75rem;
+  --text-2xl: 2rem;
+  --text-3xl: 2.5rem;
+  --text-4xl: 3.5rem;
+}
+
+/* Increased Text Spacing */
+[data-text-spacing="increased"] {
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+  line-height: 1.8;
+}

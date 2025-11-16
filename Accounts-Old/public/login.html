@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blacklink - Sign In</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Modular CSS (v3.9) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      font-feature-settings: 'kern' 1;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .login-container {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      max-width: 420px;
+      width: 100%;
+      padding: 3rem 2.5rem;
+      position: relative;
+      z-index: 1;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .login-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .release-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(118, 75, 162, 0.2));
+      color: var(--primary-light);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      margin-bottom: 1.25rem;
+    }
+
+    .release-chip i {
+      font-size: 0.85rem;
+    }
+
+    .release-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .experience-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 0 0 1.75rem 0;
+      padding: 0;
+    }
+
+    .experience-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .experience-list li i {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary-light);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: var(--radius-sm);
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo::before {
+      content: 'B';
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      }
+
+      100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+      }
+    }
+
+    h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.025em;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 400;
+    }
+
+    .form-section {
+      margin-top: 2rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      color: var(--text);
+      transition: var(--transition);
+      font-weight: 400;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    input[type="email"]:hover,
+    input[type="password"]:hover {
+      border-color: var(--primary-light);
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: var(--focus-ring), 0 1px 2px rgba(0, 0, 0, 0.05);
+      transform: translateY(-1px);
+    }
+
+    input[type="email"]:invalid:not(:focus):not(:placeholder-shown),
+    input[type="password"]:invalid:not(:focus):not(:placeholder-shown) {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .forgot-password {
+      text-align: right;
+      margin-top: 0.5rem;
+    }
+
+    .forgot-password a {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .forgot-password a:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    .sign-in-btn {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      color: #ffffff;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transition: var(--transition);
+      margin-top: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .sign-in-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s;
+    }
+
+    .sign-in-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .sign-in-btn:hover:not(:disabled)::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .sign-in-btn:active:not(:disabled) {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .sign-in-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 2rem 0;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider span {
+      padding: 0 1rem;
+      background: var(--card-bg);
+    }
+
+    .google-btn {
+      width: 100%;
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.25rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text);
+      transition: var(--transition);
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .google-btn:hover:not(:disabled) {
+      background-color: var(--bg);
+      border-color: var(--primary-light);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .google-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .google-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .google-icon {
+      height: 18px;
+      width: 18px;
+      margin-right: 0.75rem;
+    }
+
+    .classlink-btn {
+      width: 100%;
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.25rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text);
+      transition: var(--transition);
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .classlink-btn:hover:not(:disabled) {
+      background-color: var(--bg);
+      border-color: var(--primary-light);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .classlink-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .classlink-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .classlink-icon {
+      height: 18px;
+      margin-right: 0.75rem;
+    }
+
+    .banner {
+      margin-top: 1rem;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      font-size: 0.875rem;
+      display: none;
+      border-left: 4px solid;
+    }
+
+    .banner.success {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(16, 185, 129, 0.05) 100%);
+      border-color: var(--success);
+      color: #065f46;
+    }
+
+    .banner.error {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%);
+      border-color: var(--danger);
+      color: #991b1b;
+    }
+
+    .banner.loading {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
+      border-color: var(--primary);
+      color: #1e40af;
+    }
+
+    .org-access {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(99, 102, 241, 0.4);
+      background: rgba(99, 102, 241, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .org-access-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .org-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      color: var(--primary-light);
+    }
+
+    .org-pill i {
+      font-size: 0.85rem;
+    }
+
+    .org-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .btn-outline {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .org-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .register-link {
+      margin-top: 2rem;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 400;
+    }
+
+    .register-link a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .register-link a:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .sign-in-btn.loading .loading-spinner {
+      display: inline-block;
+    }
+
+    .security-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2rem;
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .security-info::before {
+      content: '🔒';
+      margin-right: 0.5rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem;
+      }
+
+      .login-container {
+        padding: 2rem 1.5rem;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <script src="https://blacklinkeducation.statuspage.io/embed/script.js"></script>
+  <main class="login-container" role="main" aria-label="Blacklink sign in form">
+    <div class="logo-section">
+      <div class="logo" aria-hidden="true"></div>
+      <div class="release-chip">
+        <i class="fas fa-code-branch" aria-hidden="true"></i>
+        Accounts 3.9 • Stable Release
+      </div>
+      <h1>Welcome back</h1>
+      <p class="release-description">
+        Sign in with your personal Blacklink ID to unlock ULTRA dashboards, App Hub collections, and shared Aero AI credits.
+      </p>
+      <ul class="experience-list">
+        <li><i class="fas fa-layer-group" aria-hidden="true"></i> QuickLaunch 2.0 with pinned App Hub tiles</li>
+        <li><i class="fas fa-universal-access" aria-hidden="true"></i> Saved accessibility & color vision presets</li>
+        <li><i class="fas fa-building" aria-hidden="true"></i> Organizations with shared ULTRA+ benefits</li>
+      </ul>
+    </div>
+
+    <div class="form-section">
+      <form id="login-form" novalidate>
+        <div class="input-group">
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email" required
+            spellcheck="false" autocapitalize="none" />
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <div style="position: relative;">
+            <input type="password" id="password" name="password" placeholder="Enter your password"
+              autocomplete="current-password" required spellcheck="false" autocapitalize="none" style="padding-right: 3rem;" />
+            <button type="button" id="toggle-password" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.25rem; padding: 0.25rem;">
+              👁️
+            </button>
+          </div>
+          <div class="forgot-password">
+            <a href="/forgot-password" tabindex="0">Forgot your password?</a>
+          </div>
+        </div>
+
+        <div class="input-group" style="margin-bottom: 0.5rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem; font-weight: 400; cursor: pointer;">
+            <input type="checkbox" id="remember-me" name="remember" style="width: auto; cursor: pointer;">
+            <span style="font-size: 0.875rem;">Remember me for 30 days</span>
+          </label>
+        </div>
+
+        <button type="submit" class="sign-in-btn" aria-live="polite" aria-busy="false">
+          <span class="loading-spinner" aria-hidden="true"></span>
+          <span class="btn-text">Sign in</span>
+        </button>
+
+        <div id="banner" class="banner" role="alert" aria-live="assertive"></div>
+      </form>
+
+      <div class="divider">
+        <span>or</span>
+      </div>
+
+      <button id="google-signin" class="google-btn" aria-label="Continue with Google">
+        <img class="google-icon"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/120px-Google_%22G%22_logo.svg.png"
+          alt="" aria-hidden="true" />
+        Continue with Google
+      </button>
+      <button id="classlink-signin" class="classlink-btn" aria-label="Continue with ClassLink">
+        <img src="/assets/classlink.png" class="classlink-icon" />
+        Login with ClassLink
+      </button>
+
+      <div class="security-info">
+        Your information is protected with enterprise-grade security
+      </div>
+
+      <div class="org-access" aria-live="polite">
+        <div class="org-access-header">
+          <span class="org-pill">
+            <i class="fas fa-building" aria-hidden="true"></i>
+            Organization Access
+          </span>
+          <span class="org-hint">Personal account required</span>
+        </div>
+        <p class="org-note">
+          Manage campuses, districts, and shared Aero AI pools after you sign in with your personal account. Once authenticated, head to the Organizations workspace to continue.
+        </p>
+        <button type="button" class="btn-outline" id="organizationAccessBtn">
+          <i class="fas fa-share-nodes" aria-hidden="true"></i>
+          Continue to Organizations
+        </button>
+      </div>
+
+      <p class="register-link">
+        Don't have an account?
+        <a href="register.html" tabindex="0">Create one now</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="js/utils.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const form = document.getElementById('login-form');
+    const banner = document.getElementById('banner');
+    const signInButton = form.querySelector('.sign-in-btn');
+    const buttonText = signInButton.querySelector('.btn-text');
+    const loadingSpinner = signInButton.querySelector('.loading-spinner');
+    const googleBtn = document.getElementById('google-signin');
+    const classlinkBtn = document.getElementById('classlink-signin');
+    const organizationAccessBtn = document.getElementById('organizationAccessBtn');
+
+    // Parse redirect URL from query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = decodeURIComponent(urlParams.get('redirect') || 'dashboard.html');
+
+    // Password visibility toggle
+    const togglePasswordBtn = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
+
+    togglePasswordBtn.addEventListener('click', () => {
+      const type = passwordInput.type === 'password' ? 'text' : 'password';
+      passwordInput.type = type;
+      togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+
+    // Remember me functionality
+    const rememberMeCheckbox = document.getElementById('remember-me');
+
+    // Check if we should auto-fill from remembered session
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    if (rememberedEmail) {
+      document.getElementById('email').value = rememberedEmail;
+      rememberMeCheckbox.checked = true;
+    }
+
+    function showBanner(message, type) {
+      banner.textContent = message;
+      banner.className = `banner ${type}`;
+      banner.style.display = 'block';
+      banner.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideBanner() {
+      banner.style.display = 'none';
+    }
+
+    if (organizationAccessBtn) {
+      organizationAccessBtn.addEventListener('click', () => {
+        showBanner("Organization workspaces unlock after you finish signing in with your personal account.", "loading");
+        organizationAccessBtn.blur();
+      });
+    }
+
+    function setLoadingState(isLoading, buttonElement, loadingText = 'Please wait...') {
+      const button = buttonElement || signInButton;
+      const text = button.querySelector('.btn-text') || button;
+      const spinner = button.querySelector('.loading-spinner');
+
+      if (isLoading) {
+        button.disabled = true;
+        button.classList.add('loading');
+        button.setAttribute('aria-busy', 'true');
+        if (text && text !== button) text.textContent = loadingText;
+        if (spinner) spinner.style.display = 'inline-block';
+      } else {
+        button.disabled = false;
+        button.classList.remove('loading');
+        button.setAttribute('aria-busy', 'false');
+        if (spinner) spinner.style.display = 'none';
+      }
+    }
+
+    function resetLoadingStates() {
+      setLoadingState(false, signInButton);
+      buttonText.textContent = 'Sign in';
+      setLoadingState(false, googleBtn);
+      googleBtn.textContent = 'Continue with Google';
+
+      // Ensure exactly one Google icon (avoid duplicates after retries)
+      const existingIcon = googleBtn.querySelector('.google-icon');
+      if (!existingIcon) {
+        const icon = document.createElement('img');
+        icon.className = 'google-icon';
+        icon.src = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/120px-Google_%22G%22_logo.svg.png';
+        icon.alt = '';
+        icon.setAttribute('aria-hidden', 'true');
+        googleBtn.insertBefore(icon, googleBtn.firstChild);
+      }
+    }
+
+    function validateEmail(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
+
+    function validatePassword(password) {
+      return password.length >= 6;
+    }
+
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        try {
+          const idToken = await user.getIdToken(true);
+          console.log("Firebase JWT token:", idToken);
+        } catch (err) {
+          console.error("Failed to get JWT token:", err);
+          showBanner("Authentication error. Please try again.", "error");
+        }
+      }
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      hideBanner();
+
+      const email = form.email.value.trim();
+      const password = form.password.value;
+
+      if (!email || !password) {
+        showBanner("Please fill in all fields.", "error");
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        showBanner("Please enter a valid email address.", "error");
+        form.email.focus();
+        return;
+      }
+
+      if (!validatePassword(password)) {
+        showBanner("Password must be at least 6 characters long.", "error");
+        form.password.focus();
+        return;
+      }
+
+      setLoadingState(true, signInButton, 'Signing in...');
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+
+        // Handle remember me
+        if (rememberMeCheckbox.checked) {
+          localStorage.setItem('rememberedEmail', email);
+          // Set Firebase persistence to local (persists even when browser is closed)
+          await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        } else {
+          localStorage.removeItem('rememberedEmail');
+          // Set Firebase persistence to session (cleared when tab is closed)
+          await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+        }
+
+        showBanner("Sign in successful! Redirecting...", "success");
+
+        setTimeout(() => {
+          window.location.href = redirectUrl;
+        }, 1500);
+      } catch (error) {
+        console.error("Sign in error:", error);
+        let errorMessage = "Sign in failed. Please try again.";
+
+        switch (error.code) {
+          case 'auth/user-not-found':
+            errorMessage = "No account found with this email address.";
+            break;
+          case 'auth/wrong-password':
+            errorMessage = "Incorrect password. Please try again.";
+            break;
+          case 'auth/invalid-email':
+            errorMessage = "Please enter a valid email address.";
+            break;
+          case 'auth/user-disabled':
+            errorMessage = "This account has been disabled. Please contact support.";
+            break;
+          case 'auth/too-many-requests':
+            errorMessage = "Too many failed attempts. Please try again later.";
+            break;
+        }
+
+        showBanner(errorMessage, "error");
+      } finally {
+        resetLoadingStates();
+      }
+    });
+
+    googleBtn.addEventListener('click', async () => {
+      hideBanner();
+      const provider = new firebase.auth.GoogleAuthProvider();
+      provider.addScope('email');
+      provider.addScope('profile');
+
+      setLoadingState(true, googleBtn, 'Connecting to Google...');
+
+      try {
+        await auth.signInWithPopup(provider);
+        showBanner("Google sign in successful! Redirecting...", "success");
+
+        setTimeout(() => {
+          window.location.href = redirectUrl;
+        }, 1500);
+      } catch (error) {
+        console.error("Google sign in error:", error);
+        let errorMessage = "Google sign in failed. Please try again.";
+
+        switch (error.code) {
+          case 'auth/popup-closed-by-user':
+            errorMessage = "Sign in was cancelled.";
+            break;
+          case 'auth/popup-blocked':
+            errorMessage = "Popup blocked. Please allow popups and try again.";
+            break;
+          case 'auth/account-exists-with-different-credential':
+            errorMessage = "An account already exists with this email using a different sign-in method.";
+            break;
+        }
+
+        showBanner(errorMessage, "error");
+      } finally {
+        resetLoadingStates();
+      }
+    });
+
+    classlinkBtn.addEventListener('click', () => {
+      // Build SSO redirect URL with original redirect parameter
+      const ssoRedirectBase = 'https://accounts.blacklink.net/sso/link';
+      const ssoRedirectParams = new URLSearchParams({
+        provider: 'classlink',
+        redirect: redirectUrl
+      });
+      const ssoRedirectUrl = `${ssoRedirectBase}?${ssoRedirectParams.toString()}`;
+
+      const classlinkUrl = `https://launchpad.classlink.com/oauth2/v2/auth?scope=full&redirect_uri=${encodeURIComponent(ssoRedirectUrl)}&client_id=c17593507926293ce9cac53d0d1bb57c4e05a64c121d&response_type=code`;
+      window.location.href = classlinkUrl;
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        hideBanner();
+      }
+    });
+
+    let bannerTimeout;
+    const originalShowBanner = showBanner;
+    showBanner = (message, type) => {
+      originalShowBanner(message, type);
+
+      if (bannerTimeout) clearTimeout(bannerTimeout);
+
+      if (type === 'error') {
+        bannerTimeout = setTimeout(() => {
+          hideBanner();
+        }, 10000);
+      }
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account - Blacklink</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Modular CSS (v3.9) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      font-feature-settings: 'kern' 1;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .register-container {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      max-width: 480px;
+      width: 100%;
+      padding: 3rem 2.5rem;
+      position: relative;
+      z-index: 1;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+    }
+
+    .register-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+      border-radius: var(--radius) var(--radius) 0 0;
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .release-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.4rem 1rem;
+      border-radius: 999px;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(118, 75, 162, 0.2));
+      color: var(--primary-light);
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      margin-bottom: 1.25rem;
+    }
+
+    .release-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 1.5rem;
+    }
+
+    .experience-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin: 0 0 1.75rem 0;
+      padding: 0;
+    }
+
+    .experience-list li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .experience-list li i {
+      width: 32px;
+      height: 32px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary-light);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      border-radius: var(--radius-sm);
+      margin: 0 auto 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo::before {
+      content: 'B';
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      }
+
+      100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+      }
+    }
+
+    h1 {
+      font-size: 1.875rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.025em;
+    }
+
+    .subtitle {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 400;
+    }
+
+    .mode-toggle {
+      margin: 2rem 0 1.5rem;
+      display: flex;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .toggle-btn {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border: none;
+      border-radius: calc(var(--radius-sm) - 4px);
+      cursor: pointer;
+      transition: var(--transition);
+      background: transparent;
+      color: var(--text-muted);
+      position: relative;
+      z-index: 1;
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .toggle-btn.active {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .form-progress {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .progress-meter {
+      position: relative;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.2);
+      overflow: hidden;
+    }
+
+    .progress-meter-fill {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      border-radius: inherit;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transition: width 0.3s ease;
+    }
+
+    .progress-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .progress-step {
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      display: grid;
+      gap: 0.2rem;
+      font-size: 0.8rem;
+      transition: var(--transition);
+    }
+
+    .progress-step.completed {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .step-label {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .step-status {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    .caps-lock {
+      display: none;
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--warning);
+    }
+
+    .caps-lock.visible {
+      display: block;
+    }
+
+    .autosave-banner {
+      margin-top: 1.5rem;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .autosave-clear {
+      border: none;
+      background: transparent;
+      color: var(--primary);
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      transition: var(--transition);
+    }
+
+    .autosave-clear:hover {
+      background: rgba(99, 102, 241, 0.15);
+    }
+
+    .form-section {
+      margin-top: 1.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .input-group.hidden {
+      max-height: 0;
+      margin-bottom: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+
+    label {
+      display: block;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--card-bg);
+      color: var(--text);
+      transition: var(--transition);
+      font-weight: 400;
+      font-family: inherit;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23cbd5e1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 0.75rem center;
+      background-size: 1rem;
+      padding-right: 2.5rem;
+    }
+
+    select:disabled {
+      background-color: var(--bg);
+      color: var(--text-muted);
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    input:hover:not(:disabled),
+    select:hover:not(:disabled) {
+      border-color: var(--primary-light);
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: var(--focus-ring), 0 1px 2px rgba(0, 0, 0, 0.05);
+      transform: translateY(-1px);
+    }
+
+    input:invalid:not(:focus):not(:placeholder-shown) {
+      border-color: var(--danger);
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+    }
+
+    .password-requirements {
+      margin-top: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem 1.25rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      color: white;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      transition: var(--transition);
+      margin-top: 1rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: translate(-50%, -50%);
+      transition: width 0.5s, height 0.5s;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .submit-btn:hover:not(:disabled)::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .submit-btn:active:not(:disabled) {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .divider span {
+      padding: 0 1rem;
+      background: var(--card-bg);
+    }
+
+    .google-btn {
+      width: 100%;
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.25rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text);
+      transition: var(--transition);
+      position: relative;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .google-btn:hover:not(:disabled) {
+      background-color: var(--bg);
+      border-color: var(--primary-light);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .google-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .google-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .google-icon {
+      height: 18px;
+      width: 18px;
+      margin-right: 0.75rem;
+    }
+
+    .error-message {
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.05) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-left: 4px solid var(--danger);
+      border-radius: var(--radius-sm);
+      color: #fca5a5;
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+      animation: slideIn 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-link {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 400;
+      margin-top: 1.5rem;
+    }
+
+    .login-link a {
+      color: var(--primary);
+      font-weight: 600;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .login-link a:hover {
+      color: var(--primary-hover);
+      text-decoration: underline;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .submit-btn.loading .loading-spinner,
+    .google-btn.loading .loading-spinner {
+      display: inline-block;
+    }
+
+    .school-info {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-sm);
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      color: var(--primary-light);
+    }
+
+    .school-info h3 {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .org-access {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      border-radius: var(--radius-sm);
+      border: 1px dashed rgba(99, 102, 241, 0.4);
+      background: rgba(99, 102, 241, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .org-access-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .org-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.35px;
+      color: var(--primary-light);
+    }
+
+    .org-hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .btn-outline {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .org-note {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .school-info p {
+      margin: 0;
+      line-height: 1.5;
+      color: var(--text-secondary);
+    }
+
+    .security-info {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: var(--bg);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .security-info::before {
+      content: '🔒';
+      margin-right: 0.5rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 1rem;
+      }
+
+      .register-container {
+        padding: 2rem 1.5rem;
+        max-width: 100%;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+      }
+
+      .toggle-btn {
+        padding: 0.625rem 0.75rem;
+        font-size: 0.8125rem;
+      }
+
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      select {
+        font-size: 16px;
+      }
+    }
+
+
+    .classlink-btn {
+      width: 100%;
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 1.25rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text);
+      transition: var(--transition);
+      position: relative;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .classlink-btn:hover:not(:disabled) {
+      background-color: var(--bg);
+      border-color: var(--primary-light);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+    }
+
+    .classlink-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .classlink-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .classlink-icon {
+      height: 18px;
+      margin-right: 0.75rem;
+    }
+  </style>
+</head>
+
+<body>
+  <script src="https://blacklinkeducation.statuspage.io/embed/script.js"></script>
+  <main class="register-container" role="main" aria-label="Blacklink registration form">
+    <div class="logo-section">
+      <div class="logo" aria-hidden="true"></div>
+      <div class="release-chip">
+        <i class="fas fa-seedling" aria-hidden="true"></i>
+        Accounts 3.9 • Stable Release
+      </div>
+      <h1>Create your account</h1>
+      <p class="release-description">Start with a personal account, then unlock organizations, ULTRA+, and shared Aero AI pools.</p>
+      <ul class="experience-list">
+        <li><i class="fas fa-user-check" aria-hidden="true"></i> Personal ID powering QuickLaunch 2.0</li>
+        <li><i class="fas fa-universal-access" aria-hidden="true"></i> Saved accessibility and theme presets</li>
+        <li><i class="fas fa-people-arrows" aria-hidden="true"></i> Ready for teams, districts, and Connect SSO</li>
+      </ul>
+    </div>
+    <div class="mode-toggle">
+      <button type="button" class="toggle-btn active" data-mode="school">School Account</button>
+      <button type="button" class="toggle-btn" data-mode="personal">Personal Account</button>
+    </div>
+    <div class="form-progress" aria-hidden="true">
+      <div class="progress-meter">
+        <div class="progress-meter-fill" id="formProgressFill"></div>
+      </div>
+      <div class="progress-steps">
+        <div class="progress-step" data-step="account">
+          <span class="step-label">Account</span>
+          <span class="step-status" id="stepAccountStatus">Pending</span>
+        </div>
+        <div class="progress-step" data-step="school">
+          <span class="step-label">School</span>
+          <span class="step-status" id="stepSchoolStatus">Pending</span>
+        </div>
+        <div class="progress-step" data-step="security">
+          <span class="step-label">Security</span>
+          <span class="step-status" id="stepSecurityStatus">Pending</span>
+        </div>
+      </div>
+    </div>
+    <div id="school-info" class="school-info">
+      <h3>School Registration</h3>
+      <p>Register with your school email to access district-specific features and resources.</p>
+    </div>
+    <div class="form-section">
+      <form id="register-form" novalidate>
+        <div class="input-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="Enter your full name" required autocomplete="name"
+            spellcheck="false" />
+        </div>
+        <div id="school-fields" class="school-fields">
+          <div class="input-group">
+            <label for="state">State</label>
+            <select id="state" name="state" required>
+              <option value="">Select your state</option>
+              <option value="missouri">Missouri</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label for="district">School District</label>
+            <select id="district" name="district" disabled required>
+              <option value="">Select your district</option>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" name="email" placeholder="Enter your email address" autocomplete="email"
+            required spellcheck="false" autocapitalize="none" />
+        </div>
+        <div class="input-group">
+          <label for="password">Password</label>
+          <div style="position: relative;">
+            <input type="password" id="password" name="password" placeholder="Create a secure password"
+              autocomplete="new-password" required minlength="6" spellcheck="false" autocapitalize="none" style="padding-right: 3rem;" />
+            <button type="button" id="toggle-password" style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--text-muted); font-size: 1.25rem; padding: 0.25rem;">
+              👁️
+            </button>
+          </div>
+          <div id="password-strength" style="margin-top: 0.5rem; padding: 0.5rem; border-radius: 8px; display: none;">
+            <div style="font-size: 0.75rem; font-weight: 600; margin-bottom: 0.25rem;">Password Strength: <span id="strength-text">Weak</span></div>
+            <div style="height: 4px; background: var(--border); border-radius: 2px; overflow: hidden;">
+              <div id="strength-bar" style="height: 100%; width: 0%; transition: all 0.3s; background: var(--danger);"></div>
+            </div>
+          </div>
+          <div class="caps-lock" id="capsLockIndicator">Caps Lock appears to be on.</div>
+          <div class="password-requirements">
+            Password must be at least 6 characters long
+          </div>
+        </div>
+        <div class="input-group">
+          <label style="display: flex; align-items: flex-start; gap: 0.5rem; font-weight: 400; cursor: pointer;">
+            <input type="checkbox" id="accept-terms" required style="width: auto; cursor: pointer; margin-top: 0.25rem;">
+            <span style="font-size: 0.875rem;">I agree to the <a href="https://blacklink.net/terms" style="color: var(--primary); text-decoration: underline;">Terms of Service</a> and <a href="privacy.html" style="color: var(--primary); text-decoration: underline;">Privacy Policy</a></span>
+          </label>
+        </div>
+        <input type="hidden" id="expected-domain" />
+        <button type="submit" class="submit-btn">
+          <span class="loading-spinner" aria-hidden="true"></span>
+          <span class="btn-text">Create Account</span>
+        </button>
+        <div id="error-message" class="error-message" role="alert" aria-live="assertive"></div>
+      </form>
+      <div class="autosave-banner" id="autosaveBanner" role="status">
+        <span id="autosaveStatus">Drafts autosave as you type.</span>
+        <button type="button" class="autosave-clear" id="clearDraft">Clear draft</button>
+      </div>
+      <div class="divider">
+        <span>or</span>
+      </div>
+      <button id="google-signin-btn" class="google-btn" aria-label="Sign up with Google">
+        <img class="google-icon"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/120px-Google_%22G%22_logo.svg.png"
+          alt="" aria-hidden="true" />
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <span class="btn-text">Continue with Google</span>
+      </button>
+      <button id="classlink-signin" class="classlink-btn" aria-label="Continue with ClassLink">
+        <img src="/assets/classlink.png" class="classlink-icon" />
+        <span class="btn-text">Login with ClassLink</span>
+      </button>
+      <div class="security-info">
+        Your information is protected with enterprise-grade security
+      </div>
+      <div class="org-access" aria-live="polite">
+        <div class="org-access-header">
+          <span class="org-pill">
+            <i class="fas fa-building" aria-hidden="true"></i>
+            Organization Workspaces
+          </span>
+          <span class="org-hint">Personal account required</span>
+        </div>
+        <p class="org-note">
+          Finish creating your personal account first. After verification, visit <strong>organizations.html</strong> to
+          request or join a district workspace with shared ULTRA+ benefits.
+        </p>
+        <button type="button" class="btn-outline" id="organizationRequestBtn">
+          <i class="fas fa-circle-info" aria-hidden="true"></i>
+          How organization access works
+        </button>
+      </div>
+      <p class="login-link">
+        Already have an account?
+        <a href="login.html" tabindex="0">Sign in</a>
+      </p>
+    </div>
+  </main>
+
+  <script src="js/utils.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const provider = new GoogleAuthProvider();
+
+    const form = document.getElementById("register-form");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const nameInput = document.getElementById("name");
+    const errorMessage = document.getElementById("error-message");
+    const districtSelect = document.getElementById("district");
+    const expectedDomainInput = document.getElementById("expected-domain");
+    const stateSelect = document.getElementById("state");
+    const toggleBtns = document.querySelectorAll('.toggle-btn');
+    const schoolFields = document.getElementById("school-fields");
+    const schoolInfo = document.getElementById("school-info");
+    const submitBtn = form.querySelector('.submit-btn');
+    const googleBtn = document.getElementById("google-signin-btn");
+    const classlinkBtn = document.getElementById("classlink-signin");
+    const termsCheckbox = document.getElementById('accept-terms');
+    const progressSteps = document.querySelectorAll('.progress-step');
+    const progressFill = document.getElementById('formProgressFill');
+    const stepAccountStatus = document.getElementById('stepAccountStatus');
+    const stepSchoolStatus = document.getElementById('stepSchoolStatus');
+    const stepSecurityStatus = document.getElementById('stepSecurityStatus');
+    const capsLockIndicator = document.getElementById('capsLockIndicator');
+    const autosaveStatus = document.getElementById('autosaveStatus');
+    const clearDraftButton = document.getElementById('clearDraft');
+    const draftStorageKey = 'register-draft';
+    const organizationRequestBtn = document.getElementById('organizationRequestBtn');
+
+    // Parse redirect URL from query parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = decodeURIComponent(urlParams.get('redirect') || 'dashboard.html');
+
+    // Password visibility toggle
+    const togglePasswordBtn = document.getElementById('toggle-password');
+    togglePasswordBtn.addEventListener('click', () => {
+      const type = passwordInput.type === 'password' ? 'text' : 'password';
+      passwordInput.type = type;
+      togglePasswordBtn.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+
+    // Password strength indicator
+    const strengthIndicator = document.getElementById('password-strength');
+    const strengthBar = document.getElementById('strength-bar');
+    const strengthText = document.getElementById('strength-text');
+
+    function calculatePasswordStrength(password) {
+      let strength = 0;
+      if (password.length >= 8) strength += 25;
+      if (password.length >= 12) strength += 25;
+      if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 20;
+      if (/[0-9]/.test(password)) strength += 15;
+      if (/[^a-zA-Z0-9]/.test(password)) strength += 15;
+      return Math.min(strength, 100);
+    }
+
+    passwordInput.addEventListener('input', () => {
+      const password = passwordInput.value;
+      if (password.length > 0) {
+        strengthIndicator.style.display = 'block';
+        const strength = calculatePasswordStrength(password);
+        strengthBar.style.width = strength + '%';
+
+        if (strength < 40) {
+          strengthBar.style.background = 'var(--danger)';
+          strengthText.textContent = 'Weak';
+          strengthText.style.color = 'var(--danger)';
+        } else if (strength < 70) {
+          strengthBar.style.background = 'var(--warning)';
+          strengthText.textContent = 'Fair';
+          strengthText.style.color = 'var(--warning)';
+        } else {
+          strengthBar.style.background = 'var(--success)';
+          strengthText.textContent = 'Strong';
+          strengthText.style.color = 'var(--success)';
+        }
+      } else {
+        strengthIndicator.style.display = 'none';
+      }
+    });
+
+    let isPersonalMode = false;
+
+    const stateDistricts = {
+      missouri: [
+        { value: "wentzville", label: "Wentzville School District", domain: "wsdr4.org" },
+        { value: "fortzumwalt", label: "Fort Zumwalt School District", domain: "fz.k12.mo.us" }
+      ]
+    };
+
+    function updateAutosaveStatus(message) {
+      if (!autosaveStatus) return;
+      autosaveStatus.textContent = message || `Draft saved ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+    }
+
+    function updateProgress() {
+      if (!progressFill || !stepAccountStatus || !stepSchoolStatus || !stepSecurityStatus) return;
+
+      const email = emailInput.value.trim();
+      const nameComplete = Boolean(nameInput.value.trim());
+      const emailComplete = validateEmail(email);
+      const accountComplete = nameComplete && emailComplete;
+
+      const schoolComplete = isPersonalMode ? true : Boolean(stateSelect.value && districtSelect.value);
+      const passwordReady = passwordInput.value.length >= 8;
+      const securityComplete = passwordReady && termsCheckbox.checked;
+
+      const steps = { account: accountComplete, school: schoolComplete, security: securityComplete };
+      const completeCount = Object.values(steps).filter(Boolean).length;
+      const percent = Math.round((completeCount / 3) * 100);
+      progressFill.style.width = `${percent}%`;
+
+      progressSteps.forEach(step => {
+        const key = step.dataset.step;
+        const done = steps[key];
+        const shouldHighlight = key !== 'school' || !isPersonalMode;
+        step.classList.toggle('completed', done && shouldHighlight);
+      });
+
+      stepAccountStatus.textContent = accountComplete ? 'Complete' : 'Pending';
+      stepSchoolStatus.textContent = isPersonalMode ? 'Skipped' : (schoolComplete ? 'Complete' : 'Pending');
+      stepSecurityStatus.textContent = securityComplete ? 'Ready' : 'Pending';
+    }
+
+    function saveDraft() {
+      if (typeof localStorage === 'undefined') return;
+      const draft = {
+        name: nameInput.value.trim(),
+        email: emailInput.value.trim(),
+        mode: isPersonalMode ? 'personal' : 'school',
+        state: stateSelect.value,
+        district: districtSelect.value,
+        expectedDomain: expectedDomainInput.value.trim()
+      };
+
+      try {
+        localStorage.setItem(draftStorageKey, JSON.stringify(draft));
+        if (draft.name || draft.email || draft.state || draft.district) {
+          updateAutosaveStatus();
+        }
+      } catch (error) {
+        console.warn('Unable to persist registration draft', error);
+      }
+    }
+
+    function clearDraft(resetFields = true) {
+      if (typeof localStorage !== 'undefined') {
+        try {
+          localStorage.removeItem(draftStorageKey);
+        } catch (error) {
+          console.warn('Unable to clear registration draft', error);
+        }
+      }
+
+      if (resetFields) {
+        nameInput.value = '';
+        emailInput.value = '';
+        passwordInput.value = '';
+        termsCheckbox.checked = false;
+        stateSelect.value = '';
+        districtSelect.innerHTML = '<option value="">Select your district</option>';
+        districtSelect.disabled = true;
+        expectedDomainInput.value = '';
+        strengthIndicator.style.display = 'none';
+        applyMode(false, { resetDomain: false, suppressSave: true });
+      }
+
+      updateProgress();
+      updateAutosaveStatus('Draft cleared.');
+    }
+
+    function restoreDraft() {
+      if (typeof localStorage === 'undefined') return;
+      try {
+        const raw = localStorage.getItem(draftStorageKey);
+        if (!raw) return;
+        const draft = JSON.parse(raw);
+
+        applyMode(draft.mode === 'personal', { resetDomain: false, suppressSave: true });
+
+        if (draft.name) nameInput.value = draft.name;
+        if (draft.email) emailInput.value = draft.email;
+        if (draft.state) {
+          stateSelect.value = draft.state;
+          stateSelect.dispatchEvent(new Event('change'));
+        }
+        if (draft.district) {
+          districtSelect.value = draft.district;
+          districtSelect.dispatchEvent(new Event('change'));
+        }
+        if (draft.expectedDomain) {
+          expectedDomainInput.value = draft.expectedDomain;
+        }
+
+        updateProgress();
+        updateAutosaveStatus('Draft restored from this device.');
+      } catch (error) {
+        console.warn('Unable to restore registration draft', error);
+      }
+    }
+
+    function applyMode(personal, { resetDomain = true, suppressSave = false } = {}) {
+      isPersonalMode = personal;
+      toggleBtns.forEach(btn => {
+        const active = btn.dataset.mode === (personal ? 'personal' : 'school');
+        btn.classList.toggle('active', active);
+      });
+
+      if (personal) {
+        schoolFields.classList.add('hidden');
+        schoolInfo.style.display = 'none';
+        stateSelect.removeAttribute('required');
+        districtSelect.removeAttribute('required');
+        districtSelect.disabled = true;
+        districtSelect.value = '';
+      } else {
+        schoolFields.classList.remove('hidden');
+        schoolInfo.style.display = 'block';
+        stateSelect.setAttribute('required', '');
+        districtSelect.setAttribute('required', '');
+        districtSelect.disabled = !stateSelect.value;
+      }
+
+      if (resetDomain) {
+        expectedDomainInput.value = '';
+      }
+
+      hideError();
+      updateProgress();
+
+      if (!suppressSave) {
+        saveDraft();
+      }
+    }
+
+    function handleCapsLock(event) {
+      if (!capsLockIndicator) return;
+      const capsOn = event?.getModifierState && event.getModifierState('CapsLock');
+      capsLockIndicator.classList.toggle('visible', Boolean(capsOn));
+    }
+
+    function showError(message) {
+      errorMessage.textContent = message;
+      errorMessage.classList.add('show');
+      errorMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      setTimeout(() => hideError(), 8000);
+    }
+
+    if (organizationRequestBtn) {
+      organizationRequestBtn.addEventListener('click', () => {
+        alert('Organization access requires a verified personal account. Complete this registration, then visit organizations.html to continue.');
+      });
+    }
+
+    function hideError() {
+      errorMessage.classList.remove('show');
+    }
+
+    function setLoadingState(button, isLoading, loadingText = 'Please wait...') {
+      const btnText = button.querySelector('.btn-text');
+      if (isLoading) {
+        button.disabled = true;
+        button.classList.add('loading');
+        if (btnText) btnText.textContent = loadingText;
+      } else {
+        button.disabled = false;
+        button.classList.remove('loading');
+      }
+    }
+
+    function resetLoadingStates() {
+      setLoadingState(submitBtn, false);
+      submitBtn.querySelector('.btn-text').textContent = 'Create Account';
+      setLoadingState(googleBtn, false);
+      googleBtn.querySelector('.btn-text').textContent = 'Continue with Google';
+    }
+
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function validatePassword(password) {
+      return password.length >= 6;
+    }
+
+    toggleBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+        isPersonalMode = mode === 'personal';
+        toggleBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (isPersonalMode) {
+          schoolFields.classList.add('hidden');
+          schoolInfo.style.display = 'none';
+          stateSelect.removeAttribute('required');
+          districtSelect.removeAttribute('required');
+        } else {
+          schoolFields.classList.remove('hidden');
+          schoolInfo.style.display = 'block';
+          stateSelect.setAttribute('required', '');
+          districtSelect.setAttribute('required', '');
+        }
+        expectedDomainInput.value = "";
+        hideError();
+      });
+    });
+
+    stateSelect.addEventListener("change", () => {
+      const selectedState = stateSelect.value;
+      const districts = stateDistricts[selectedState] || [];
+
+      districtSelect.innerHTML = '<option value="">Select your district</option>';
+
+      if (districts.length === 0) {
+        districtSelect.disabled = true;
+        expectedDomainInput.value = "";
+        return;
+      }
+
+      districts.forEach(({ value, label }) => {
+        const option = document.createElement("option");
+        option.value = value;
+        option.textContent = label;
+        districtSelect.appendChild(option);
+      });
+
+      districtSelect.disabled = false;
+      expectedDomainInput.value = "";
+    });
+
+    districtSelect.addEventListener("change", () => {
+      const selectedState = stateSelect.value;
+      const selectedDistrict = districtSelect.value;
+      const districts = stateDistricts[selectedState] || [];
+      const district = districts.find(d => d.value === selectedDistrict);
+      expectedDomainInput.value = district ? district.domain : "";
+    });
+
+    async function saveUserInfoToFirestore(user) {
+      const userDocRef = doc(db, "users", user.uid);
+      const data = {
+        uid: user.uid,
+        email: user.email,
+        name: nameInput.value.trim() || user.displayName || "Unknown",
+        createdAt: new Date().toISOString(),
+        registrationMode: isPersonalMode ? "personal" : "school"
+      };
+
+      if (!isPersonalMode) {
+        data.state = stateSelect.value || null;
+        data.district = districtSelect.value || null;
+        data.expectedDomain = expectedDomainInput.value || null;
+      }
+
+      await setDoc(userDocRef, data);
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      hideError();
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+      const name = nameInput.value.trim();
+      const expectedDomain = expectedDomainInput.value.trim().toLowerCase();
+      const domain = email.split("@")[1]?.toLowerCase();
+
+      if (!name) {
+        showError("Please enter your full name.");
+        nameInput.focus();
+        return;
+      }
+
+      if (!isPersonalMode) {
+        if (!stateSelect.value) {
+          showError("Please select your state.");
+          stateSelect.focus();
+          return;
+        }
+        if (!districtSelect.value) {
+          showError("Please select your school district.");
+          districtSelect.focus();
+          return;
+        }
+      }
+
+      if (!email) {
+        showError("Please enter your email address.");
+        emailInput.focus();
+        return;
+      }
+
+      if (!validateEmail(email)) {
+        showError("Please enter a valid email address.");
+        emailInput.focus();
+        return;
+      }
+
+      if (!password) {
+        showError("Please enter a password.");
+        passwordInput.focus();
+        return;
+      }
+
+      if (!validatePassword(password)) {
+        showError("Password must be at least 6 characters long.");
+        passwordInput.focus();
+        return;
+      }
+
+      if (!document.getElementById('accept-terms').checked) {
+        showError("Please accept the Terms of Service and Privacy Policy to continue.");
+        return;
+      }
+
+      if (!isPersonalMode && expectedDomain && domain !== expectedDomain) {
+        showError(`Email must be from "${expectedDomain}"`);
+        emailInput.focus();
+        return;
+      }
+
+      setLoadingState(submitBtn, true, 'Creating account...');
+
+      try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        await saveUserInfoToFirestore(userCredential.user);
+        setTimeout(() => window.location.href = redirectUrl, 1000);
+      } catch (error) {
+        let errorText = "Registration failed. Please try again.";
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorText = "An account with this email already exists.";
+            break;
+          case 'auth/invalid-email':
+            errorText = "Please enter a valid email address.";
+            break;
+          case 'auth/weak-password':
+            errorText = "Password is too weak. Please choose a stronger password.";
+            break;
+          case 'auth/operation-not-allowed':
+            errorText = "Email registration is currently disabled. Please contact support.";
+            break;
+        }
+        showError(errorText);
+      } finally {
+        resetLoadingStates();
+      }
+    });
+
+    googleBtn.addEventListener("click", async () => {
+      hideError();
+
+      if (!isPersonalMode) {
+        const expectedDomain = expectedDomainInput.value.trim().toLowerCase();
+        if (!expectedDomain) {
+          showError("Please select a district to continue.");
+          return;
+        }
+      }
+
+      setLoadingState(googleBtn, true, 'Connecting to Google...');
+
+      try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+
+        if (!isPersonalMode) {
+          const domain = user.email.split("@")[1]?.toLowerCase();
+          const expectedDomain = expectedDomainInput.value.trim().toLowerCase();
+
+          if (domain !== expectedDomain) {
+            showError(`Google account must be from "${expectedDomain}"`);
+            await signOut(auth);
+            return;
+          }
+        }
+
+        await saveUserInfoToFirestore(user);
+        setTimeout(() => window.location.href = redirectUrl, 1000);
+      } catch (error) {
+        let errorText = "Google sign-in failed. Please try again.";
+        switch (error.code) {
+          case 'auth/popup-closed-by-user':
+            errorText = "Sign-in was cancelled.";
+            break;
+          case 'auth/popup-blocked':
+            errorText = "Popup blocked. Please allow popups and try again.";
+            break;
+          case 'auth/account-exists-with-different-credential':
+            errorText = "An account already exists with this email using a different sign-in method.";
+            break;
+        }
+        showError(errorText);
+      } finally {
+        resetLoadingStates();
+      }
+    });
+
+    classlinkBtn.addEventListener("click", () => {
+      // Build SSO redirect URL with original redirect parameter
+      const ssoRedirectBase = 'https://accounts.blacklink.net/sso/link';
+      const ssoRedirectParams = new URLSearchParams({
+        provider: 'classlink',
+        redirect: redirectUrl
+      });
+      const ssoRedirectUrl = `${ssoRedirectBase}?${ssoRedirectParams.toString()}`;
+
+      const classlinkUrl = `https://launchpad.classlink.com/oauth2/v2/auth?scope=full&redirect_uri=${encodeURIComponent(ssoRedirectUrl)}&client_id=c17593507926293ce9cac53d0d1bb57c4e05a64c121d&response_type=code`;
+      window.location.href = classlinkUrl;
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') hideError();
+    });
+  </script>
+</body>
+
+</html>

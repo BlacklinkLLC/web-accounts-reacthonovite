@@ -1,0 +1,899 @@
+<!DOCTYPE html>
+<html lang="en">
+<!--
+  Blacklink Accounts v3.9 - Admin Dashboard
+  Only accessible to users with isAdmin: true
+-->
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - Blacklink Accounts</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Modular CSS (v3.9) -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/nav.css">
+
+  <!-- Page-specific styles -->
+  <style>
+    body {
+      padding-top: 80px;
+      min-height: 100vh;
+    }
+
+    .admin-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .admin-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .admin-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: var(--spacing-xl);
+      border: 2px solid var(--border);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .stat-icon.users {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(37, 99, 235, 0.2) 100%);
+      color: var(--info);
+    }
+
+    .stat-icon.subscriptions {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.2) 100%);
+      color: var(--ultra);
+    }
+
+    .stat-icon.organizations {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.2) 100%);
+      color: var(--success);
+    }
+
+    .stat-icon.analytics {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2) 0%, rgba(124, 58, 237, 0.2) 100%);
+      color: #8b5cf6;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 600;
+    }
+
+    .stat-change {
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .stat-change.positive {
+      color: var(--success);
+    }
+
+    .stat-change.negative {
+      color: var(--danger);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 2px solid var(--border);
+    }
+
+    .data-table thead {
+      background: var(--bg-secondary);
+    }
+
+    .data-table th {
+      padding: 1rem;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .data-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .data-table tr:hover {
+      background: var(--bg-secondary);
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .user-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .user-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .user-email {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .action-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--bg-secondary);
+    }
+
+    .action-btn.danger:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
+
+    .empty-state i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 3rem;
+      color: var(--text-muted);
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .tab {
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: var(--transition);
+    }
+
+    .tab:hover {
+      color: var(--text-secondary);
+    }
+
+    .tab.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar (automatically rendered by navbar.js) -->
+  <div id="navbar-container"></div>
+
+  <!-- Main Content -->
+  <main class="container">
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+      <h1>
+        <i class="fas fa-shield-halved"></i>
+        Admin Dashboard
+      </h1>
+      <p style="color: var(--text-secondary); font-size: 1.125rem;">
+        System administration and user management
+      </p>
+      <div style="margin-top: 1rem;">
+        <span class="admin-badge">
+          <i class="fas fa-lock"></i>
+          Administrator Access
+        </span>
+      </div>
+    </div>
+
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon users">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="stat-value" id="totalUsers">-</div>
+        <div class="stat-label">Total Users</div>
+        <div class="stat-change positive" id="usersChange" style="display: none;">
+          <i class="fas fa-arrow-up"></i>
+          <span>0% this month</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon subscriptions">
+          <i class="fas fa-star"></i>
+        </div>
+        <div class="stat-value" id="ultraUsers">-</div>
+        <div class="stat-label">ULTRA Subscribers</div>
+        <div class="stat-change positive" id="subsChange" style="display: none;">
+          <i class="fas fa-arrow-up"></i>
+          <span>0% this month</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon organizations">
+          <i class="fas fa-building"></i>
+        </div>
+        <div class="stat-value" id="totalOrgs">-</div>
+        <div class="stat-label">Organizations</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon analytics">
+          <i class="fas fa-chart-line"></i>
+        </div>
+        <div class="stat-value" id="analyticsEvents">-</div>
+        <div class="stat-label">Analytics Events (7d)</div>
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('users')">
+        <i class="fas fa-users"></i> Users
+      </button>
+      <button class="tab" onclick="switchTab('subscriptions')">
+        <i class="fas fa-star"></i> Subscriptions
+      </button>
+      <button class="tab" onclick="switchTab('organizations')">
+        <i class="fas fa-building"></i> Organizations
+      </button>
+      <button class="tab" onclick="switchTab('analytics')">
+        <i class="fas fa-chart-line"></i> Analytics
+      </button>
+    </div>
+
+    <!-- Users Tab -->
+    <div id="users-tab" class="tab-content active">
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">Recent Users</h2>
+          <button class="btn btn-sm" onclick="loadUsers()">
+            <i class="fas fa-refresh"></i>
+            Refresh
+          </button>
+        </div>
+        <div id="usersTableContainer">
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading users...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Subscriptions Tab -->
+    <div id="subscriptions-tab" class="tab-content">
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">Active Subscriptions</h2>
+          <button class="btn btn-sm" onclick="loadSubscriptions()">
+            <i class="fas fa-refresh"></i>
+            Refresh
+          </button>
+        </div>
+        <div id="subscriptionsTableContainer">
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading subscriptions...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Organizations Tab -->
+    <div id="organizations-tab" class="tab-content">
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">Organizations</h2>
+          <button class="btn btn-sm" onclick="loadOrganizations()">
+            <i class="fas fa-refresh"></i>
+            Refresh
+          </button>
+        </div>
+        <div id="organizationsTableContainer">
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading organizations...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Analytics Tab -->
+    <div id="analytics-tab" class="tab-content">
+      <div class="card">
+        <div class="section-header">
+          <h2 class="section-title">Recent Analytics Events</h2>
+          <button class="btn btn-sm" onclick="loadAnalytics()">
+            <i class="fas fa-refresh"></i>
+            Refresh
+          </button>
+        </div>
+        <div id="analyticsTableContainer">
+          <div class="loading">
+            <div class="spinner"></div>
+            <p>Loading analytics...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modular JavaScript (v3.9) -->
+  <script src="js/navbar.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/analytics-compat.js"></script>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // Initialize navbar
+    Navbar.initNavbar(auth, db, 'admin');
+
+    let currentUser = null;
+    let isAdmin = false;
+
+    // Auth state observer
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        currentUser = user;
+
+        // Initialize analytics
+        if (window.BlacklinkAnalytics) {
+          BlacklinkAnalytics.init(db, user);
+          BlacklinkAnalytics.trackPageView('admin');
+        }
+
+        // Check if user is admin
+        try {
+          const userDoc = await db.collection('users').doc(user.uid).get();
+          const userData = userDoc.data();
+
+          isAdmin = userData?.isAdmin === true || user.email?.endsWith('@blacklink.net');
+
+          if (!isAdmin) {
+            BlacklinkUtils.showToast('Access denied. Admin privileges required.', 'danger');
+            setTimeout(() => {
+              window.location.href = '/dashboard.html';
+            }, 2000);
+            return;
+          }
+
+          // Load dashboard data
+          loadDashboardStats();
+          loadUsers();
+        } catch (error) {
+          console.error('Error checking admin status:', error);
+          BlacklinkUtils.showToast('Error verifying admin access', 'danger');
+          setTimeout(() => {
+            window.location.href = '/dashboard.html';
+          }, 2000);
+        }
+      } else {
+        window.location.href = '/login.html?redirect=admin.html';
+      }
+    });
+
+    // Tab switching
+    function switchTab(tabName) {
+      // Update tab buttons
+      document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+      event.target.closest('.tab').classList.add('active');
+
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.getElementById(`${tabName}-tab`).classList.add('active');
+
+      // Load data for the tab if needed
+      switch(tabName) {
+        case 'users':
+          loadUsers();
+          break;
+        case 'subscriptions':
+          loadSubscriptions();
+          break;
+        case 'organizations':
+          loadOrganizations();
+          break;
+        case 'analytics':
+          loadAnalytics();
+          break;
+      }
+    }
+
+    // Load dashboard stats
+    async function loadDashboardStats() {
+      try {
+        // Get total users count
+        const usersSnapshot = await db.collection('users').get();
+        document.getElementById('totalUsers').textContent = usersSnapshot.size.toLocaleString();
+
+        // Get ULTRA users count
+        const subscriptionsSnapshot = await db.collection('subscriptions').get();
+        let ultraCount = 0;
+        subscriptionsSnapshot.forEach(doc => {
+          const tier = BlacklinkUtils.normalizeTier(doc.data().tier);
+          if (tier === 'ULTRA' || tier === 'ULTRA_PLUS') {
+            ultraCount++;
+          }
+        });
+        document.getElementById('ultraUsers').textContent = ultraCount.toLocaleString();
+
+        // Get organizations count
+        const orgsSnapshot = await db.collection('organizations').get();
+        document.getElementById('totalOrgs').textContent = orgsSnapshot.size.toLocaleString();
+
+        // Get analytics events (last 7 days)
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        const analyticsSnapshot = await db.collection('analytics')
+          .where('timestamp', '>=', sevenDaysAgo.toISOString())
+          .get();
+        document.getElementById('analyticsEvents').textContent = analyticsSnapshot.size.toLocaleString();
+
+      } catch (error) {
+        console.error('Error loading dashboard stats:', error);
+        BlacklinkUtils.showToast('Error loading dashboard statistics', 'danger');
+      }
+    }
+
+    // Load users
+    async function loadUsers() {
+      const container = document.getElementById('usersTableContainer');
+      container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading users...</p></div>';
+
+      try {
+        const usersSnapshot = await db.collection('users')
+          .orderBy('createdAt', 'desc')
+          .limit(50)
+          .get();
+
+        if (usersSnapshot.empty) {
+          container.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><h3>No users found</h3></div>';
+          return;
+        }
+
+        let tableHTML = `
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Created</th>
+                <th>Admin</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        usersSnapshot.forEach(doc => {
+          const user = doc.data();
+          const initials = BlacklinkUtils.getUserInitials(user.name, user.email);
+          const createdDate = user.createdAt ? BlacklinkUtils.formatDate(user.createdAt.toDate()) : 'N/A';
+
+          tableHTML += `
+            <tr>
+              <td>
+                <div class="user-info">
+                  <div class="user-avatar">${initials}</div>
+                  <div class="user-details">
+                    <div class="user-name">${user.name || 'Unknown'}</div>
+                  </div>
+                </div>
+              </td>
+              <td>${user.email || 'N/A'}</td>
+              <td>${createdDate}</td>
+              <td>
+                ${user.isAdmin ? '<span class="badge badge-danger">Admin</span>' : '<span class="badge badge-info">User</span>'}
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn" onclick="viewUser('${doc.id}')">
+                    <i class="fas fa-eye"></i> View
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+
+        tableHTML += '</tbody></table>';
+        container.innerHTML = tableHTML;
+
+      } catch (error) {
+        console.error('Error loading users:', error);
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Error loading users</h3></div>';
+        BlacklinkUtils.showToast('Error loading users', 'danger');
+      }
+    }
+
+    // Load subscriptions
+    async function loadSubscriptions() {
+      const container = document.getElementById('subscriptionsTableContainer');
+      container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading subscriptions...</p></div>';
+
+      try {
+        const subsSnapshot = await db.collection('subscriptions').limit(50).get();
+
+        if (subsSnapshot.empty) {
+          container.innerHTML = '<div class="empty-state"><i class="fas fa-star"></i><h3>No subscriptions found</h3></div>';
+          return;
+        }
+
+        let tableHTML = `
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>User ID</th>
+                <th>Tier</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        subsSnapshot.forEach(doc => {
+          const sub = doc.data();
+          const tier = BlacklinkUtils.getTierDisplayName(sub.tier);
+          const badgeClass = BlacklinkUtils.getTierBadgeClass(sub.tier);
+
+          tableHTML += `
+            <tr>
+              <td><code style="font-size: 0.875rem;">${doc.id}</code></td>
+              <td><span class="badge ${badgeClass}">${tier}</span></td>
+              <td><span class="badge badge-success">Active</span></td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn" onclick="viewSubscription('${doc.id}')">
+                    <i class="fas fa-eye"></i> View
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+
+        tableHTML += '</tbody></table>';
+        container.innerHTML = tableHTML;
+
+      } catch (error) {
+        console.error('Error loading subscriptions:', error);
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Error loading subscriptions</h3></div>';
+        BlacklinkUtils.showToast('Error loading subscriptions', 'danger');
+      }
+    }
+
+    // Load organizations
+    async function loadOrganizations() {
+      const container = document.getElementById('organizationsTableContainer');
+      container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading organizations...</p></div>';
+
+      try {
+        const orgsSnapshot = await db.collection('organizations')
+          .orderBy('createdAt', 'desc')
+          .limit(50)
+          .get();
+
+        if (orgsSnapshot.empty) {
+          container.innerHTML = '<div class="empty-state"><i class="fas fa-building"></i><h3>No organizations found</h3></div>';
+          return;
+        }
+
+        let tableHTML = `
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Members</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        orgsSnapshot.forEach(doc => {
+          const org = doc.data();
+          const createdDate = org.createdAt ? BlacklinkUtils.formatDate(org.createdAt.toDate()) : 'N/A';
+
+          tableHTML += `
+            <tr>
+              <td><strong>${org.name || 'Unnamed'}</strong></td>
+              <td><span class="badge badge-info">${org.type || 'Organization'}</span></td>
+              <td>${org.memberCount || 0}</td>
+              <td>${createdDate}</td>
+              <td>
+                <div class="action-buttons">
+                  <button class="action-btn" onclick="viewOrganization('${doc.id}')">
+                    <i class="fas fa-eye"></i> View
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+
+        tableHTML += '</tbody></table>';
+        container.innerHTML = tableHTML;
+
+      } catch (error) {
+        console.error('Error loading organizations:', error);
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Error loading organizations</h3></div>';
+        BlacklinkUtils.showToast('Error loading organizations', 'danger');
+      }
+    }
+
+    // Load analytics
+    async function loadAnalytics() {
+      const container = document.getElementById('analyticsTableContainer');
+      container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Loading analytics...</p></div>';
+
+      try {
+        const analyticsSnapshot = await db.collection('analytics')
+          .orderBy('timestamp', 'desc')
+          .limit(100)
+          .get();
+
+        if (analyticsSnapshot.empty) {
+          container.innerHTML = '<div class="empty-state"><i class="fas fa-chart-line"></i><h3>No analytics events found</h3></div>';
+          return;
+        }
+
+        let tableHTML = `
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>User</th>
+                <th>Timestamp</th>
+                <th>Properties</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        analyticsSnapshot.forEach(doc => {
+          const event = doc.data();
+          const timestamp = new Date(event.timestamp);
+          const timeStr = BlacklinkUtils.formatTimestamp(timestamp);
+          const propertiesStr = JSON.stringify(event.properties || {}, null, 2);
+
+          tableHTML += `
+            <tr>
+              <td><code style="font-size: 0.875rem;">${event.event}</code></td>
+              <td><code style="font-size: 0.75rem;">${event.user?.uid?.substring(0, 8) || 'N/A'}...</code></td>
+              <td>${timeStr}</td>
+              <td><details><summary>View</summary><pre style="font-size: 0.75rem; margin-top: 0.5rem;">${propertiesStr}</pre></details></td>
+            </tr>
+          `;
+        });
+
+        tableHTML += '</tbody></table>';
+        container.innerHTML = tableHTML;
+
+      } catch (error) {
+        console.error('Error loading analytics:', error);
+        container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><h3>Error loading analytics</h3></div>';
+        BlacklinkUtils.showToast('Error loading analytics', 'danger');
+      }
+    }
+
+    // View user details
+    function viewUser(userId) {
+      window.location.href = `/profile.html?uid=${userId}`;
+    }
+
+    // View subscription details
+    function viewSubscription(userId) {
+      BlacklinkUtils.showToast('Subscription details coming soon', 'info');
+    }
+
+    // View organization details
+    function viewOrganization(orgId) {
+      window.location.href = `/organizations.html?id=${orgId}`;
+    }
+  </script>
+</body>
+
+</html>
