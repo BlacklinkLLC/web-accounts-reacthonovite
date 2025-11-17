@@ -1,0 +1,15 @@
+/* pastel light theme */
+[data-theme="pastel-light"] {
+  --primary: #fb7185;
+  --primary-hover: #f43f5e;
+  --primary-light: #fecdd3;
+  --bg: #fdf2f8;
+  --bg-secondary: #ffffff;
+  --card-bg: #ffffff;
+  --text: #1f2937;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --border: #f5d0e6;
+  --shadow: 0 2px 10px rgba(244,63,94,0.08);
+  --shadow-lg: 0 24px 48px rgba(244,63,94,0.12);
+}

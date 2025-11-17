@@ -65,13 +65,40 @@
      * Apply theme to document
      * @param {string} themeId - Theme ID
      */
-    applyTheme: function(themeId) {
+    _ensureThemeStylesheet: function(cssPath) {
+      let link = document.getElementById('dynamic-theme-css');
+      if (!cssPath) {
+        if (link) {
+          link.remove();
+        }
+        localStorage.removeItem('themeCssPath');
+        return;
+      }
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.id = 'dynamic-theme-css';
+        document.head.appendChild(link);
+      }
+      if (link.getAttribute('href') !== cssPath) {
+        link.setAttribute('href', cssPath);
+      }
+      localStorage.setItem('themeCssPath', cssPath);
+    },
+
+    applyTheme: function(themeId, options = {}) {
       if (!themeId) return;
       document.documentElement.setAttribute('data-theme', themeId);
       if (document.body) {
         document.body.setAttribute('data-theme', themeId);
       }
       localStorage.setItem('theme', themeId);
+      if ('cssPath' in options) {
+        this._ensureThemeStylesheet(options.cssPath);
+      } else if (!localStorage.getItem('themeCssPath')) {
+        // Clear any stale dynamic stylesheet if switching back to built-in themes
+        this._ensureThemeStylesheet(null);
+      }
     },
 
     /**
@@ -87,7 +114,11 @@
      */
     initTheme: function() {
       const savedTheme = this.getCurrentTheme();
-      this.applyTheme(savedTheme);
+      const savedCssPath = localStorage.getItem('themeCssPath');
+      if (savedCssPath) {
+        this._ensureThemeStylesheet(savedCssPath);
+      }
+      this.applyTheme(savedTheme, { cssPath: savedCssPath || undefined });
     },
 
     /**

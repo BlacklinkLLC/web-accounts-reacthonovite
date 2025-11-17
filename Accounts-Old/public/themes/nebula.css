@@ -1,0 +1,15 @@
+/* nebula theme */
+[data-theme="nebula"] {
+  --primary: hsl(261deg 65% 62%);
+  --primary-hover: hsl(261deg 65% 52%);
+  --primary-light: hsl(261deg 70% 72%);
+  --bg: hsl(101deg 25% 10%);
+  --bg-secondary: hsl(101deg 25% 16%);
+  --card-bg: hsl(101deg 25% 16%);
+  --text: #e5e7eb;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border: hsl(101deg 20% 25%);
+  --shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 24px 48px rgba(0, 0, 0, 0.5);
+}

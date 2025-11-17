@@ -499,17 +499,25 @@
           interests: selectedInterests,
           notes: elements.notes.value.trim(),
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }
+        },
+        userId: user.uid,
+        email: user.email || null
       };
 
       setSavingState(true);
       showStatus('Saving preferences…');
       try {
+        // Refresh token to avoid stale/denied auth issues
+        await user.getIdToken(true);
         await db.collection('users').doc(user.uid).set(payload, { merge: true });
         showStatus('Saved. We’ll notify you when new betas open.');
       } catch (err) {
         console.error('Failed to save beta prefs', err);
-        showStatus('Failed to save. Please try again.', 'error');
+        if (err?.code === 'permission-denied') {
+          showStatus('Permission denied saving Beta prefs. Please ensure you are signed in and have write access.', 'error');
+        } else {
+          showStatus('Failed to save. Please try again.', 'error');
+        }
       } finally {
         setSavingState(false);
       }

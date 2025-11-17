@@ -24,7 +24,8 @@
       initials: 'U',
       photoURL: '',
       tier: 'FREE',
-      isAdmin: false
+      isAdmin: false,
+      isBeta: false
     }
   };
 
@@ -40,6 +41,7 @@
           <a href="profile.html" class="nav-link ${currentPage === 'profile' ? 'active' : ''}">Profile</a>
           <a href="settings.html" class="nav-link ${currentPage === 'settings' ? 'active' : ''}">Settings</a>
           <a href="subscription.html" class="nav-link ${currentPage === 'subscription' ? 'active' : ''}">Subscription</a>
+          <a href="visibility.html" class="nav-link ${currentPage === 'visibility' ? 'active' : ''}">Visibility</a>
           <a href="beta.html" class="nav-link ${currentPage === 'beta' ? 'active' : ''}">Beta</a>
           <a href="privacy.html" class="nav-link ${currentPage === 'privacy' ? 'active' : ''}">Privacy</a>
           <a href="about.html" class="nav-link ${currentPage === 'about' ? 'active' : ''}">About</a>
@@ -51,6 +53,7 @@
               <span class="user-menu-name" id="userName">User</span>
               <span class="user-menu-badges">
                 <span class="user-tier-pill" id="userTierBadge" hidden>ULTRA</span>
+                <span class="user-beta-pill" id="userBetaBadge" hidden>BETA</span>
                 <span class="user-admin-pill" id="userAdminBadge" hidden>ADMIN</span>
               </span>
               <span class="user-menu-meta">
@@ -299,9 +302,10 @@
     attachAdminHandler();
   }
 
-  function updateBadges(tier, isAdmin) {
+  function updateBadges(tier, isAdmin, isBeta) {
     const tierBadge = document.getElementById('userTierBadge');
     const adminBadge = document.getElementById('userAdminBadge');
+    const betaBadge = document.getElementById('userBetaBadge');
     const avatar = document.getElementById('userAvatar');
     const badgesContainer = document.querySelector('.user-menu-badges');
 
@@ -318,6 +322,16 @@
       } else {
         tierBadge.hidden = true;
         tierBadge.dataset.tier = 'FREE';
+      }
+    }
+
+    if (betaBadge) {
+      if (isBeta) {
+        betaBadge.hidden = false;
+        betaBadge.textContent = 'BETA';
+        betaBadge.title = 'Beta tester';
+      } else {
+        betaBadge.hidden = true;
       }
     }
 
@@ -359,7 +373,7 @@
     }
 
     if (badgesContainer) {
-      const shouldShow = (tierBadge && !tierBadge.hidden) || (adminBadge && !adminBadge.hidden);
+      const shouldShow = (tierBadge && !tierBadge.hidden) || (adminBadge && !adminBadge.hidden) || (betaBadge && !betaBadge.hidden);
       badgesContainer.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
     }
   }
@@ -371,6 +385,7 @@
     const photoURL = state.user.photoURL || '';
     const tier = normalizeTier(state.user.tier);
     const isAdmin = Boolean(state.user.isAdmin);
+    const isBeta = Boolean(state.user.isBeta);
     const email = state.user.email || state.user.emailAddress || '';
 
     const userNameElement = document.getElementById('userName');
@@ -404,7 +419,13 @@
       dropdownTier.textContent = tier === 'ULTRA_PLUS' ? 'ULTRA+' : tier;
     }
 
-    updateBadges(tier, isAdmin);
+    updateBadges(tier, isAdmin, isBeta);
+
+    if (state.userMenu) {
+      state.userMenu.setAttribute('data-tier', tier);
+      state.userMenu.setAttribute('data-admin', isAdmin ? 'true' : 'false');
+      state.userMenu.setAttribute('data-beta', isBeta ? 'true' : 'false');
+    }
   }
 
   function mountNavbar(currentPage) {
@@ -452,6 +473,7 @@
           photoURL: userData.photoURL || user.photoURL || '',
           tier: userData.subscription?.tier || userData.subscriptionTier || 'FREE',
           isAdmin: Boolean(userData.isAdmin),
+          isBeta: Boolean(userData.betaProgram?.optedIn),
           adminLabel: userData.adminLabel || state.user.adminLabel,
           email: user.email || userData.email || ''
         });
@@ -495,7 +517,7 @@
       setUser(options.user);
     } else {
       // ensure badges reflect any retained state
-      updateBadges(normalizeTier(state.user.tier), Boolean(state.user.isAdmin));
+      updateBadges(normalizeTier(state.user.tier), Boolean(state.user.isAdmin), Boolean(state.user.isBeta));
     }
 
     subscribeToAuth();

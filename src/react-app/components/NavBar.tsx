@@ -11,7 +11,7 @@ const links: NavLink[] = [
   { label: "Dashboard", href: "/dashboard" },
   { label: "Profile", href: "/profile" },
   { label: "Settings", href: "/settings" },
-  { label: "Subscription", href: "/subscription" },
+  { label: "Subscriptions", href: "/subscription" },
   { label: "Beta", href: "/beta" },
   { label: "About", href: "/about" },
 ];
@@ -57,6 +57,14 @@ export const NavBar = ({ path }: NavBarProps) => {
             {link.label}
           </a>
         ))}
+        {profile.isAdmin ? (
+          <a
+            className={`app-nav-link ${activeLookup["/admin"] ? "active" : ""}`}
+            href="/admin"
+          >
+            Admin
+          </a>
+        ) : null}
       </nav>
 
       <div className="app-user-menu">
@@ -68,7 +76,7 @@ export const NavBar = ({ path }: NavBarProps) => {
         >
           <div className="user-avatar avatar-ultra-plus avatar-photo">
             {profile.photoURL ? (
-              <img src={profile.photoURL} alt={profile.displayName} />
+              <img src={profile.photoURL} alt={profile.displayName} referrerPolicy="no-referrer" />
             ) : (
               profile.displayName.slice(0, 2).toUpperCase()
             )}
@@ -89,7 +97,7 @@ export const NavBar = ({ path }: NavBarProps) => {
           <div className="user-dropdown-profile">
             <div className="avatar avatar-ultra-plus avatar-photo">
               {profile.photoURL ? (
-                <img src={profile.photoURL} alt={profile.displayName} />
+                <img src={profile.photoURL} alt={profile.displayName} referrerPolicy="no-referrer" />
               ) : (
                 profile.displayName.slice(0, 2).toUpperCase()
               )}

@@ -58,26 +58,26 @@ const PageHero = ({
 const HomePage = () => (
   <div className="page-shell">
     <PageHero
-      title="Welcome back to Accounts 4.0"
-      subtitle="Unified access, billing, and identity across Blacklink. Navigate to any section using the legacy URLs; everything is refreshed for the Beta."
+      title="Blacklink Accounts"
+      subtitle="Legacy Accounts experience running inside Accounts 4.0."
+      badge={<Badge variant="warning">Port</Badge>}
       ctas={
         <>
           <Button>Open dashboard</Button>
-          <Button variant="secondary">View organizations</Button>
+          <Button variant="secondary">Go to settings</Button>
         </>
       }
     />
     <div className="grid grid-3 layout-bottom">
-      <PageSection title="Quick links" badge={<Badge variant="info">Live</Badge>}>
+      <PageSection title="Quick links" badge={<Badge variant="info">Legacy</Badge>}>
         <div className="pill-row">
           <span className="pill">Dashboard</span>
           <span className="pill pill-success">Profile</span>
           <span className="pill pill-ultra">Settings</span>
-          <span className="pill pill-success">Subscription</span>
+          <span className="pill pill-success">Subscriptions</span>
         </div>
         <p className="theme-footnote">
-          Use /dashboard, /profile, /settings, /subscription, /beta, /about to view the refreshed
-          pages.
+          Legacy URLs: /dashboard, /profile, /settings, /subscription, /beta, /about.
         </p>
       </PageSection>
       <PageSection title="Status" badge={<Badge variant="success">Operational</Badge>}>
@@ -95,10 +95,7 @@ const HomePage = () => (
         </div>
       </PageSection>
       <PageSection title="Beta notes" badge={<Badge variant="warning">Beta</Badge>}>
-        <p className="theme-footnote">
-          Expect rapid changes as we iterate on the 4.0 Beta. Legacy URLs still resolve to these
-          updated templates so bookmarks remain functional.
-        </p>
+        <p className="theme-footnote">Strict 1:1 port. No new features in this phase.</p>
       </PageSection>
     </div>
   </div>
@@ -108,106 +105,123 @@ const DashboardPage = () => (
   <DashboardContent />
 );
 
+const formatTier = (tier: string) => {
+  const norm = tier?.toUpperCase() || "";
+  if (norm.includes("ULTRA_PLUS") || norm.includes("ULTRA+")) return "ULTRA+ (Employee)";
+  if (norm.includes("ULTRA")) return "ULTRA";
+  return norm || "ULTRA+";
+};
+
 const DashboardContent = () => {
-  const { stats, orgs, statsPermissionDenied, profile } = useAuth();
+  const { profile, quickLaunch } = useAuth();
+  const quickLaunchApps = quickLaunch.length
+    ? quickLaunch
+    : [
+        { id: "nova", name: "Nova", url: "https://nova.blacklink.app", icon: "🚀" },
+        { id: "admin", name: "Admin", url: "https://admin.blacklink.app", icon: "🛡️" },
+        { id: "docs", name: "Docs", url: "https://docs.blacklink.app", icon: "📘" },
+        { id: "support", name: "Support", url: "https://support.blacklink.app", icon: "🆘" },
+      ];
+  const [search, setSearch] = React.useState("");
+  const [showFavorites, setShowFavorites] = React.useState(false);
+  const filteredApps = quickLaunchApps.filter((app) => {
+    const matchesSearch =
+      app.name.toLowerCase().includes(search.toLowerCase()) ||
+      app.url.toLowerCase().includes(search.toLowerCase());
+    const matchesFavorite = showFavorites ? app.favorite : true;
+    return matchesSearch && matchesFavorite;
+  });
 
   return (
     <div className="page-shell">
-      <PageHero
-        title="Dashboard"
-        subtitle="Overview of identity, billing, usage, and shortcuts from Accounts 3.9 revived in 4.0."
-        badge={<Badge variant="success">Live</Badge>}
-      />
-      <div className="grid grid-3 layout-bottom">
-        <PageSection title="Usage" badge={<Badge variant="info">Edge</Badge>}>
-          {statsPermissionDenied ? (
-            <p className="theme-footnote">
-              Stats unavailable: Firestore denies access to <code>stats/global</code>. Update rules
-              or sign in with a role that can read stats.
-            </p>
-          ) : null}
-          <div className="stat-grid">
-            <div className="stat-block">
-              <p className="eyebrow">Active users</p>
-              <p className="stat-value">{stats.activeUsers || "—"}</p>
-              <p className="stat-trend">Realtime from Firebase</p>
+      <header className="hero card">
+        <div className="eyebrow-row">
+          <span className="pill tier-badge ultra-plus">{formatTier(profile.tier)}</span>
+        </div>
+        <div className="hero-main">
+          <div className="brand-mark" aria-hidden>
+            4.0
+          </div>
+          <div>
+            <p className="eyebrow">Welcome back</p>
+            <h1>Blacklink Dashboard</h1>
+            <p className="hero-subtitle">Overview of identity, billing, usage, and shortcuts.</p>
+          </div>
+        </div>
+        <div className="release-banner">
+          <span className="release-badge">Beta</span>
+          <span className="release-note">Strict port of Accounts-Old. No new features enabled.</span>
+        </div>
+      </header>
+        <PageSection title="QuickLaunch" badge={<Badge variant="info">Accounts-Old</Badge>}>
+        <div className="quicklaunch">
+          <div className="quicklaunch-header">
+            <div className="quicklaunch-title">
+              <div className="quicklaunch-icon">⚡</div>
+              QuickLaunch
             </div>
-            <div className="stat-block">
-              <p className="eyebrow">Organizations</p>
-              <p className="stat-value">{stats.orgs || orgs.length || "—"}</p>
-              <p className="stat-trend">{stats.apiHealth}</p>
+            <Button size="sm">Add app</Button>
+          </div>
+          <div className="quicklaunch-toolbar">
+            <div className="search-apps">
+              <span className="search-icon">🔎</span>
+              <input
+                type="search"
+                aria-label="Search quicklaunch apps"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search apps"
+              />
+            </div>
+            <div className="quicklaunch-filters">
+              <button
+                type="button"
+                className={`chip-toggle ${!showFavorites ? "active" : ""}`}
+                onClick={() => setShowFavorites(false)}
+              >
+                All
+              </button>
+              <button
+                type="button"
+                className={`chip-toggle ${showFavorites ? "active" : ""}`}
+                onClick={() => setShowFavorites(true)}
+              >
+                Favorites
+              </button>
+              <select defaultValue="all" aria-label="Filter collection" className="select-dropdown">
+                <option value="all">All collections</option>
+                <option value="default">Default</option>
+              </select>
             </div>
           </div>
-        </PageSection>
-        <PageSection title="Security" badge={<Badge variant="success">Secured</Badge>}>
-          <div className="timeline">
-            <div className="timeline-item strong">
-              <div>
-                <p className="timeline-title">MFA enforced</p>
-                <p className="timeline-subtitle">Org-wide</p>
-              </div>
-              <Badge variant="success">On</Badge>
-            </div>
-            <div className="timeline-item strong">
-              <div>
-                <p className="timeline-title">Passkeys</p>
-                <p className="timeline-subtitle">Available to all members</p>
-              </div>
-              <Badge variant="info">Ready</Badge>
-            </div>
+          <div className="apps-grid">
+            {filteredApps.map((app) => (
+              <a key={app.name} className="app-card" href={app.url}>
+                <div className="app-icon">{app.icon}</div>
+                <div className="app-name">{app.name}</div>
+                <div className="app-url">{app.url}</div>
+                <div className="app-actions">
+                  <button className="app-action-btn favorite" title="Favorite" type="button">
+                    ★
+                  </button>
+                  <button className="app-action-btn" title="Edit" type="button">
+                    ✏️
+                  </button>
+                  <button className="app-action-btn" title="Delete" type="button">
+                    🗑️
+                  </button>
+                </div>
+                {app.favorite ? (
+                  <span className="usage-chip">
+                    <i>★</i> Favorite
+                  </span>
+                ) : null}
+              </a>
+            ))}
           </div>
-        </PageSection>
-        <PageSection title="Shortcuts" badge={<Badge variant="info">Navigate</Badge>}>
-          <div className="component-row">
-            <Button size="sm">Profile</Button>
-            <Button size="sm" variant="secondary">
-              Settings
-            </Button>
-            <Button size="sm" variant="secondary">
-              Subscription
-            </Button>
-          </div>
-        </PageSection>
-      </div>
-      <div className="grid grid-2 layout-top">
-        <PageSection title="Account overview" badge={<Badge variant="ultra-plus">ULTRA+</Badge>}>
-          <div className="timeline">
-            <div className="timeline-item">
-              <div>
-                <p className="timeline-title">Tier</p>
-                <p className="timeline-subtitle">Ultra+ for Employees</p>
-              </div>
-              <Badge variant="ultra-plus">{profile.tier}</Badge>
-            </div>
-            <div className="timeline-item">
-              <div>
-                <p className="timeline-title">Billing</p>
-                <p className="timeline-subtitle">Employee-sponsored</p>
-              </div>
-              <Badge variant="success">Active</Badge>
-            </div>
-            <div className="timeline-item">
-              <div>
-                <p className="timeline-title">Devices</p>
-                <p className="timeline-subtitle">{profile.devices ?? "—"} trusted</p>
-              </div>
-              <Badge variant="info">Edge-bound</Badge>
-            </div>
-          </div>
-        </PageSection>
-        <PageSection title="QuickLaunch" badge={<Badge variant="info">3.9 carry</Badge>}>
-          <div className="component-row">
-            <Button size="sm">Nova</Button>
-            <Button size="sm" variant="secondary">
-              Admin
-            </Button>
-            <Button size="sm" variant="secondary">
-              Support
-            </Button>
-          </div>
-          <p className="theme-footnote">Pulled forward from Accounts 3.9 quicklaunch presets.</p>
-        </PageSection>
-      </div>
+        </div>
+        <p className="theme-footnote">Legacy quicklaunch ported; hook to product_pulse/quicklaunch.</p>
+      </PageSection>
     </div>
   );
 };
@@ -347,154 +361,319 @@ const RegisterPage = () => {
 };
 
 const ProfilePage = () => {
-  const { profile } = useAuth();
+  const { profile, quickLaunch } = useAuth();
+  const tierClass = profile.tier.toUpperCase().includes("ULTRA") ? "ultra-plus" : "ultra";
+  const username = profile.email ? profile.email.split("@")[0] : "user";
+  const apps = quickLaunch.slice(0, 6);
 
   return (
-    <div className="page-shell">
-      <PageHero
-        title="Profile"
-        subtitle="Manage your personal details, badges, and trusted devices."
-        badge={<Badge variant="info">Identity</Badge>}
-      />
-      <div className="grid grid-2 layout-top">
-        <section className="card profile-card">
-          <div className="profile-header">
-            <div className="avatar avatar-ultra-plus">{profile.displayName.slice(0, 2).toUpperCase()}</div>
-            <div>
-              <p className="profile-name">{profile.displayName}</p>
-              <p className="profile-meta">{profile.email}</p>
-              <div className="pill-row">
-                <span className="pill">SSO</span>
-                <span className="pill pill-success">MFA</span>
-                <span className="pill pill-ultra">{profile.tier}</span>
+    <div className="profile-page-container">
+      <div className="profile-header-card">
+        <div className="profile-info">
+          <div className="profile-avatar-legacy">
+            {profile.photoURL ? (
+              <img src={profile.photoURL} alt={profile.displayName} referrerPolicy="no-referrer" />
+            ) : (
+              profile.displayName.slice(0, 2).toUpperCase()
+            )}
+          </div>
+          <div className="profile-details">
+            <div className="profile-name-legacy">
+              {profile.displayName}
+              <span className={`tier-badge ${tierClass}`}>{formatTier(profile.tier)}</span>
+            </div>
+            <div className="profile-email">{profile.email}</div>
+            <div className="profile-stats">
+              <div className="profile-stat">
+                <span className="profile-stat-value">{profile.devices ?? "—"}</span>
+                <span className="profile-stat-label">Devices</span>
+              </div>
+              <div className="profile-stat">
+                <span className="profile-stat-value">{apps.length}</span>
+                <span className="profile-stat-label">QuickLaunch apps</span>
+              </div>
+              <div className="profile-stat">
+                <span className="profile-stat-value">{profile.roles?.length || 1}</span>
+                <span className="profile-stat-label">Roles</span>
               </div>
             </div>
-            <Badge variant="success">Verified</Badge>
           </div>
-          <div className="profile-body">
-            <div>
-              <p className="eyebrow">Organization</p>
-              <p className="profile-value">{profile.organization || "—"}</p>
-            </div>
-            <div>
-              <p className="eyebrow">Devices</p>
-              <p className="profile-value">{profile.devices ?? "—"} trusted</p>
-            </div>
-            <div>
-              <p className="eyebrow">Roles</p>
-              <p className="profile-value">{profile.roles?.join(", ") || "member"}</p>
-            </div>
-          </div>
-          <div className="profile-actions">
-            <Button size="sm">Manage access</Button>
-            <Button variant="secondary" size="sm">
-              Audit trail
-            </Button>
-          </div>
-        </section>
-        <PageSection title="Activity" badge={<Badge variant="info">Recent</Badge>}>
-          <div className="timeline">
-            <div className="timeline-item">
-              <div>
-                <p className="timeline-title">Passkey challenge</p>
-                <p className="timeline-subtitle">Approved on trusted device</p>
-              </div>
-              <Badge variant="success">OK</Badge>
-            </div>
-            <div className="timeline-item">
-              <div>
-                <p className="timeline-title">Email update</p>
-                <p className="timeline-subtitle">Pending verification</p>
-              </div>
-              <Badge variant="warning">Pending</Badge>
-            </div>
-          </div>
-        </PageSection>
+        </div>
       </div>
-    </div>
-  );
-};
 
-const SettingsPage = () => (
-  <div className="page-shell">
-    <PageHero
-      title="Settings"
-      subtitle="Configure security, notifications, and localization."
-      badge={<Badge variant="warning">Preview</Badge>}
-    />
-    <div className="grid grid-2 layout-top">
-      <PageSection title="Security" badge={<Badge variant="success">On</Badge>}>
-        <div className="timeline">
-          <div className="timeline-item">
-            <div>
-              <p className="timeline-title">MFA</p>
-              <p className="timeline-subtitle">Required for all members</p>
-            </div>
-            <Badge variant="success">Enabled</Badge>
+      <section className="profile-section">
+        <div className="profile-section-title">
+          <div className="profile-section-icon">🪪</div>
+          Profile details
+        </div>
+        <div className="profile-info-grid">
+          <div className="info-item">
+            <span className="info-label">Display name</span>
+            <span className="info-value">{profile.displayName}</span>
           </div>
-          <div className="timeline-item">
-            <div>
-              <p className="timeline-title">Device trust</p>
-              <p className="timeline-subtitle">Session-bound</p>
-            </div>
-            <Badge variant="info">Active</Badge>
+          <div className="info-item">
+            <span className="info-label">Username</span>
+            <span className="info-value">{username}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Email</span>
+            <span className="info-value">{profile.email}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Organization</span>
+            <span className="info-value">{profile.organization || "—"}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Tier</span>
+            <span className="info-value">{formatTier(profile.tier)}</span>
           </div>
         </div>
-      </PageSection>
-      <PageSection title="Preferences" badge={<Badge>UI</Badge>}>
-        <div className="timeline">
-          <div className="timeline-item">
-            <div>
-              <p className="timeline-title">Language</p>
-              <p className="timeline-subtitle">English</p>
+      </section>
+
+      <section className="profile-section">
+        <div className="profile-section-title">
+          <div className="profile-section-icon">✨</div>
+          Features
+        </div>
+        <div className="profile-feature-grid">
+          <div className="profile-feature-card">
+            <div className="profile-feature-title">SSO providers</div>
+            <div className="profile-feature-meta">
+              <span>Google</span>
+              <span>ClassLink</span>
             </div>
-            <Badge variant="info">Default</Badge>
           </div>
-          <div className="timeline-item">
-            <div>
-              <p className="timeline-title">Notifications</p>
-              <p className="timeline-subtitle">Security alerts, billing</p>
+          <div className="profile-feature-card">
+            <div className="profile-feature-title">MFA</div>
+            <div className="profile-feature-meta">
+              <span>Enabled</span>
+              <span>Accounts</span>
             </div>
-            <Badge variant="success">On</Badge>
+          </div>
+          <div className="profile-feature-card">
+            <div className="profile-feature-title">Sessions</div>
+            <div className="profile-feature-meta">
+              <span>Active</span>
+              <span>Device trust</span>
+            </div>
           </div>
         </div>
-      </PageSection>
-    </div>
-  </div>
-);
+      </section>
 
-const OrganizationsPage = () => {
-  const { orgs } = useAuth();
-
-  return (
-    <div className="page-shell">
-      <PageHero
-        title="Organizations"
-        subtitle="Manage workspaces, roles, and cross-tenant ULTRA settings."
-        badge={<Badge variant="info">Multi-tenant</Badge>}
-      />
-      <PageSection title="Spaces" badge={<Badge variant="success">Healthy</Badge>}>
-        <div className="component-grid">
-          {orgs.length === 0 ? (
-            <p className="theme-footnote">No orgs found for your account.</p>
+      <section className="profile-section">
+        <div className="profile-section-title">
+          <div className="profile-section-icon">📦</div>
+          QuickLaunch favorites
+        </div>
+        <div className="profile-app-list">
+          {apps.length === 0 ? (
+            <p className="theme-footnote">No apps yet. Add some from Dashboard.</p>
           ) : (
-            orgs.map((org) => (
-              <div key={org.id} className="mini-card">
-                <p className="metric-value">{org.name}</p>
-                <p className="theme-footnote">
-                  {org.tier} · {org.members ?? "—"} members
-                </p>
-                <div className="component-row">
-                  <Button size="sm">Open</Button>
-                  <Button size="sm" variant="secondary">
-                    Audit
-                  </Button>
+            apps.map((app, index) => (
+              <div key={app.id} className="profile-app-item">
+                <div className="profile-app-primary">
+                  <div className="app-icon">{app.icon || "⚡"}</div>
+                  <div className="profile-app-details">
+                    <span>{app.name}</span>
+                    <span className="profile-app-meta">{app.url}</span>
+                  </div>
                 </div>
+                <div className="app-rank">{index + 1}</div>
               </div>
             ))
           )}
         </div>
-      </PageSection>
+      </section>
+
+      <section className="profile-section">
+        <div className="profile-section-title">
+          <div className="profile-section-icon">🛡️</div>
+          Security
+        </div>
+        <div className="security-grid">
+          <div className="security-card">
+            <span className="label">Devices</span>
+            <span className="value">{profile.devices ?? "—"} trusted</span>
+            <span className="hint">Review devices in security settings.</span>
+          </div>
+          <div className="security-card">
+            <span className="label">Sessions</span>
+            <span className="value">Active</span>
+            <span className="hint">Sign out all devices from security panel.</span>
+          </div>
+          <div className="security-card">
+            <span className="label">SSO</span>
+            <span className="value">Google, ClassLink</span>
+            <span className="hint">Managed via auth providers.</span>
+          </div>
+        </div>
+      </section>
+
+      {profile.isAdmin ? (
+        <section className="profile-section">
+          <div className="profile-section-title">
+            <div className="profile-section-icon">🛠️</div>
+            Admin
+          </div>
+          <div className="profile-admin-grid">
+            <div className="profile-admin-card">
+              <strong>Audit</strong>
+              <span>Review org configuration</span>
+            </div>
+            <div className="profile-admin-card">
+              <strong>Security events</strong>
+              <span>See logs in product_pulse/security_events</span>
+            </div>
+          </div>
+        </section>
+      ) : null}
+    </div>
+  );
+};
+
+const SettingsPage = () => {
+  const { profile, setUsername, error, loading } = useAuth();
+  const [usernameInput, setUsernameInput] = React.useState(profile.username || "");
+
+  const handleUsernameSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await setUsername(usernameInput);
+  };
+
+  return (
+    <div className="profile-page-container">
+      <div className="profile-header-card">
+        <div className="profile-info">
+          <div className="profile-avatar-legacy">
+            {profile.photoURL ? (
+              <img src={profile.photoURL} alt={profile.displayName} referrerPolicy="no-referrer" />
+            ) : (
+              profile.displayName.slice(0, 2).toUpperCase()
+            )}
+          </div>
+          <div className="profile-details">
+            <div className="profile-name-legacy">
+              Settings
+              <span className={`tier-badge ${profile.tier.toUpperCase().includes("ULTRA") ? "ultra-plus" : "ultra"}`}>
+                {formatTier(profile.tier)}
+              </span>
+            </div>
+            <div className="profile-email">{profile.email}</div>
+          </div>
+        </div>
+      </div>
+
+      <section className="profile-section">
+        <div className="profile-section-title">
+          <div className="profile-section-icon">⚙️</div>
+          General
+        </div>
+        <form className="profile-info-grid" onSubmit={handleUsernameSave}>
+          <div className="info-item">
+            <span className="info-label">Display name</span>
+            <span className="info-value">{profile.displayName}</span>
+          </div>
+          <div className="info-item">
+            <label className="info-label" htmlFor="username-input">
+              Username
+            </label>
+            <input
+              id="username-input"
+              className="info-value"
+              value={usernameInput}
+              onChange={(e) => setUsernameInput(e.target.value)}
+              placeholder="username"
+            />
+            <Button type="submit" size="sm" disabled={loading}>
+              {loading ? "Saving..." : "Save username"}
+            </Button>
+            {error === "username-taken" ? (
+              <p className="form-error">Username is taken.</p>
+            ) : error === "username-empty" ? (
+              <p className="form-error">Username cannot be empty.</p>
+            ) : null}
+          </div>
+          <div className="info-item">
+            <span className="info-label">Email</span>
+            <span className="info-value">{profile.email}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Organization</span>
+            <span className="info-value">{profile.organization || "—"}</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Tier</span>
+            <span className="info-value">{formatTier(profile.tier)}</span>
+          </div>
+        </form>
+      </section>
+
+      <section className="profile-section">
+        <div className="profile-section-title">
+          <div className="profile-section-icon">🧭</div>
+          Accessibility
+        </div>
+        <div className="profile-info-grid">
+          <div className="info-item">
+            <span className="info-label">Font scaling</span>
+            <span className="info-value">Default</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Reduced motion</span>
+            <span className="info-value">Off</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">High contrast</span>
+            <span className="info-value">Off</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="profile-section">
+        <div className="profile-section-title">
+          <div className="profile-section-icon">🔔</div>
+          Notifications
+        </div>
+        <div className="profile-info-grid">
+          <div className="info-item">
+            <span className="info-label">Security alerts</span>
+            <span className="info-value">On</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Billing emails</span>
+            <span className="info-value">On</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="profile-section">
+        <div className="profile-section-title">
+          <div className="profile-section-icon">🛡️</div>
+          Security & Privacy
+        </div>
+        <div className="profile-info-grid">
+          <div className="info-item">
+            <span className="info-label">MFA</span>
+            <span className="info-value">Enabled</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">Device trust</span>
+            <span className="info-value">{profile.devices ?? "—"} devices</span>
+          </div>
+          <div className="info-item">
+            <span className="info-label">SSO providers</span>
+            <span className="info-value">Google, ClassLink</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="profile-section">
+        <div className="profile-section-title">
+          <div className="profile-section-icon">⚡</div>
+          QuickLaunch settings
+        </div>
+        <p className="profile-section-note">Manage apps from the dashboard QuickLaunch section.</p>
+      </section>
     </div>
   );
 };
@@ -513,7 +692,7 @@ const SubscriptionPage = () => {
         <div className="component-grid">
           <div className="mini-card">
             <p className="metric-label">Current</p>
-            <p className="metric-value">{profile.tier}</p>
+            <p className="metric-value">{formatTier(profile.tier)}</p>
             <p className="theme-footnote">Includes audit pipelines, passkeys, and org limits.</p>
             <Button size="sm">Manage</Button>
           </div>
@@ -588,6 +767,163 @@ const AdminPage = () => (
   </div>
 );
 
+const AdminRoute = () => {
+  const { profile } = useAuth();
+  if (!profile.isAdmin) {
+    return (
+      <div className="page-shell">
+        <PageHero
+          title="Unauthorized"
+          subtitle="You need admin access to view this page."
+          badge={<Badge variant="danger">Restricted</Badge>}
+        />
+      </div>
+    );
+  }
+  return <AdminPage />;
+};
+
+const LogoutPage = () => {
+  const { signOutUser } = useAuth();
+  React.useEffect(() => {
+    signOutUser().finally(() => {
+      window.location.href = "/login";
+    });
+  }, []);
+  return (
+    <div className="page-shell">
+      <PageHero title="Signing out" subtitle="Clearing your session..." badge={<Badge>Logout</Badge>} />
+    </div>
+  );
+};
+
+const NotificationsPage = () => (
+  <div className="page-shell">
+    <PageHero title="Notifications" subtitle="Legacy notifications settings" badge={<Badge>Legacy</Badge>} />
+    <PageSection title="Email & system alerts" badge={<Badge variant="info">Accounts-Old</Badge>}>
+      <ul className="list">
+        <li>Security alerts</li>
+        <li>Billing alerts</li>
+        <li>System notifications</li>
+      </ul>
+    </PageSection>
+  </div>
+);
+
+const SecurityPage = () => (
+  <div className="page-shell">
+    <PageHero title="Security" subtitle="Legacy security controls" badge={<Badge>Legacy</Badge>} />
+    <PageSection title="Devices & sessions" badge={<Badge variant="info">Accounts-Old</Badge>}>
+      <p className="theme-footnote">List active sessions, devices, login history (legacy parity placeholder).</p>
+    </PageSection>
+  </div>
+);
+
+const DevicesPage = () => (
+  <div className="page-shell">
+    <PageHero title="Devices" subtitle="Trusted devices and removal" badge={<Badge>Legacy</Badge>} />
+    <PageSection title="Device list" badge={<Badge variant="info">Accounts-Old</Badge>}>
+      <p className="theme-footnote">Legacy device management UI to be ported.</p>
+    </PageSection>
+  </div>
+);
+
+const QuickLaunchPage = () => (
+  <div className="page-shell">
+    <PageHero title="QuickLaunch" subtitle="Manage shortcuts" badge={<Badge>Legacy</Badge>} />
+    <PageSection title="Apps" badge={<Badge variant="info">Accounts-Old</Badge>}>
+      <p className="theme-footnote">Legacy QuickLaunch add/edit/delete UI to be ported.</p>
+    </PageSection>
+  </div>
+);
+
+const DevComponentsPage = () => (
+  <div className="page-shell">
+    <PageHero title="Dev Components" subtitle="Visual testbed for CSS components" badge={<Badge>Dev</Badge>} />
+    <div className="grid grid-2">
+      <PageSection title="Buttons" badge={<Badge variant="info">UI</Badge>}>
+        <div className="component-row">
+          <Button>Primary</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="success" icon="✅">
+            Success
+          </Button>
+          <Button variant="danger" icon="⚠️">
+            Danger
+          </Button>
+        </div>
+      </PageSection>
+      <PageSection title="Badges" badge={<Badge variant="info">UI</Badge>}>
+        <div className="component-row badge-row">
+          <Badge>Default</Badge>
+          <Badge variant="success">Success</Badge>
+          <Badge variant="warning">Warning</Badge>
+          <Badge variant="danger">Danger</Badge>
+          <Badge variant="info">Info</Badge>
+          <Badge variant="ultra-plus">ULTRA+</Badge>
+        </div>
+      </PageSection>
+    </div>
+
+    <div className="grid grid-2">
+      <PageSection title="Inputs" badge={<Badge variant="info">Form</Badge>}>
+        <div className="form-group">
+          <label htmlFor="dev-input">Text input</label>
+          <input id="dev-input" placeholder="Type here" />
+        </div>
+        <div className="form-group">
+          <label htmlFor="dev-select">Select</label>
+          <select id="dev-select" className="select-dropdown">
+            <option>Option 1</option>
+            <option>Option 2</option>
+          </select>
+        </div>
+      </PageSection>
+      <PageSection title="Toggles & sliders" badge={<Badge variant="info">Form</Badge>}>
+        <div className="component-row">
+          <label className="toggle-switch on">
+            <input type="checkbox" defaultChecked />
+            <span className="toggle-thumb" />
+          </label>
+          <label className="toggle-switch">
+            <input type="checkbox" />
+            <span className="toggle-thumb" />
+          </label>
+          <div style={{ flex: 1, minWidth: "160px" }}>
+            <input className="slider" type="range" min="0" max="100" defaultValue="50" />
+          </div>
+        </div>
+      </PageSection>
+    </div>
+
+    <PageSection title="Card & list" badge={<Badge variant="info">Layout</Badge>}>
+      <div className="profile-info-grid">
+        <div className="info-item">
+          <span className="info-label">Label</span>
+          <span className="info-value">Value</span>
+        </div>
+        <div className="info-item">
+          <span className="info-label">Long text</span>
+          <span className="info-value">This value wraps to demonstrate text wrapping in info boxes.</span>
+        </div>
+      </div>
+    </PageSection>
+
+    <PageSection title="Route map" badge={<Badge variant="info">Sitemap</Badge>}>
+      <ul className="list">
+        <li><a href="/dashboard">/dashboard</a></li>
+        <li><a href="/profile">/profile</a></li>
+        <li><a href="/settings">/settings</a></li>
+        <li><a href="/subscription">/subscription</a></li>
+        <li><a href="/beta">/beta</a></li>
+        <li><a href="/about">/about</a></li>
+        <li><a href="/admin">/admin</a> (admin only)</li>
+        <li><a href="/dev">/dev</a></li>
+      </ul>
+    </PageSection>
+  </div>
+);
+
 const ConstructionPage = () => (
   <div className="page-shell">
     <PageHero
@@ -650,16 +986,21 @@ const pages: Record<string, ReactElement> = {
   "/dashboard": <DashboardPage />,
   "/login": <LoginPage />,
   "/register": <RegisterPage />,
+  "/logout": <LogoutPage />,
   "/profile": <ProfilePage />,
   "/settings": <SettingsPage />,
-  "/organizations": <OrganizationsPage />,
+  "/settings/notifications": <NotificationsPage />,
+  "/settings/security": <SecurityPage />,
+  "/settings/devices": <DevicesPage />,
+  "/settings/quicklaunch": <QuickLaunchPage />,
   "/subscription": <SubscriptionPage />,
   "/privacy": <PrivacyPage />,
   "/beta": <BetaPage />,
-  "/admin": <AdminPage />,
+  "/admin": <AdminRoute />,
   "/construction": <ConstructionPage />,
   "/about": <AboutPage />,
   "/template": <TemplatePage />,
+  "/dev": <DevComponentsPage />,
 };
 
 export const PageRenderer = ({ path }: PageRendererProps) => {

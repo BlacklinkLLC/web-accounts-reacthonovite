@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visibility & Themes - Blacklink</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/themes.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/nav.css">
+  <link rel="preload" href="css/themes.css" as="style">
+
+  <style>
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .hero {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .hero h1 {
+      font-size: 1.65rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      color: var(--primary-light);
+      font-weight: 600;
+      font-size: 0.85rem;
+      width: fit-content;
+    }
+
+    .cards {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--card-bg);
+      padding: 1rem;
+      display: grid;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-sm, var(--shadow));
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    .themes-grid {
+      display: grid;
+      gap: 0.75rem;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+
+    .theme-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--card-bg);
+      padding: 0.9rem;
+      display: grid;
+      gap: 0.35rem;
+      box-shadow: var(--shadow-sm, var(--shadow));
+    }
+
+    .theme-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-weight: 700;
+    }
+
+    .theme-tag {
+      font-size: 0.8rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary-light);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+    }
+
+    .theme-swatches {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0.3rem;
+      margin-top: 0.35rem;
+    }
+
+    .swatch {
+      height: 20px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.5rem 0.75rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn:hover {
+      background: rgba(99, 102, 241, 0.1);
+      border-color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary-hover);
+    }
+
+    .notice {
+      padding: 0.75rem;
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      background: var(--card-bg);
+    }
+
+    .status {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 1rem;
+      }
+      .hero {
+        padding: 1rem;
+      }
+    }
+
+    /* Theme preview + picker */
+    .theme-preview-container {
+      margin: 1rem 0;
+    }
+    .theme-preview {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+    .preview-header {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      padding: 1rem 1.5rem;
+      background: var(--bg-secondary);
+      border-bottom: 1px solid var(--border);
+    }
+    .preview-logo {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .preview-nav {
+      display: flex;
+      gap: 0.5rem;
+    }
+    .preview-nav-item {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+    .preview-nav-item.active {
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--primary);
+    }
+    .preview-content {
+      padding: 1.5rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1rem;
+    }
+    .preview-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .preview-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.75rem;
+    }
+    .preview-card-text {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .preview-button {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: var(--primary);
+      color: white;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    .preview-card-secondary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .preview-stat {
+      text-align: center;
+    }
+    .preview-stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-light);
+    }
+    .preview-stat-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .theme-picker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .theme-picker-title {
+      font-weight: 700;
+    }
+    .theme-picker-count {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+    .theme-card.active {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+    }
+
+    .toggle-switch {
+      width: 46px;
+      height: 26px;
+      border-radius: 30px;
+      background: var(--border);
+      position: relative;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .toggle-switch::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: var(--transition);
+    }
+    .toggle-switch.active {
+      background: var(--primary);
+    }
+    .toggle-switch.active::after {
+      transform: translateX(20px);
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .toggle-item:last-child {
+      border-bottom: none;
+    }
+    .toggle-info {
+      display: grid;
+      gap: 0.2rem;
+    }
+    .toggle-label {
+      font-weight: 600;
+    }
+    .toggle-description {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .select-item {
+      display: grid;
+      gap: 0.35rem;
+      margin: 0.5rem 0;
+    }
+    .select-label {
+      font-weight: 600;
+    }
+    .select-dropdown {
+      padding: 0.6rem 0.75rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card-bg);
+      color: var(--text);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="navbar-container"></div>
+
+  <main>
+    <section class="hero">
+      <div class="pill"><i class="fas fa-eye"></i> Visibility & Themes</div>
+      <h1><i class="fas fa-palette"></i> Appearance & Accessibility</h1>
+      <p>Customize how Blacklink looks and feels with themes, colors, and accessibility options. Themes apply instantly
+        and persist across pages.</p>
+      <div class="notice" id="betaNotice">
+        <i class="fas fa-flask"></i>
+        <span>Beta access recommended for customizing visibility presets.</span>
+      </div>
+      <div class="status" id="statusText"></div>
+    </section>
+
+    <section class="card">
+      <h2><i class="fas fa-tv"></i> Theme Preview</h2>
+      <p>This preview reflects the currently selected theme.</p>
+      <div class="theme-preview-container">
+        <div class="theme-preview" id="themePreview">
+          <div class="preview-header">
+            <div class="preview-logo">BL</div>
+            <div class="preview-nav">
+              <div class="preview-nav-item active">Dashboard</div>
+              <div class="preview-nav-item">Settings</div>
+            </div>
+          </div>
+          <div class="preview-content">
+            <div class="preview-card">
+              <div class="preview-card-title">Welcome Back!</div>
+              <div class="preview-card-text">This is how your interface will look with the selected theme.</div>
+              <div class="preview-button">Get Started</div>
+            </div>
+            <div class="preview-card preview-card-secondary">
+              <div class="preview-stat">
+                <div class="preview-stat-value">24</div>
+                <div class="preview-stat-label">Apps</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="theme-picker-header" style="margin-bottom:0.5rem;">
+        <span class="theme-picker-title">Choose Your Theme</span>
+        <span class="theme-picker-count" id="themeCount"></span>
+      </div>
+      <div class="themes-grid" id="themesGrid"></div>
+    </section>
+
+    <section class="card">
+      <h2><i class="fas fa-universal-access"></i> Accessibility Options</h2>
+      <div class="accessibility-section">
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Reduce Motion</div>
+            <div class="toggle-description">Minimize animations and transitions</div>
+          </div>
+          <div class="toggle-switch" id="reduceMotion"></div>
+        </div>
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">High Contrast</div>
+            <div class="toggle-description">Increase contrast for readability</div>
+          </div>
+          <div class="toggle-switch" id="highContrast"></div>
+        </div>
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Large Text</div>
+            <div class="toggle-description">Increase base font size</div>
+          </div>
+          <div class="toggle-switch" id="largeText"></div>
+        </div>
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Focus Indicators</div>
+            <div class="toggle-description">Enhanced keyboard navigation visibility</div>
+          </div>
+          <div class="toggle-switch" id="focusIndicators"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2><i class="fas fa-sliders-h"></i> Display Customization</h2>
+      <div class="display-settings-section">
+        <div class="select-item">
+          <label class="select-label">Border Radius</label>
+          <select class="select-dropdown" id="borderRadius">
+            <option value="sharp">Sharp (0px)</option>
+            <option value="small">Small (8px)</option>
+            <option value="medium">Medium (12px)</option>
+            <option value="large" selected>Large (20px)</option>
+            <option value="round">Extra Round (32px)</option>
+          </select>
+        </div>
+
+        <div class="select-item">
+          <label class="select-label">UI Density</label>
+          <select class="select-dropdown" id="uiDensity">
+            <option value="compact">Compact</option>
+            <option value="comfortable" selected>Comfortable</option>
+            <option value="spacious">Spacious</option>
+          </select>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Smooth Scrolling</div>
+            <div class="toggle-description">Enable smooth scrolling behavior</div>
+          </div>
+          <div class="toggle-switch" id="smoothScrolling"></div>
+        </div>
+
+        <div class="toggle-item">
+          <div class="toggle-info">
+            <div class="toggle-label">Compact Mode</div>
+            <div class="toggle-description">Reduce padding and margins</div>
+          </div>
+          <div class="toggle-switch" id="compactMode"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/utils.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDh1cCQXw1TGVJdVVgLEGdOgZlTPzGORLw",
+      authDomain: "blacklink-auth.firebaseapp.com",
+      databaseURL: "https://blacklink-auth-default-rtdb.firebaseio.com",
+      projectId: "blacklink-auth",
+      storageBucket: "blacklink-auth.firebasestorage.app",
+      messagingSenderId: "457832218084",
+      appId: "1:457832218084:web:97ed6014a2ba6a6d789bf1",
+      measurementId: "G-YXBK4L3VPL"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const themeCountEl = document.getElementById('themeCount');
+    const themesGrid = document.getElementById('themesGrid');
+    const statusText = document.getElementById('statusText');
+    const betaNotice = document.getElementById('betaNotice');
+    const themePreview = document.getElementById('themePreview');
+
+    const builtInThemes = [
+      { id: 'dark', label: 'Dark', icon: '🌙', tier: 'free', swatches: { primary: '#6366f1', primaryHover: '#4f46e5', bg: '#0a0f1e', card: '#1a1f35', border: '#2d3548' } },
+      { id: 'light', label: 'Light', icon: '☀️', tier: 'free', swatches: { primary: '#6366f1', primaryHover: '#4f46e5', bg: '#f8fafc', card: '#ffffff', border: '#e2e8f0' } },
+      { id: 'nord', label: 'Nord', icon: '❄️', tier: 'free', swatches: { primary: '#88c0d0', primaryHover: '#81a1c1', bg: '#2e3440', card: '#3b4252', border: '#4c566a' } },
+      { id: 'slate', label: 'Slate', icon: '🪨', tier: 'free', swatches: { primary: '#64748b', primaryHover: '#475569', bg: '#0f172a', card: '#111827', border: '#1f2937' } },
+      { id: 'dusk', label: 'Dusk', icon: '🌇', tier: 'free', swatches: { primary: '#a78bfa', primaryHover: '#8b5cf6', bg: '#0f0b1e', card: '#1a1533', border: '#2d2650' } },
+      { id: 'noir', label: 'Noir', icon: '🕶️', tier: 'free', swatches: { primary: '#22d3ee', primaryHover: '#0ea5e9', bg: '#000000', card: '#0a0a0a', border: '#1a1a1a' } },
+      { id: 'horizon', label: 'Horizon', icon: '🌅', tier: 'free', swatches: { primary: '#f97316', primaryHover: '#ea580c', bg: '#0f172a', card: '#111827', border: '#1f2937' } },
+      { id: 'desert', label: 'Desert', icon: '🏜️', tier: 'free', swatches: { primary: '#f59e0b', primaryHover: '#d97706', bg: '#2b1a0d', card: '#362112', border: '#4a2f1d' } },
+      { id: 'paper', label: 'Paper', icon: '📄', tier: 'free', swatches: { primary: '#4b5563', primaryHover: '#374151', bg: '#f7f7f2', card: '#ffffff', border: '#e5e7eb' }, cssPath: 'themes/paper.css' },
+      { id: 'pastel-light', label: 'Pastel Light', icon: '🩵', tier: 'free', swatches: { primary: '#fb7185', primaryHover: '#f43f5e', bg: '#fdf2f8', card: '#ffffff', border: '#f5d0e6' }, cssPath: 'themes/pastel-light.css' },
+      { id: 'sky', label: 'Sky', icon: '🌤️', tier: 'free', swatches: { primary: '#0ea5e9', primaryHover: '#0284c7', bg: '#f0f9ff', card: '#ffffff', border: '#dbeafe' }, cssPath: 'themes/sky.css' },
+
+      { id: 'ocean', label: 'Ocean', icon: '🌊', tier: 'ultra', swatches: { primary: '#0ea5e9', primaryHover: '#0284c7', bg: '#0c1e2e', card: '#1a2f42', border: '#2d4a5e' } },
+      { id: 'forest', label: 'Forest', icon: '🌲', tier: 'ultra', swatches: { primary: '#10b981', primaryHover: '#059669', bg: '#0a1f1a', card: '#1a3329', border: '#2d4a3f' } },
+      { id: 'sunset', label: 'Sunset', icon: '🌅', tier: 'ultra', swatches: { primary: '#f59e0b', primaryHover: '#d97706', bg: '#1f1408', card: '#2d1f10', border: '#4a3520' } },
+      { id: 'rose', label: 'Rose', icon: '🌹', tier: 'ultra', swatches: { primary: '#f43f5e', primaryHover: '#e11d48', bg: '#1f0a12', card: '#2d1a20', border: '#4a2d35' } },
+      { id: 'midnight', label: 'Midnight', icon: '🌌', tier: 'ultra', swatches: { primary: '#8b5cf6', primaryHover: '#7c3aed', bg: '#000000', card: '#0a0a0a', border: '#1a1a1a' } },
+      { id: 'aurora', label: 'Aurora', icon: '✨', tier: 'ultra', swatches: { primary: '#a78bfa', primaryHover: '#8b5cf6', bg: '#0f0a1e', card: '#1a1333', border: '#3d2d5e' } },
+      { id: 'crimson', label: 'Crimson', icon: '🔥', tier: 'ultra', swatches: { primary: '#dc2626', primaryHover: '#b91c1c', bg: '#1a0505', card: '#2d0a0a', border: '#4a1515' } },
+      { id: 'monokai', label: 'Monokai', icon: '💻', tier: 'ultra', swatches: { primary: '#a6e22e', primaryHover: '#8fd12b', bg: '#272822', card: '#34352f', border: '#49483e' } },
+      { id: 'dracula', label: 'Dracula', icon: '🧛', tier: 'ultra', swatches: { primary: '#bd93f9', primaryHover: '#a678e8', bg: '#282a36', card: '#343746', border: '#44475a' } },
+      { id: 'gruvbox', label: 'Gruvbox', icon: '🎨', tier: 'ultra', swatches: { primary: '#b8bb26', primaryHover: '#98971a', bg: '#282828', card: '#3c3836', border: '#504945' } },
+      { id: 'solarized', label: 'Solarized', icon: '☀️', tier: 'ultra', swatches: { primary: '#268bd2', primaryHover: '#2075ba', bg: '#002b36', card: '#073642', border: '#586e75' } },
+      { id: 'tokyo', label: 'Tokyo Night', icon: '🗼', tier: 'ultra', swatches: { primary: '#7aa2f7', primaryHover: '#5e8ce0', bg: '#1a1b26', card: '#24283b', border: '#414868' } },
+      { id: 'catppuccin', label: 'Catppuccin', icon: '🐈', tier: 'ultra', swatches: { primary: '#89b4fa', primaryHover: '#6c9ce8', bg: '#1e1e2e', card: '#313244', border: '#45475a' } },
+      { id: 'cyberpunk', label: 'Cyberpunk', icon: '🤖', tier: 'ultra', swatches: { primary: '#f472b6', primaryHover: '#ec4899', bg: '#0b0711', card: '#140f1f', border: '#261b38' } },
+      { id: 'lavender', label: 'Lavender', icon: '💜', tier: 'ultra', swatches: { primary: '#c084fc', primaryHover: '#a855f7', bg: '#120f1a', card: '#1f1a2b', border: '#32294b' } },
+      { id: 'emerald', label: 'Emerald', icon: '💚', tier: 'ultra', swatches: { primary: '#34d399', primaryHover: '#10b981', bg: '#0a1f17', card: '#112d22', border: '#1a4031' } },
+      { id: 'amber', label: 'Amber', icon: '🟡', tier: 'ultra', swatches: { primary: '#f59e0b', primaryHover: '#d97706', bg: '#1a1305', card: '#241a08', border: '#3d2a0f' } },
+      { id: 'coral', label: 'Coral', icon: '🪸', tier: 'ultra', swatches: { primary: '#fb7185', primaryHover: '#f43f5e', bg: '#180d0f', card: '#221418', border: '#3a2429' } },
+      { id: 'mint', label: 'Mint', icon: '🌿', tier: 'ultra', swatches: { primary: '#2dd4bf', primaryHover: '#14b8a6', bg: '#0c1c1a', card: '#0f2b26', border: '#1b413c' } },
+      { id: 'volcano', label: 'Volcano', icon: '🌋', tier: 'ultra', swatches: { primary: '#f97316', primaryHover: '#ea580c', bg: '#1a0c07', card: '#24130b', border: '#3d2112' } },
+      { id: 'berry', label: 'Berry', icon: '🫐', tier: 'ultra', swatches: { primary: '#a855f7', primaryHover: '#9333ea', bg: '#140a1f', card: '#1c0f2b', border: '#2d1c45' } },
+      { id: 'matrix', label: 'Matrix', icon: '🧮', tier: 'ultra', swatches: { primary: '#22c55e', primaryHover: '#16a34a', bg: '#030712', card: '#0b1220', border: '#1f2937' } },
+      { id: 'pastel', label: 'Pastel', icon: '🎨', tier: 'ultra', swatches: { primary: '#f472b6', primaryHover: '#ec4899', bg: '#1c1423', card: '#241b2d', border: '#3a2a46' } },
+      { id: 'glacier', label: 'Glacier', icon: '🧊', tier: 'ultra', swatches: { primary: '#38bdf8', primaryHover: '#0ea5e9', bg: '#02121f', card: '#0b2c44', border: '#123d58' } },
+      { id: 'ember', label: 'Ember', icon: '🔥', tier: 'ultra', swatches: { primary: '#fb5607', primaryHover: '#d9480f', bg: '#140705', card: '#1f0e0a', border: '#3b1b14' } }
+    ];
+
+    const generatedNames = [
+      "alpine", "arctic", "aurora4", "blossom", "canyon", "citrine", "cobalt", "copper", "cosmos",
+      "crystal", "duskfall", "emberglow", "fjord", "galaxy", "graphite", "harbor", "jade",
+      "lagoon", "lilac", "lumen", "magma", "marsh", "midday", "mocha-lite", "nebula",
+      "noir-lite", "orchid", "pearl", "pebble", "plasma", "sage", "sandstone", "sapphire", "tundra", "velvet"
+    ];
+
+    function computeGeneratedSwatches(idx) {
+      const hue = (idx * 9) % 360;
+      const primary = `hsl(${hue}deg 65% 62%)`;
+      const primaryHover = `hsl(${hue}deg 65% 52%)`;
+      const primaryLight = `hsl(${hue}deg 70% 72%)`;
+      const bgHue = (hue + 200) % 360;
+      const bg = `hsl(${bgHue}deg 25% 10%)`;
+      const card = `hsl(${bgHue}deg 25% 16%)`;
+      const border = `hsl(${bgHue}deg 20% 25%)`;
+      return { primary, primaryHover, primaryLight, bg, card, border };
+    }
+
+    const generatedThemes = generatedNames.map((id, idx) => {
+      const sw = computeGeneratedSwatches(idx);
+      return {
+        id,
+        label: id.replace(/-/g, ' '),
+        icon: '🧪',
+        tier: 'beta',
+        cssPath: `themes/${id}.css`,
+        swatches: sw
+      };
+    });
+
+    const allThemes = [...builtInThemes, ...generatedThemes];
+
+    function toTitle(str) {
+      return str.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    function renderThemes() {
+      themesGrid.innerHTML = '';
+      const currentTheme = window.BlacklinkUtils.getCurrentTheme();
+      allThemes.forEach((theme) => {
+        const sw = theme.swatches;
+        const card = document.createElement('div');
+        card.className = 'theme-card';
+        if (theme.id === currentTheme) {
+          card.classList.add('active');
+        }
+        const tierLabel = theme.tier === 'free' ? 'Free' : theme.tier === 'beta' ? 'Beta' : 'ULTRA';
+        card.innerHTML = `
+          <div class="theme-header">
+            <span>${theme.icon || '🎨'} ${toTitle(theme.label || theme.id)}</span>
+            <span class="theme-tag">${tierLabel}</span>
+          </div>
+          <div class="theme-swatches" style="--sw-primary:${sw.primary};--sw-primary-hover:${sw.primaryHover || sw.primary};--sw-bg:${sw.bg};--sw-card:${sw.card};--sw-border:${sw.border};">
+            <div class="swatch" style="background:var(--sw-primary);"></div>
+            <div class="swatch" style="background:var(--sw-primary-hover);"></div>
+            <div class="swatch" style="background:var(--sw-bg);"></div>
+            <div class="swatch" style="background:var(--sw-card);"></div>
+            <div class="swatch" style="background:var(--sw-border);"></div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary"><i class="fas fa-check-circle"></i> ${theme.id === currentTheme ? 'Active' : 'Apply'}</button>
+            ${theme.cssPath ? `<a class="btn" href="${theme.cssPath}" target="_blank" rel="noopener">View CSS</a>` : ''}
+          </div>
+        `;
+        card.querySelector('.btn-primary').addEventListener('click', () => applyTheme(theme));
+        themesGrid.appendChild(card);
+      });
+      themeCountEl.textContent = `${allThemes.length} themes available`;
+    }
+
+    function applyTheme(theme) {
+      const cssPath = theme.cssPath || null;
+      window.BlacklinkUtils.applyTheme(theme.id, { cssPath });
+      statusText.textContent = `Applied theme: ${toTitle(theme.label || theme.id)}`;
+      themePreview.setAttribute('data-theme', theme.id);
+      renderThemes();
+    }
+
+    function setToggle(el, on) {
+      if (!el) return;
+      el.classList.toggle('active', on);
+    }
+
+    function loadDisplayPrefs() {
+      const settings = JSON.parse(localStorage.getItem('visibilitySettings') || '{}');
+      return {
+        reduceMotion: !!settings.reduceMotion,
+        highContrast: !!settings.highContrast,
+        largeText: !!settings.largeText,
+        focusIndicators: settings.focusIndicators !== false,
+        smoothScrolling: settings.smoothScrolling !== false,
+        compactMode: !!settings.compactMode,
+        borderRadius: settings.borderRadius || 'large',
+        uiDensity: settings.uiDensity || 'comfortable'
+      };
+    }
+
+    function applyDisplayPrefs(prefs) {
+      if (prefs.reduceMotion) document.documentElement.setAttribute('data-motion', 'reduce'); else document.documentElement.removeAttribute('data-motion');
+      if (prefs.highContrast) document.documentElement.setAttribute('data-contrast', 'high'); else document.documentElement.removeAttribute('data-contrast');
+      if (prefs.largeText) document.documentElement.setAttribute('data-text-size', 'large'); else document.documentElement.removeAttribute('data-text-size');
+      document.documentElement.setAttribute('data-focus-indicators', prefs.focusIndicators ? 'on' : 'off');
+      document.documentElement.style.scrollBehavior = prefs.smoothScrolling ? 'smooth' : 'auto';
+
+      const radiusMap = { sharp: '0px', small: '8px', medium: '12px', large: '20px', round: '32px' };
+      document.documentElement.style.setProperty('--radius', radiusMap[prefs.borderRadius] || '20px');
+      document.documentElement.style.setProperty('--radius-sm', radiusMap[prefs.borderRadius === 'sharp' ? 'sharp' : 'small'] || '8px');
+
+      const densityMap = {
+        compact: { padding: '0.75rem' },
+        comfortable: { padding: '1rem' },
+        spacious: { padding: '1.5rem' }
+      };
+      const density = densityMap[prefs.uiDensity] || densityMap.comfortable;
+      document.documentElement.style.setProperty('--padding', density.padding);
+
+      setToggle(document.getElementById('reduceMotion'), prefs.reduceMotion);
+      setToggle(document.getElementById('highContrast'), prefs.highContrast);
+      setToggle(document.getElementById('largeText'), prefs.largeText);
+      setToggle(document.getElementById('focusIndicators'), prefs.focusIndicators);
+      setToggle(document.getElementById('smoothScrolling'), prefs.smoothScrolling);
+      setToggle(document.getElementById('compactMode'), prefs.compactMode);
+      const borderRadiusSelect = document.getElementById('borderRadius');
+      const densitySelect = document.getElementById('uiDensity');
+      if (borderRadiusSelect) borderRadiusSelect.value = prefs.borderRadius;
+      if (densitySelect) densitySelect.value = prefs.uiDensity;
+    }
+
+    function savePrefs(newPrefs) {
+      localStorage.setItem('visibilitySettings', JSON.stringify(newPrefs));
+    }
+
+    function attachDisplayHandlers() {
+      const prefs = loadDisplayPrefs();
+      const toggles = ['reduceMotion', 'highContrast', 'largeText', 'focusIndicators', 'smoothScrolling', 'compactMode'];
+      toggles.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('click', () => {
+            prefs[id] = !prefs[id];
+            savePrefs(prefs);
+            applyDisplayPrefs(prefs);
+          });
+        }
+      });
+      document.getElementById('borderRadius').addEventListener('change', (e) => {
+        prefs.borderRadius = e.target.value;
+        savePrefs(prefs);
+        applyDisplayPrefs(prefs);
+      });
+      document.getElementById('uiDensity').addEventListener('change', (e) => {
+        prefs.uiDensity = e.target.value;
+        savePrefs(prefs);
+        applyDisplayPrefs(prefs);
+      });
+      applyDisplayPrefs(prefs);
+    }
+
+    async function checkBetaStatus(user) {
+      if (!user) {
+        betaNotice.innerHTML = '<i class="fas fa-user-lock"></i><span>Sign in to confirm beta access.</span>';
+        return;
+      }
+      try {
+        const snap = await db.collection('users').doc(user.uid).get();
+        const data = snap.data() || {};
+        const isBeta = Boolean(data.betaProgram?.optedIn);
+        betaNotice.innerHTML = isBeta
+          ? '<i class="fas fa-flask"></i><span>You are enrolled in the Beta program.</span>'
+          : '<i class="fas fa-flask"></i><span>Not enrolled in Beta. Opt in on beta.html to unlock early theme updates.</span>';
+      } catch (err) {
+        console.error('Failed to load beta status', err);
+      }
+    }
+
+    function init() {
+      renderThemes();
+      attachDisplayHandlers();
+      const savedTheme = window.BlacklinkUtils.getCurrentTheme();
+      const activeTheme = allThemes.find(t => t.id === savedTheme);
+      if (activeTheme) {
+        themePreview.setAttribute('data-theme', activeTheme.id);
+      }
+      Navbar.initNavbar(auth, db, { currentPage: 'visibility' });
+      auth.onAuthStateChanged((user) => checkBetaStatus(user));
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+
+</html>
