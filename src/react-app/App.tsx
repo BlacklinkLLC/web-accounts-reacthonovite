@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from "./providers/AuthProvider";
 import { ThemeProvider, useTheme } from "./theme/ThemeProvider";
 import { ThemeOption, themeOptions } from "./theme/themes";
 import GradientText from "../components/reactbits/GradientText";
+import TextPressure from "../components/TextPressure/TextPressure";
 
 const WelcomeModal = () => {
   const [visible, setVisible] = useState(false);

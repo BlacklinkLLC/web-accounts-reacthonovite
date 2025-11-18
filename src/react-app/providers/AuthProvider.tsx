@@ -207,11 +207,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     // Persist auth across reloads using browser storage (cookie-like behavior)
-    setPersistence(auth, browserLocalPersistence).catch((err) => {
+    setPersistence(auth, browserLocalPersistence).catch((err: unknown) => {
       logFirebaseError("auth-persistence", err);
     });
 
-    const unsubscribe = onAuthStateChanged(auth, async (nextUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (nextUser: User | null) => {
       setUser(nextUser);
       setLoading(true);
       setError(null);
@@ -271,7 +271,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
       try {
         const qlSnap = await getDocs(collection(db, "product_pulse", nextUser.uid, "quicklaunch"));
-        const items: QuickLaunchApp[] = qlSnap.docs.map((docSnap) => {
+        const items: QuickLaunchApp[] = qlSnap.docs.map((docSnap: QueryDocumentSnapshot) => {
           const data = docSnap.data() as Record<string, unknown>;
           return {
             id: docSnap.id,
