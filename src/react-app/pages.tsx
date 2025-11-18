@@ -1919,7 +1919,9 @@ const AboutPage = () => (
         <li>Visibility & Privacy center restored with theme mixer</li>
         <li>ULTRA+ Theme Mixer (beta) with gradient/custom color palette</li>
         <li>Announcement bar for build identifiers</li>
-        <li>Admin link gating by users/{{uid}}.isAdmin</li>
+        <li>
+          Admin link gating by <code>users/{"{uid}"}.isAdmin</code>
+        </li>
         <li>QuickLaunch CRUD wired to product_pulse/quicklaunch</li>
       </ul>
     </PageSection>
