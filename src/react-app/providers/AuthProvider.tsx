@@ -318,9 +318,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           limit(1),
         );
         const snap = await getDocs(usernamesQuery);
-        if (!snap.empty) {
-          const docSnap = snap.docs[0];
-          setProfile((prev) => ({ ...prev, username: docSnap.id }));
+        const firstDoc: QueryDocumentSnapshot | undefined = snap.docs[0];
+        if (firstDoc) {
+          setProfile((prev) => ({ ...prev, username: firstDoc.id }));
         }
       } catch (err) {
         logFirebaseError("username-fetch", err);
@@ -492,12 +492,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
     const docRef = doc(db, "product_pulse", uid, "quicklaunch", id);
-    const update: Record<string, unknown> = {
+    const update: Partial<QuickLaunchApp & { userId: string }> = {
       ...payload,
       userId: uid,
     };
-    delete update.id;
-    await updateDoc(docRef, update);
+    delete (update as { id?: string }).id;
+    await updateDoc(docRef, update as any);
     setQuickLaunch((prev) =>
       prev.map((app) => (app.id === id ? { ...app, ...payload, userId: uid } : app)),
     );
