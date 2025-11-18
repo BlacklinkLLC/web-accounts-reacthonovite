@@ -448,7 +448,12 @@ function App() {
           {path !== "/login" && path !== "/register" ? (
             <div className="app-layout">
               <NavBar path={path} />
-              <main className="app-main">{isComponentGrid ? <ComponentGridPage /> : <PageRenderer path={path} />}</main>
+              <main className="app-main">
+                <div className="announcement-bar" role="status">
+                  Accounts 4.0 Alpha 2 Fix 2 Build :4.0.PB2.A2-F2.20251117
+                </div>
+                {isComponentGrid ? <ComponentGridPage /> : <PageRenderer path={path} />}
+              </main>
               <WelcomeModal />
             </div>
           ) : (

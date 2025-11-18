@@ -204,6 +204,19 @@
   padding: 1.5rem;
 }
 
+/* Announcement bar */
+.announcement-bar {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  background: linear-gradient(90deg, rgba(99, 102, 241, 0.15), rgba(14, 165, 233, 0.12));
+  color: var(--text);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm, var(--shadow));
+}
+
 /* User menu & dropdown */
 .app-user-menu {
   position: relative;

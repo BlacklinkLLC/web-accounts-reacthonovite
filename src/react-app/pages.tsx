@@ -1889,44 +1889,38 @@ const AboutPage = () => (
       subtitle="The unified authentication and subscription platform powering Blacklink products with ULTRA tiers and Aero AI."
       badge={<Badge variant="info">About</Badge>}
     />
-    <PageSection title="Current build" badge={<Badge variant="success">Stable</Badge>}>
+    <PageSection title="Current build" badge={<Badge variant="success">Alpha 2 Fix 2</Badge>}>
       <div className="build-grid">
         <div className="build-stat">
           <div className="build-stat-label">Version</div>
-          <div className="build-stat-value">3.9</div>
+          <div className="build-stat-value">4.0 Alpha 2</div>
         </div>
         <div className="build-stat">
           <div className="build-stat-label">Build Number</div>
-          <div className="build-stat-value">39C05022026</div>
+          <div className="build-stat-value">4.0.PB2.A2-F2.20251117</div>
         </div>
         <div className="build-stat">
           <div className="build-stat-label">Release Date</div>
-          <div className="build-stat-value">November 16th 2025</div>
+          <div className="build-stat-value">November 17 2025</div>
         </div>
         <div className="build-stat">
           <div className="build-stat-label">Status</div>
           <div className="build-stat-value" style={{ color: "var(--success)" }}>
-            Stable
+            Alpha
           </div>
         </div>
       </div>
     </PageSection>
 
-    <PageSection title="What's new in 3.9" badge={<Badge variant="info">Overview</Badge>}>
-      <p className="theme-footnote">Bridge release introducing teams, organizations, modular architecture, and 25+ themes.</p>
+    <PageSection title="What's new in 4.0 Alpha 2" badge={<Badge variant="info">Overview</Badge>}>
+      <p className="theme-footnote">Parity-focus port plus ULTRA+ Theme Mixer and visibility controls.</p>
       <ul className="feature-list">
-        <li>Organizations & Teams with role-based permissions</li>
-        <li>Shared AeroAI credits pool</li>
-        <li>25+ premium themes (Dracula, Monokai, Tokyo Night, etc.)</li>
-        <li>Modular CSS & JavaScript architecture</li>
-        <li>ULTRA+ tier with early access</li>
-        <li>Analytics tracking system</li>
-        <li>ClassLink discovery groundwork</li>
-        <li>Enhanced SSO with JWT/external providers</li>
-        <li>Accessibility options (reduce motion, high contrast, font scaling)</li>
-        <li>Organization dashboard with member management</li>
-        <li>Live theme preview with picker</li>
-        <li>Comprehensive Firestore security rules</li>
+        <li>Accounts-Old parity across dashboard, profile, settings, subscriptions</li>
+        <li>Visibility & Privacy center restored with theme mixer</li>
+        <li>ULTRA+ Theme Mixer (beta) with gradient/custom color palette</li>
+        <li>Announcement bar for build identifiers</li>
+        <li>Admin link gating by users/{{uid}}.isAdmin</li>
+        <li>QuickLaunch CRUD wired to product_pulse/quicklaunch</li>
       </ul>
     </PageSection>
 
