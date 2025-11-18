@@ -1,5 +1,5 @@
 import "./App.css";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "./components/Badge";
 import { Button } from "./components/Button";
 import { NavBar } from "./components/NavBar";
@@ -8,6 +8,72 @@ import { PageRenderer } from "./pages";
 import { AuthProvider, useAuth } from "./providers/AuthProvider";
 import { ThemeProvider, useTheme } from "./theme/ThemeProvider";
 import { ThemeOption, themeOptions } from "./theme/themes";
+import GradientText from "../components/reactbits/GradientText";
+
+const WelcomeModal = () => {
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const seen = typeof window !== "undefined" ? localStorage.getItem("bl_welcome4") : "1";
+    if (!seen) setVisible(true);
+    if (typeof window !== "undefined") {
+      (window as unknown as { __BL_SHOW_WELCOME__?: () => void; __BL_HIDE_WELCOME__?: () => void }).__BL_SHOW_WELCOME__ =
+        () => setVisible(true);
+      (window as unknown as { __BL_HIDE_WELCOME__?: () => void }).__BL_HIDE_WELCOME__ = () => setVisible(false);
+    }
+  }, []);
+
+  const dismiss = () => {
+    localStorage.setItem("bl_welcome4", "1");
+    setVisible(false);
+  };
+
+  if (!visible) return null;
+  return (
+    <div className="welcome-overlay" role="dialog" aria-modal="true" aria-label="Welcome to Accounts 4.0">
+      <div className="welcome-modal layout">
+        <div className="welcome-left">
+          <p className="pill" aria-hidden="true">
+            <span aria-hidden>🚀</span> New stack
+          </p>
+          <div className="relative h-24 w-full">
+            <TextPressure
+              text="Welcome to 4.0 Beta"
+              flex
+              alpha
+              width
+              weight
+              italic
+              textColor="#ffffff"
+              className="w-full justify-start text-left"
+              minFontSize={28}
+            />
+          </div>
+          <p className="gradient-text">
+            <GradientText>Legacy Accounts now on React + Vite + Firebase + shadcn/ui.</GradientText>
+          </p>
+        </div>
+        <div className="welcome-right">
+          <div className="welcome-card" aria-label="Roadmap">
+            <h3 className="welcome-card-title">4.0 Roadmap</h3>
+            <ul className="welcome-list">
+              <li>Expanded ULTRA+ features (Messages, Community, QuickLaunch)</li>
+              <li>Updated legal: AUP, TOS, Privacy, AUR, SDPP, 3DPP</li>
+              <li>Connect & SSO: ClassLink OneRoster, OpenSiS framework, external SSO URL</li>
+              <li>Visibility & Privacy controls for data sharing</li>
+            </ul>
+          </div>
+          <div className="welcome-actions">
+            <Button onClick={dismiss}>Start exploring</Button>
+            <Button variant="secondary" onClick={dismiss}>
+              Close
+            </Button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const heroStats = [
   { label: "Themes", value: "32", detail: "Core + ULTRA palettes" },
@@ -378,8 +444,15 @@ function App() {
     <ThemeProvider>
       <AuthProvider>
         <AuthGate path={path}>
-          {path !== "/login" && path !== "/register" ? <NavBar path={path} /> : null}
-          {isComponentGrid ? <ComponentGridPage /> : <PageRenderer path={path} />}
+          {path !== "/login" && path !== "/register" ? (
+            <div className="app-layout">
+              <NavBar path={path} />
+              <main className="app-main">{isComponentGrid ? <ComponentGridPage /> : <PageRenderer path={path} />}</main>
+              <WelcomeModal />
+            </div>
+          ) : (
+            isComponentGrid ? <ComponentGridPage /> : <PageRenderer path={path} />
+          )}
         </AuthGate>
       </AuthProvider>
     </ThemeProvider>

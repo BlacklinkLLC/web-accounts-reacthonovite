@@ -7,13 +7,30 @@ type NavLink = {
   href: string;
 };
 
-const links: NavLink[] = [
-  { label: "Dashboard", href: "/dashboard" },
-  { label: "Profile", href: "/profile" },
-  { label: "Settings", href: "/settings" },
-  { label: "Subscriptions", href: "/subscription" },
-  { label: "Beta", href: "/beta" },
-  { label: "About", href: "/about" },
+const groupedLinks: { title: string; items: NavLink[] }[] = [
+  {
+    title: "Overview",
+    items: [
+      { label: "Dashboard", href: "/dashboard" },
+      { label: "Profile", href: "/profile" },
+    ],
+  },
+  {
+    title: "Settings",
+    items: [
+      { label: "Settings", href: "/settings" },
+      { label: "Privacy", href: "/privacy" },
+      { label: "Visibility", href: "/settings/visibility" },
+      { label: "Subscriptions", href: "/subscription" },
+    ],
+  },
+  {
+    title: "Info",
+    items: [
+      { label: "Beta", href: "/beta" },
+      { label: "About", href: "/about" },
+    ],
+  },
 ];
 
 type NavBarProps = {
@@ -28,42 +45,60 @@ const formatTier = (tier: string) => {
 };
 
 export const NavBar = ({ path }: NavBarProps) => {
-  const [open, setOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { profile, signOutUser } = useAuth();
 
-  const activeLookup = useMemo(
-    () =>
-      links.reduce<Record<string, boolean>>((acc, link) => {
-        acc[link.href] = path.startsWith(link.href);
-        return acc;
-      }, {}),
-    [path],
-  );
+  const activeLookup = useMemo(() => {
+    const flat = groupedLinks.flatMap((g) => g.items);
+    return flat.reduce<Record<string, boolean>>((acc, link) => {
+      acc[link.href] = path.startsWith(link.href);
+      return acc;
+    }, {});
+  }, [path]);
 
   return (
-    <header className="app-header">
-      <a className="app-logo" href="/dashboard">
-        <div className="app-logo-icon">BL</div>
-        <span>Blacklink Accounts</span>
-      </a>
+    <aside className={`app-sidebar ${sidebarOpen ? "open" : "collapsed"}`} aria-label="Primary navigation">
+      <div className="sidebar-top">
+        <button
+          type="button"
+          className="sidebar-toggle"
+          aria-label={sidebarOpen ? "Collapse navigation" : "Expand navigation"}
+          aria-expanded={sidebarOpen}
+          onClick={() => setSidebarOpen((prev) => !prev)}
+        >
+          <span className="sidebar-toggle-icon">☰</span>
+        </button>
+        <a className="app-logo" href="/dashboard" aria-label="Blacklink Accounts Home">
+          <div className="app-logo-icon">BL</div>
+          {sidebarOpen ? <span className="app-logo-text">Blacklink Accounts</span> : null}
+        </a>
+      </div>
 
-      <nav className="app-nav">
-        {links.map((link) => (
-          <a
-            key={link.href}
-            className={`app-nav-link ${activeLookup[link.href] ? "active" : ""}`}
-            href={link.href}
-          >
-            {link.label}
-          </a>
+      <nav className="app-nav-vertical" aria-label="Main">
+        {groupedLinks.map((group) => (
+          <div key={group.title} className="nav-group">
+            <div className="nav-group-title">{group.title}</div>
+            {group.items.map((link) => (
+              <a
+                key={link.href}
+                className={`app-nav-link-vertical ${activeLookup[link.href] ? "active" : ""}`}
+                href={link.href}
+              >
+                <span className="nav-dot" aria-hidden="true" />
+                <span className="nav-label">{link.label}</span>
+              </a>
+            ))}
+          </div>
         ))}
         {profile.isAdmin ? (
-          <a
-            className={`app-nav-link ${activeLookup["/admin"] ? "active" : ""}`}
-            href="/admin"
-          >
-            Admin
-          </a>
+          <div className="nav-group">
+            <div className="nav-group-title">Admin</div>
+            <a className={`app-nav-link-vertical ${activeLookup["/admin"] ? "active" : ""}`} href="/admin">
+              <span className="nav-dot" aria-hidden="true" />
+              <span className="nav-label">Admin</span>
+            </a>
+          </div>
         ) : null}
       </nav>
 
@@ -71,8 +106,8 @@ export const NavBar = ({ path }: NavBarProps) => {
         <button
           type="button"
           className="user-menu-button"
-          aria-expanded={open}
-          onClick={() => setOpen((prev) => !prev)}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((prev) => !prev)}
         >
           <div className="user-avatar avatar-ultra-plus avatar-photo">
             {profile.photoURL ? (
@@ -93,7 +128,7 @@ export const NavBar = ({ path }: NavBarProps) => {
             ▾
           </span>
         </button>
-        <div className={`user-dropdown ${open ? "open" : ""}`}>
+        <div className={`user-dropdown ${menuOpen ? "open" : ""}`}>
           <div className="user-dropdown-profile">
             <div className="avatar avatar-ultra-plus avatar-photo">
               {profile.photoURL ? (
@@ -108,10 +143,10 @@ export const NavBar = ({ path }: NavBarProps) => {
             </div>
             <span className="user-dropdown-tier">{formatTier(profile.tier)}</span>
           </div>
-          <button className="user-dropdown-item" type="button">
+          <button className="user-dropdown-item" type="button" onClick={() => (window.location.href = "/profile")}>
             <span aria-hidden="true">👤</span> Profile
           </button>
-          <button className="user-dropdown-item" type="button">
+          <button className="user-dropdown-item" type="button" onClick={() => (window.location.href = "/settings")}>
             <span aria-hidden="true">⚙️</span> Settings
           </button>
           <button className="user-dropdown-item" type="button" onClick={signOutUser}>
@@ -119,6 +154,6 @@ export const NavBar = ({ path }: NavBarProps) => {
           </button>
         </div>
       </div>
-    </header>
+    </aside>
   );
 };

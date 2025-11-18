@@ -28,6 +28,10 @@ import {
   query,
   where,
   runTransaction,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { useRef } from "react";
 import { auth, db } from "../firebase/client";
@@ -50,6 +54,8 @@ export type QuickLaunchApp = {
   url: string;
   icon?: string;
   favorite?: boolean;
+  userId?: string;
+  createdAt?: unknown;
 };
 
 export type AeroTokens = {
@@ -86,7 +92,11 @@ type AuthContextShape = {
   signInWithGoogle: () => Promise<void>;
   signInWithClassLink: () => Promise<void>;
   signOutUser: () => Promise<void>;
+  addQuickLaunch: (payload: Omit<QuickLaunchApp, "id">) => Promise<void>;
+  updateQuickLaunch: (id: string, payload: Partial<QuickLaunchApp>) => Promise<void>;
+  deleteQuickLaunch: (id: string) => Promise<void>;
   setUsername: (username: string) => Promise<void>;
+  setPhotoUrl: (url: string) => Promise<void>;
 };
 
 const fallbackProfile: UserProfile = {
@@ -143,6 +153,7 @@ const normalizeProfile = (user: User | null, docSnap?: QueryDocumentSnapshot): U
       displayName: user.displayName || fallbackProfile.displayName,
       email: user.email || fallbackProfile.email,
       tier: "ULTRA_PLUS",
+      username: undefined,
       organization: fallbackProfile.organization,
       roles: ["member"],
       devices: fallbackProfile.devices,
@@ -276,11 +287,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setQuickLaunch([]);
       }
 
-    try {
-      const tokensSnap = await getDoc(doc(db, "aero_tokens", nextUser.uid));
-      if (tokensSnap.exists()) {
-        const data = tokensSnap.data() as Record<string, unknown>;
-        setAeroTokens({
+      try {
+        const tokensSnap = await getDoc(doc(db, "aero_tokens", nextUser.uid));
+        if (tokensSnap.exists()) {
+          const data = tokensSnap.data() as Record<string, unknown>;
+          setAeroTokens({
             remaining: Number(data.remaining ?? 0),
             allocatedAt: (data.allocatedAt as string) || "",
             lastReset: (data.lastReset as string) || "",
@@ -294,13 +305,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       }
 
       try {
-        const usernamesSnap = await getDoc(doc(db, "social", "usernames"));
-        if (usernamesSnap.exists()) {
-          const data = usernamesSnap.data() as Record<string, string>;
-          const entry = Object.entries(data).find(([, val]) => val === nextUser.uid);
-          if (entry) {
-            setProfile((prev) => ({ ...prev, username: entry[0].replace(/^@/, "") }));
-          }
+        // Prefer username stored on user doc
+        setProfile((prev) => ({
+          ...prev,
+          username: (prev.username as string | undefined) || undefined,
+        }));
+
+        // Fallback: query usernames/{username} where uid == current user
+        const usernamesQuery = query(
+          collection(db, "usernames"),
+          where("uid", "==", nextUser.uid),
+          limit(1),
+        );
+        const snap = await getDocs(usernamesQuery);
+        if (!snap.empty) {
+          const docSnap = snap.docs[0];
+          setProfile((prev) => ({ ...prev, username: docSnap.id }));
         }
       } catch (err) {
         logFirebaseError("username-fetch", err);
@@ -373,34 +393,48 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const setUsername = async (username: string) => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
-    const desired = `@${username.trim()}`;
+    const desired = username.trim();
     if (!username.trim()) {
       setError("username-empty");
       return;
     }
+    const needsDistrictSuffix =
+      (profile.organization || "").toLowerCase().includes("district") ||
+      (profile.roles || []).some((r) => r.toLowerCase().includes("district"));
+    const finalUsername = needsDistrictSuffix ? `${desired}.wsdr4` : desired;
     setLoading(true);
     setError(null);
-    const usernamesRef = doc(db, "social", "usernames");
-
     try {
       await runTransaction(db, async (tx) => {
-        const snap = await tx.get(usernamesRef);
-        const data = (snap.exists() ? snap.data() : {}) as Record<string, string>;
-
-        if (data[desired] && data[desired] !== uid) {
-          throw new Error("username-taken");
+        const newUsernameRef = doc(db, "usernames", finalUsername);
+        const newUsernameSnap = await tx.get(newUsernameRef);
+        if (newUsernameSnap.exists()) {
+          const existingUid = (newUsernameSnap.data() as { uid?: string }).uid;
+          if (existingUid && existingUid !== uid) {
+            throw new Error("username-taken");
+          }
         }
 
-        const newData: Record<string, string> = {};
-        Object.entries(data).forEach(([key, val]) => {
-          if (val !== uid) newData[key] = val;
-        });
+        const userRef = doc(db, "users", uid);
+        const userSnap = await tx.get(userRef);
+        const data = userSnap.data() as { username?: string; email?: string } | undefined;
+        const currentUsername = data?.username;
+        const currentEmail = data?.email || profile.email;
 
-        newData[desired] = uid;
-        tx.set(usernamesRef, newData);
+        tx.set(newUsernameRef, { uid, createdAt: serverTimestamp() });
+        tx.set(
+          userRef,
+          { username: finalUsername, email: currentEmail, updatedAt: serverTimestamp() },
+          { merge: true },
+        );
+
+        if (currentUsername && currentUsername !== finalUsername) {
+          const oldRef = doc(db, "usernames", currentUsername);
+          tx.delete(oldRef);
+        }
       });
 
-      setProfile((prev) => ({ ...prev, username }));
+      setProfile((prev) => ({ ...prev, username: finalUsername }));
     } catch (err) {
       const message = (err as Error).message;
       setError(message === "username-taken" ? "username-taken" : "username");
@@ -408,6 +442,73 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const setPhotoUrl = async (url: string) => {
+    if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+    setLoading(true);
+    setError(null);
+    try {
+      const userRef = doc(db, "users", uid);
+      const snap = await getDoc(userRef);
+      const email = (snap.data() as { email?: string } | undefined)?.email ?? profile.email;
+      await setDoc(
+        userRef,
+        {
+          email,
+          photoURL: url,
+          updatedAt: serverTimestamp(),
+        },
+        { merge: true },
+      );
+      setProfile((prev) => ({ ...prev, photoURL: url }));
+    } catch (err) {
+      logFirebaseError("photo-set", err);
+      setError("photo");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addQuickLaunch = async (payload: Omit<QuickLaunchApp, "id">) => {
+    if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+    const colRef = collection(db, "product_pulse", uid, "quicklaunch");
+    const docRef = doc(colRef);
+    const record = {
+      name: payload.name,
+      url: payload.url,
+      icon: payload.icon || "⚡",
+      favorite: Boolean(payload.favorite),
+      userId: uid,
+      createdAt: serverTimestamp(),
+    };
+    await setDoc(docRef, record);
+    setQuickLaunch((prev) => [...prev, { ...record, id: docRef.id }]);
+  };
+
+  const updateQuickLaunch = async (id: string, payload: Partial<QuickLaunchApp>) => {
+    if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+    const docRef = doc(db, "product_pulse", uid, "quicklaunch", id);
+    const update: Record<string, unknown> = {
+      ...payload,
+      userId: uid,
+    };
+    delete update.id;
+    await updateDoc(docRef, update);
+    setQuickLaunch((prev) =>
+      prev.map((app) => (app.id === id ? { ...app, ...payload, userId: uid } : app)),
+    );
+  };
+
+  const deleteQuickLaunch = async (id: string) => {
+    if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+    const docRef = doc(db, "product_pulse", uid, "quicklaunch", id);
+    await deleteDoc(docRef);
+    setQuickLaunch((prev) => prev.filter((app) => app.id !== id));
   };
 
   const signOutUser = async () => {
@@ -432,9 +533,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       signUp,
       signInWithGoogle,
       signInWithClassLink,
+      addQuickLaunch,
+      updateQuickLaunch,
+      deleteQuickLaunch,
+      setUsername,
+      setPhotoUrl,
       signOutUser,
       statsPermissionDenied,
-      setUsername,
     }),
     [user, profile, orgs, stats, quickLaunch, aeroTokens, loading, error, statsPermissionDenied],
   );
