@@ -56,6 +56,8 @@ export type QuickLaunchApp = {
   favorite?: boolean;
   userId?: string;
   createdAt?: unknown;
+  group?: string;
+  color?: string;
 };
 
 export type AeroTokens = {
@@ -277,8 +279,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             id: docSnap.id,
             name: (data.name as string) || "App",
             url: (data.url as string) || "#",
-            icon: typeof data.icon === "string" ? (data.icon as string) : "⚡",
+            icon: typeof data.icon === "string" ? (data.icon as string) : "bolt",
             favorite: Boolean(data.favorite),
+            group: typeof data.group === "string" ? (data.group as string) : undefined,
+            color: typeof data.color === "string" ? (data.color as string) : undefined,
           };
         });
         setQuickLaunch(items);
@@ -479,8 +483,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const record = {
       name: payload.name,
       url: payload.url,
-      icon: payload.icon || "⚡",
+      icon: payload.icon || "bolt",
       favorite: Boolean(payload.favorite),
+      group: payload.group || "General",
+      color: payload.color || null,
       userId: uid,
       createdAt: serverTimestamp(),
     };

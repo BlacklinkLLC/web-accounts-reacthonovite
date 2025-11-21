@@ -10,6 +10,14 @@ import { ThemeProvider, useTheme } from "./theme/ThemeProvider";
 import { ThemeOption, themeOptions } from "./theme/themes";
 import GradientText from "../components/reactbits/GradientText";
 import TextPressure from "../components/TextPressure/TextPressure";
+import RocketIcon from "./components/icons/outline/rocket.svg?react";
+import PaletteIcon from "./components/icons/outline/palette.svg?react";
+import PuzzleIcon from "./components/icons/outline/puzzle.svg?react";
+import ChartBarIcon from "./components/icons/outline/chart-bar.svg?react";
+import ShieldIcon from "./components/icons/outline/shield.svg?react";
+import SatelliteIcon from "./components/icons/outline/satellite.svg?react";
+import BoltIcon from "./components/icons/outline/bolt.svg?react";
+import CheckIcon from "./components/icons/outline/check.svg?react";
 
 const WelcomeModal = () => {
   const [visible, setVisible] = useState(false);
@@ -34,9 +42,10 @@ const WelcomeModal = () => {
     <div className="welcome-overlay" role="dialog" aria-modal="true" aria-label="Welcome to Accounts 4.0">
       <div className="welcome-modal layout">
         <div className="welcome-left">
-          <p className="pill" aria-hidden="true">
-            <span aria-hidden>🚀</span> New stack
-          </p>
+        <p className="pill" aria-hidden="true">
+          <RocketIcon className="icon-inline icon-accent" aria-hidden="true" width={16} height={16} />
+          New stack
+        </p>
           <div className="relative h-24 w-full">
             <TextPressure
               text="Welcome to 4.0 Beta"
@@ -51,7 +60,7 @@ const WelcomeModal = () => {
             />
           </div>
           <p className="gradient-text">
-            <GradientText>Legacy Accounts now on React + Vite + Firebase + shadcn/ui.</GradientText>
+            <GradientText>Accounts 4.0 is running on React + Vite + Firebase + shadcn/ui.</GradientText>
           </p>
         </div>
         <div className="welcome-right">
@@ -110,10 +119,18 @@ const ComponentShowcase = () => (
     <div className="component-row">
       <Button>Primary</Button>
       <Button variant="secondary">Secondary</Button>
-      <Button variant="success" icon="✅" size="sm">
+      <Button
+        variant="success"
+        icon={<CheckIcon className="icon-inline icon-success" aria-hidden="true" width={16} height={16} />}
+        size="sm"
+      >
         Confirm
       </Button>
-      <Button variant="danger" icon="⚡" size="sm">
+      <Button
+        variant="danger"
+        icon={<BoltIcon className="icon-inline icon-warning" aria-hidden="true" width={16} height={16} />}
+        size="sm"
+      >
         Danger
       </Button>
     </div>
@@ -341,8 +358,7 @@ const ComponentGridPage = () => {
             <p className="eyebrow">Blacklink Design System</p>
             <h1>Component grid</h1>
             <p className="hero-subtitle">
-              Palette selector, accessibility toggles, and UI primitives ported from the legacy
-              Accounts-Old set into 4.0 Beta.
+              Palette selector, accessibility toggles, and UI primitives running on the 4.0 stack.
             </p>
             <div className="hero-actions">
               <Button>Primary CTA</Button>
@@ -365,9 +381,7 @@ const ComponentGridPage = () => {
         <section className="card theme-card">
           <div className="card-header">
             <div className="card-title">
-              <span role="img" aria-hidden="true">
-                🎨
-              </span>
+              <PaletteIcon className="icon-inline icon-accent" aria-hidden="true" width={18} height={18} />
               Theme system
             </div>
             <Badge variant={activeTheme.tier === "ultra" ? "ultra" : "info"}>
@@ -381,9 +395,7 @@ const ComponentGridPage = () => {
         <section className="card component-card">
           <div className="card-header">
             <div className="card-title">
-              <span role="img" aria-hidden="true">
-                🧩
-              </span>
+              <PuzzleIcon className="icon-inline icon-accent" aria-hidden="true" width={18} height={18} />
               Component sampler
             </div>
             <Badge variant="success">Live</Badge>
@@ -396,9 +408,7 @@ const ComponentGridPage = () => {
         <section className="card">
           <div className="card-header">
             <div className="card-title">
-              <span role="img" aria-hidden="true">
-                📊
-              </span>
+              <ChartBarIcon className="icon-inline icon-accent" aria-hidden="true" width={18} height={18} />
               Account health
             </div>
             <Badge variant="info">Edge</Badge>
@@ -409,9 +419,7 @@ const ComponentGridPage = () => {
         <section className="card">
           <div className="card-header">
             <div className="card-title">
-              <span role="img" aria-hidden="true">
-                🛡️
-              </span>
+              <ShieldIcon className="icon-inline icon-accent" aria-hidden="true" width={18} height={18} />
               Profile
             </div>
             <Badge variant="warning">Preview</Badge>
@@ -422,9 +430,7 @@ const ComponentGridPage = () => {
         <section className="card">
           <div className="card-header">
             <div className="card-title">
-              <span role="img" aria-hidden="true">
-                🛰️
-              </span>
+              <SatelliteIcon className="icon-inline icon-accent" aria-hidden="true" width={18} height={18} />
               Events
             </div>
             <Badge>Streaming</Badge>
@@ -450,7 +456,7 @@ function App() {
               <NavBar path={path} />
               <main className="app-main">
                 <div className="announcement-bar" role="status">
-                  Accounts 4.0 Alpha 2 Fix 2 Build :4.0.PB2.A2-F2.20251117
+                  Accounts 4.0 Beta 1 Build : 4.0.PB1.B1.20251119
                 </div>
                 {isComponentGrid ? <ComponentGridPage /> : <PageRenderer path={path} />}
               </main>

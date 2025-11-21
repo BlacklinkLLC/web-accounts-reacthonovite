@@ -6,6 +6,46 @@ import { useAuth } from "./providers/AuthProvider";
 import GradientText from "../components/reactbits/GradientText";
 import { useTheme } from "./theme/ThemeProvider";
 import { themeOptions, ThemeOption } from "./theme/themes";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDoc,
+  limit,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+  where,
+} from "firebase/firestore";
+import { db } from "./firebase/client";
+import FileDescriptionIcon from "./components/icons/outline/file-description.svg?react";
+import RocketIcon from "./components/icons/outline/rocket.svg?react";
+import ShieldIcon from "./components/icons/outline/shield.svg?react";
+import BookIcon from "./components/icons/outline/book.svg?react";
+import SearchIcon from "./components/icons/outline/search.svg?react";
+import TrashIcon from "./components/icons/outline/trash.svg?react";
+import BoxIcon from "./components/icons/outline/box.svg?react";
+import ToolsIcon from "./components/icons/outline/tools.svg?react";
+import PhotoIcon from "./components/icons/outline/photo.svg?react";
+import CompassIcon from "./components/icons/outline/compass.svg?react";
+import BellIcon from "./components/icons/outline/bell.svg?react";
+import ConfettiIcon from "./components/icons/outline/confetti.svg?react";
+import PaletteIcon from "./components/icons/outline/palette.svg?react";
+import FlaskIcon from "./components/icons/outline/flask.svg?react";
+import RoadIcon from "./components/icons/outline/road.svg?react";
+import TagIcon from "./components/icons/outline/tag.svg?react";
+import BoltIcon from "./components/icons/outline/bolt.svg?react";
+import HelpIcon from "./components/icons/outline/help.svg?react";
+import ClipboardIcon from "./components/icons/outline/clipboard-text.svg?react";
+import LockIcon from "./components/icons/outline/lock.svg?react";
+import CheckIcon from "./components/icons/outline/check.svg?react";
+import SettingsIcon from "./components/icons/outline/settings.svg?react";
+import AlertTriangleIcon from "./components/icons/outline/alert-triangle.svg?react";
+import StarIcon from "./components/icons/outline/star.svg?react";
+import PencilIcon from "./components/icons/outline/pencil.svg?react";
 
 type PageRendererProps = {
   path: string;
@@ -21,9 +61,7 @@ const PageSection = ({ title, badge, children }: SectionProps) => (
   <section className="card page-card">
     <div className="card-header">
       <div className="card-title">
-        <span role="img" aria-hidden="true">
-          📄
-        </span>
+        <FileDescriptionIcon className="icon-inline icon-muted" aria-hidden="true" width={18} height={18} />
         {title}
       </div>
       {badge}
@@ -67,8 +105,8 @@ const HomePage = () => (
   <div className="page-shell">
     <PageHero
       title="Blacklink Accounts"
-      subtitle="Legacy Accounts experience running inside Accounts 4.0."
-      badge={<Badge variant="warning">Port</Badge>}
+      subtitle="Accounts workspace running inside the 4.0 shell."
+      badge={<Badge variant="warning">Beta</Badge>}
       ctas={
         <>
           <Button>Open dashboard</Button>
@@ -77,16 +115,14 @@ const HomePage = () => (
       }
     />
     <div className="grid grid-3 layout-bottom">
-      <PageSection title="Quick links" badge={<Badge variant="info">Legacy</Badge>}>
+      <PageSection title="Quick links" badge={<Badge variant="info">Navigation</Badge>}>
         <div className="pill-row">
           <span className="pill">Dashboard</span>
           <span className="pill pill-success">Profile</span>
           <span className="pill pill-ultra">Settings</span>
           <span className="pill pill-success">Subscriptions</span>
         </div>
-        <p className="theme-footnote">
-          Legacy URLs: /dashboard, /profile, /settings, /subscription, /beta, /about.
-        </p>
+        <p className="theme-footnote">Key URLs: /dashboard, /profile, /settings, /subscription, /beta, /about.</p>
       </PageSection>
       <PageSection title="Status" badge={<Badge variant="success">Operational</Badge>}>
         <div className="stat-grid">
@@ -103,7 +139,7 @@ const HomePage = () => (
         </div>
       </PageSection>
       <PageSection title="Beta notes" badge={<Badge variant="warning">Beta</Badge>}>
-        <p className="theme-footnote">Strict 1:1 port. No new features in this phase.</p>
+        <p className="theme-footnote">No additional features in this phase.</p>
       </PageSection>
     </div>
   </div>
@@ -155,10 +191,10 @@ const DashboardContent = () => {
   const quickLaunchApps = quickLaunch.length
     ? quickLaunch
     : [
-        { id: "nova", name: "Nova", url: "https://nova.blacklink.app", icon: "🚀" },
-        { id: "admin", name: "Admin", url: "https://admin.blacklink.app", icon: "🛡️" },
-        { id: "docs", name: "Docs", url: "https://docs.blacklink.app", icon: "📘" },
-        { id: "support", name: "Support", url: "https://support.blacklink.app", icon: "🆘" },
+        { id: "nova", name: "Nova", url: "https://nova.blacklink.app", icon: "rocket" },
+        { id: "admin", name: "Admin", url: "https://admin.blacklink.app", icon: "shield" },
+        { id: "docs", name: "Docs", url: "https://docs.blacklink.app", icon: "book" },
+        { id: "support", name: "Support", url: "https://support.blacklink.app", icon: "support" },
       ];
   const [search, setSearch] = React.useState("");
   const [showFavorites, setShowFavorites] = React.useState(false);
@@ -175,7 +211,7 @@ const DashboardContent = () => {
     if (!name) return;
     const url = window.prompt("App URL");
     if (!url) return;
-    await addQuickLaunch({ name, url, icon: "⚡", favorite: false });
+    await addQuickLaunch({ name, url, icon: "bolt", favorite: false });
   };
 
   const handleEditApp = async (app: QuickLaunchApp) => {
@@ -193,6 +229,15 @@ const DashboardContent = () => {
   const handleToggleFavorite = async (app: QuickLaunchApp) => {
     await updateQuickLaunch(app.id, { favorite: !app.favorite });
   };
+
+  const groupedApps = filteredApps.reduce<Record<string, QuickLaunchApp[]>>((acc, app) => {
+    const key = (app.group as string | undefined) || "General";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(app);
+    return acc;
+  }, {});
+
+  const groupNames = Object.keys(groupedApps).sort((a, b) => a.localeCompare(b));
 
   return (
     <div className="page-shell">
@@ -212,14 +257,16 @@ const DashboardContent = () => {
         </div>
         <div className="release-banner">
           <span className="release-badge">Beta</span>
-          <span className="release-note">Strict port of Accounts-Old. No new features enabled.</span>
+          <span className="release-note">Some areas are still in active development.</span>
         </div>
       </header>
         <PageSection title="QuickLaunch" badge={<Badge variant="info">Accounts-Old</Badge>}>
         <div className="quicklaunch">
           <div className="quicklaunch-header">
             <div className="quicklaunch-title">
-              <div className="quicklaunch-icon">⚡</div>
+              <div className="quicklaunch-icon">
+                <BoltIcon className="icon-inline" aria-hidden="true" width={24} height={24} />
+              </div>
               QuickLaunch
             </div>
             <Button size="sm" type="button" onClick={handleAddApp}>
@@ -228,7 +275,9 @@ const DashboardContent = () => {
           </div>
           <div className="quicklaunch-toolbar">
             <div className="search-apps">
-              <span className="search-icon">🔎</span>
+              <span className="search-icon" aria-hidden="true">
+                <SearchIcon className="icon-inline icon-muted" width={16} height={16} />
+              </span>
               <input
                 type="search"
                 aria-label="Search quicklaunch apps"
@@ -259,56 +308,103 @@ const DashboardContent = () => {
             </div>
           </div>
           <div className="apps-grid">
-            {filteredApps.map((app) => (
-              <a key={app.name} className="app-card" href={app.url} target="_blank" rel="noreferrer">
-                <div className="app-icon">{app.icon}</div>
-                <div className="app-name">{app.name}</div>
-                <div className="app-url">{app.url}</div>
-                <div className="app-actions">
-                  <button
-                    className="app-action-btn favorite"
-                    title="Favorite"
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleToggleFavorite(app);
-                    }}
-                  >
-                    ★
-                  </button>
-                  <button
-                    className="app-action-btn"
-                    title="Edit"
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleEditApp(app);
-                    }}
-                  >
-                    ✏️
-                  </button>
-                  <button
-                    className="app-action-btn"
-                    title="Delete"
-                    type="button"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleDeleteApp(app);
-                    }}
-                  >
-                    🗑️
-                  </button>
-                </div>
-                {app.favorite ? (
-                  <span className="usage-chip">
-                    <i>★</i> Favorite
-                  </span>
-                ) : null}
-              </a>
+            {groupNames.map((group) => (
+              <div key={group} className="app-group">
+                <div className="app-group-header">{group}</div>
+                {groupedApps[group].map((app) => {
+                  const iconName = app.icon || "bolt";
+                  const iconEl =
+                    iconName === "rocket" ? (
+                      <RocketIcon className="icon-inline" aria-hidden="true" />
+                    ) : iconName === "shield" ? (
+                      <ShieldIcon className="icon-inline" aria-hidden="true" />
+                    ) : iconName === "book" ? (
+                      <BookIcon className="icon-inline" aria-hidden="true" />
+                    ) : iconName === "support" ? (
+                      <HelpIcon className="icon-inline" aria-hidden="true" />
+                    ) : (
+                      <BoltIcon className="icon-inline" aria-hidden="true" />
+                    );
+
+                  return (
+                    <a key={app.id} className="app-card" href={app.url} target="_blank" rel="noreferrer">
+                      <div
+                        className="app-icon"
+                        style={app.color ? { background: app.color } : undefined}
+                      >
+                        {iconEl}
+                      </div>
+                      <div className="app-name">{app.name}</div>
+                      <div className="app-url">{app.url}</div>
+                      <div className="app-actions">
+                        <button
+                          className="app-action-btn favorite"
+                          title="Favorite"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleToggleFavorite(app);
+                          }}
+                        >
+                          <StarIcon
+                            className="icon-inline icon-warning"
+                            aria-hidden="true"
+                            width={14}
+                            height={14}
+                          />
+                        </button>
+                        <button
+                          className="app-action-btn"
+                          title="Edit"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleEditApp(app);
+                          }}
+                        >
+                          <PencilIcon
+                            className="icon-inline icon-muted"
+                            aria-hidden="true"
+                            width={14}
+                            height={14}
+                          />
+                        </button>
+                        <button
+                          className="app-action-btn"
+                          title="Delete"
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteApp(app);
+                          }}
+                        >
+                          <TrashIcon
+                            className="icon-inline icon-muted"
+                            aria-hidden="true"
+                            width={14}
+                            height={14}
+                          />
+                        </button>
+                      </div>
+                      {app.favorite ? (
+                        <span className="usage-chip">
+                          <StarIcon
+                            className="icon-inline icon-warning"
+                            aria-hidden="true"
+                            width={12}
+                            height={12}
+                          />
+                          Favorite
+                        </span>
+                      ) : null}
+                    </a>
+                  );
+                })}
+              </div>
             ))}
           </div>
         </div>
-        <p className="theme-footnote">Legacy quicklaunch ported; hook to product_pulse/quicklaunch.</p>
+        <p className="theme-footnote">QuickLaunch shortcuts are stored in product_pulse/quicklaunch.</p>
       </PageSection>
     </div>
   );
@@ -496,7 +592,9 @@ const ProfilePage = () => {
 
       <section className="profile-section">
         <div className="profile-section-title">
-          <div className="profile-section-icon">✨</div>
+          <div className="profile-section-icon">
+            <ConfettiIcon className="icon-inline" aria-hidden="true" />
+          </div>
           Features
         </div>
         <div className="profile-feature-grid">
@@ -526,7 +624,9 @@ const ProfilePage = () => {
 
       <section className="profile-section">
         <div className="profile-section-title">
-          <div className="profile-section-icon">📦</div>
+          <div className="profile-section-icon">
+            <BoxIcon className="icon-inline" aria-hidden="true" />
+          </div>
           QuickLaunch favorites
         </div>
         <div className="profile-app-list">
@@ -536,7 +636,9 @@ const ProfilePage = () => {
             apps.map((app, index) => (
               <div key={app.id} className="profile-app-item">
                 <div className="profile-app-primary">
-                  <div className="app-icon">{app.icon || "⚡"}</div>
+                  <div className="app-icon">
+                    <BoltIcon className="icon-inline" aria-hidden="true" />
+                  </div>
                   <div className="profile-app-details">
                     <span>{app.name}</span>
                     <span className="profile-app-meta">{app.url}</span>
@@ -551,7 +653,9 @@ const ProfilePage = () => {
 
       <section className="profile-section">
         <div className="profile-section-title">
-          <div className="profile-section-icon">🛡️</div>
+          <div className="profile-section-icon">
+            <ShieldIcon className="icon-inline" aria-hidden="true" />
+          </div>
           Security
         </div>
         <div className="security-grid">
@@ -576,7 +680,9 @@ const ProfilePage = () => {
       {profile.isAdmin ? (
         <section className="profile-section">
           <div className="profile-section-title">
-            <div className="profile-section-icon">🛠️</div>
+            <div className="profile-section-icon">
+              <ToolsIcon className="icon-inline" aria-hidden="true" />
+            </div>
             Admin
           </div>
           <div className="profile-admin-grid">
@@ -591,6 +697,373 @@ const ProfilePage = () => {
           </div>
         </section>
       ) : null}
+    </div>
+  );
+};
+
+type ThreadSummary = {
+  id: string;
+  name: string;
+  handle: string;
+  verified?: boolean;
+  preview?: string;
+  badge?: string;
+  variant?: "info" | "success" | "warning" | "danger";
+  unread?: boolean;
+  updatedAt?: unknown;
+};
+
+type ChatMessage = {
+  id: string;
+  content: string;
+  senderId: string;
+  createdAt?: unknown;
+};
+
+const MessagesPage = () => {
+  const { profile, user } = useAuth();
+  const [threads, setThreads] = React.useState<ThreadSummary[]>([]);
+  const [unreadThreads, setUnreadThreads] = React.useState<ThreadSummary[]>([]);
+  const [messages, setMessages] = React.useState<ChatMessage[]>([]);
+  const [activeThreadId, setActiveThreadId] = React.useState<string | null>(null);
+  const [handleInput, setHandleInput] = React.useState("@blacklink");
+  const [bodyInput, setBodyInput] = React.useState("");
+  const [sendStatus, setSendStatus] = React.useState<string | null>(null);
+
+  React.useEffect(() => {
+    if (!user) {
+      setThreads([]);
+      setUnreadThreads([]);
+      return;
+    }
+
+    const convRef = collection(db, "conversations");
+    const q = query(
+      convRef,
+      where("participants", "array-contains", user.uid),
+      orderBy("lastMessageAt", "desc"),
+      limit(50),
+    );
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const nextThreads: ThreadSummary[] = snap.docs.map((d) => {
+          const data = d.data();
+          const participants = (data.participants as string[]) || [];
+          const otherId = participants.find((p) => p !== user.uid) || user.uid;
+          const handles = (data.handles as Record<string, string> | undefined) || {};
+          const displayHandle = handles[otherId] || handles[user.uid] || `@${otherId.slice(0, 6)}`;
+          const lastMessage = (data.lastMessage || {}) as { content?: string };
+          return {
+            id: d.id,
+            name: displayHandle,
+            handle: displayHandle,
+            verified: false,
+            preview: (lastMessage.content as string) || "",
+            badge: undefined,
+            variant: "info",
+            unread: false,
+            updatedAt: data.lastMessageAt,
+          };
+        });
+        setThreads(nextThreads);
+        setUnreadThreads(nextThreads);
+      },
+      (err) => {
+        console.error("[Messages] Failed to load inbox", err);
+        setThreads([]);
+        setUnreadThreads([]);
+      },
+    );
+    return () => unsub();
+  }, [user]);
+
+  React.useEffect(() => {
+    if (!user || !activeThreadId) {
+      setMessages([]);
+      return;
+    }
+    const msgsRef = collection(db, "conversations", activeThreadId, "messages");
+    const q = query(msgsRef, orderBy("createdAt", "asc"), limit(100));
+    const unsub = onSnapshot(
+      q,
+      (snap) => {
+        const nextMessages: ChatMessage[] = snap.docs.map((d) => {
+          const data = d.data();
+          return {
+            id: d.id,
+            content: (data.content as string) || "",
+            senderId: (data.senderId as string) || "",
+            createdAt: data.createdAt,
+          };
+        });
+        setMessages(nextMessages);
+      },
+      (err) => {
+        console.error("[Messages] Failed to load thread", err);
+        setMessages([]);
+      },
+    );
+    return () => unsub();
+  }, [user, activeThreadId]);
+
+  const resolveHandle = async (handleRaw: string) => {
+    const normalized = handleRaw.trim().replace(/^@/, "").toLowerCase();
+    const snap = await getDoc(doc(db, "usernames", normalized));
+    if (!snap.exists()) {
+      throw new Error("Handle not found");
+    }
+    const data = snap.data() as { uid?: string };
+    if (!data.uid) throw new Error("Handle missing uid");
+    return { uid: data.uid, handle: `@${normalized}` };
+  };
+
+  const conversationIdFor = (uidA: string, uidB: string) => [uidA, uidB].sort().join("--");
+
+  const ensureConversation = async (peerUid: string, peerHandle: string) => {
+    if (!user) throw new Error("Not signed in");
+    const conversationId = conversationIdFor(user.uid, peerUid);
+    const conversationRef = doc(db, "conversations", conversationId);
+    const snap = await getDoc(conversationRef);
+    if (!snap.exists()) {
+      const handles: Record<string, string> = {
+        [user.uid]: profile.username ? `@${profile.username}` : profile.email,
+        [peerUid]: peerHandle,
+      };
+      await setDoc(conversationRef, {
+        participants: [user.uid, peerUid],
+        handles,
+        createdAt: serverTimestamp(),
+        lastMessage: null,
+        lastMessageAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+    }
+    return conversationId;
+  };
+
+  const sendMessage = async () => {
+    if (!user) {
+      setSendStatus("Sign in to send a message.");
+      return;
+    }
+    const text = bodyInput.trim();
+    if (!text) {
+      setSendStatus("Message cannot be empty.");
+      return;
+    }
+    setSendStatus("Sending…");
+    try {
+      const { uid: peerUid, handle: peerHandle } = await resolveHandle(handleInput);
+      const conversationId = await ensureConversation(peerUid, peerHandle);
+      const messageRef = collection(db, "conversations", conversationId, "messages");
+      await addDoc(messageRef, {
+        senderId: user.uid,
+        content: text,
+        createdAt: serverTimestamp(),
+      });
+      const conversationRef = doc(db, "conversations", conversationId);
+      await updateDoc(conversationRef, {
+        lastMessage: { senderId: user.uid, content: text },
+        lastMessageAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
+      setActiveThreadId(conversationId);
+      setBodyInput("");
+      setSendStatus("Sent");
+    } catch (err) {
+      console.error("[Messages] send failed", err);
+      setSendStatus((err as Error).message || "Failed to send.");
+    }
+  };
+
+  return (
+    <div className="page-shell">
+      <PageHero
+        title="Messages"
+        subtitle="Preview of the conversation workspace—free for every Blacklink user."
+        badge={<Badge variant="warning">Beta</Badge>}
+      />
+      <div className="messages-layout">
+        <aside className="messages-sidebar">
+          <div className="messages-profile-card">
+            <div className="messages-profile-avatar">{profile.displayName.slice(0, 2).toUpperCase()}</div>
+            <div>
+              <p className="eyebrow">{profile.username || profile.email}</p>
+              <p className="hero-subtitle" style={{ marginBottom: 0 }}>
+                Messages are free and follow your ULTRA status automatically.
+              </p>
+            </div>
+          </div>
+
+          <div className="messages-send-card">
+            <div>
+              <h3 className="card-title" style={{ marginBottom: "0.35rem" }}>
+                Send a message
+              </h3>
+              <p className="messages-empty-cta">
+                Type a handle using the @ prefix. Messages write to Firestore; delivery to others arrives once mirrored.
+              </p>
+            </div>
+            <div className="form-group">
+              <label htmlFor="messages-handle">Recipient handle</label>
+              <input
+                id="messages-handle"
+                placeholder="@handle"
+                value={handleInput}
+                onChange={(e) => setHandleInput(e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="messages-body">Message</label>
+              <textarea
+                id="messages-body"
+                placeholder="Type your note…"
+                rows={3}
+                value={bodyInput}
+                onChange={(e) => setBodyInput(e.target.value)}
+              />
+            </div>
+            <Button onClick={sendMessage} disabled={!user}>
+              Send
+            </Button>
+            {sendStatus ? <p className="theme-footnote">{sendStatus}</p> : null}
+          </div>
+
+          <div className="card" style={{ gap: "0.75rem" }}>
+            <div className="card-header">
+              <div className="card-title">Inbox</div>
+              <Badge variant="success">Preview</Badge>
+            </div>
+            <div className="stat-grid">
+              <div className="stat-block">
+                <p className="eyebrow">Unread</p>
+                <p className="stat-value">{unreadThreads.length}</p>
+                <p className="stat-trend">Waiting for you</p>
+              </div>
+              <div className="stat-block">
+                <p className="eyebrow">Total</p>
+                <p className="stat-value">{threads.length}</p>
+                <p className="stat-trend">Every thread visible</p>
+              </div>
+            </div>
+            <div className="inbox-list">
+              {unreadThreads.map((thread) => (
+                <div key={thread.id} className="inbox-entry">
+                  <span>
+                    {thread.name}
+                    {thread.verified ? (
+                      <span className="verified-pill small">
+                        <CheckIcon className="icon-inline icon-success" aria-hidden="true" width={12} height={12} />
+                        Verified
+                      </span>
+                    ) : null}
+                  </span>
+                  <span>{thread.handle}</span>
+                </div>
+              ))}
+              {unreadThreads.length === 0 ? <span>No unread conversations.</span> : null}
+            </div>
+            <p className="theme-footnote">Inbox summary mirrors Accounts-Old counts. Hooks coming later.</p>
+          </div>
+
+          <div className="card" style={{ gap: "0.75rem" }}>
+            <div className="card-header">
+              <div className="card-title">All conversations</div>
+              <Badge variant="info">Mock</Badge>
+            </div>
+            <div className="conversation-list">
+              {threads.map((thread) => (
+                <button
+                  key={thread.id}
+                  className={`conversation-item ${activeThreadId === thread.id ? "active" : ""}`}
+                  type="button"
+                  onClick={() => setActiveThreadId(thread.id)}
+                >
+                  <div style={{ flex: 1 }}>
+                    <div className="conversation-title-row">
+                      <strong>{thread.name}</strong>
+                      {thread.verified ? (
+                        <span className="verified-pill small">
+                          <CheckIcon className="icon-inline icon-success" aria-hidden="true" width={12} height={12} />
+                          Verified
+                        </span>
+                      ) : null}
+                      <span className="conversation-meta">{thread.handle}</span>
+                      {thread.unread ? <span className="unread-dot" aria-label="Unread message indicator" /> : null}
+                    </div>
+                    <p className="conversation-meta">{thread.preview}</p>
+                  </div>
+                  <Badge variant={thread.variant}>{thread.badge}</Badge>
+                </button>
+              ))}
+              {threads.length === 0 ? <p className="theme-footnote">No conversations yet. Send one to get started.</p> : null}
+            </div>
+            <p className="theme-footnote">All threads are rendered by default until backend wiring lands.</p>
+          </div>
+        </aside>
+
+        <section className="messages-chat-card">
+          <div className="chat-header">
+            {activeThreadId ? (
+              <div>
+                <strong>Conversation</strong>
+                <p className="messages-empty-cta">Messages are stored in Firestore. Delivery to peers depends on mirrors.</p>
+              </div>
+            ) : (
+              <div>
+                <strong>No conversation selected</strong>
+                <p className="messages-empty-cta">Choose a thread from the inbox to load messages.</p>
+              </div>
+            )}
+            <Badge variant="info">Preview</Badge>
+          </div>
+          {activeThreadId ? (
+            <>
+              <div className="chat-body">
+                {messages.length === 0 ? <p className="messages-empty-cta">No messages yet. Start the conversation.</p> : null}
+                {messages.map((message) => (
+                  <div
+                    key={message.id}
+                    className="chat-message"
+                    style={{ alignSelf: message.senderId === user?.uid ? "flex-end" : "flex-start" }}
+                  >
+                    <strong>{message.senderId === user?.uid ? "You" : "Partner"}</strong>
+                    {message.content}
+                  </div>
+                ))}
+              </div>
+              <div className="chat-footer">
+                <p className="messages-empty-cta">Messages persist in Firestore. Replies from others require their mirrors.</p>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="chat-body empty-state">
+                <div className="chat-sample" aria-live="polite">
+                  <div className="chat-sample-header">
+                    <span>Blacklink</span>
+                    <span className="verified-pill">
+                      <CheckIcon className="icon-inline icon-success" aria-hidden="true" width={12} height={12} />
+                      Verified
+                    </span>
+                    <span className="conversation-meta">@blacklink</span>
+                  </div>
+                  <p>Welcome to Blacklink Messages! This chat is open to everyone—free for all tiers.</p>
+                </div>
+                <div className="chat-message">
+                  <strong>Blacklink</strong>
+                  We will mirror Accounts-Old conversations here. Use the Send a message field to draft a note to @support,
+                  @billing, or any teammate once the APIs are ready.
+                </div>
+              </div>
+              <div className="chat-footer">
+                <p className="messages-empty-cta">Live conversations arrive later. Preview mode only.</p>
+              </div>
+            </>
+          )}
+        </section>
+      </div>
     </div>
   );
 };
@@ -673,7 +1146,7 @@ const SettingsPage = () => {
     <div className="profile-page-container">
       <div className="profile-header-card">
         <div className="profile-info">
-          <div className="profile-avatar-legacy">
+          <div className="profile-avatar">
             {profile.photoURL ? (
               <img src={profile.photoURL} alt={profile.displayName} referrerPolicy="no-referrer" />
             ) : (
@@ -681,7 +1154,7 @@ const SettingsPage = () => {
             )}
           </div>
           <div className="profile-details">
-            <div className="profile-name-legacy">
+            <div className="profile-name">
               Settings
               <span className={`tier-badge ${profile.tier.toUpperCase().includes("ULTRA") ? "ultra-plus" : "ultra"}`}>
                 {formatTier(profile.tier)}
@@ -694,7 +1167,9 @@ const SettingsPage = () => {
 
       <section className="profile-section">
         <div className="profile-section-title">
-          <div className="profile-section-icon">⚙️</div>
+          <div className="profile-section-icon">
+            <SettingsIcon className="icon-inline" aria-hidden="true" />
+          </div>
           General
         </div>
         <form className="profile-info-grid" onSubmit={handleUsernameSave}>
@@ -740,7 +1215,9 @@ const SettingsPage = () => {
 
       <section className="profile-section">
         <div className="profile-section-title">
-          <div className="profile-section-icon">🖼️</div>
+          <div className="profile-section-icon">
+            <PhotoIcon className="icon-inline" aria-hidden="true" />
+          </div>
           Profile photo
         </div>
         <form className="profile-info-grid" onSubmit={handlePhotoUrlSave}>
@@ -836,7 +1313,9 @@ const SettingsPage = () => {
 
       <section className="profile-section">
         <div className="profile-section-title">
-          <div className="profile-section-icon">🧭</div>
+          <div className="profile-section-icon">
+            <CompassIcon className="icon-inline" aria-hidden="true" />
+          </div>
           Accessibility
         </div>
         <div className="profile-info-grid">
@@ -880,7 +1359,9 @@ const SettingsPage = () => {
 
       <section className="profile-section">
         <div className="profile-section-title">
-          <div className="profile-section-icon">🔔</div>
+          <div className="profile-section-icon">
+            <BellIcon className="icon-inline" aria-hidden="true" />
+          </div>
           Notifications
         </div>
         <div className="profile-info-grid">
@@ -922,7 +1403,9 @@ const SettingsPage = () => {
 
       <section className="profile-section">
         <div className="profile-section-title">
-          <div className="profile-section-icon">🛡️</div>
+          <div className="profile-section-icon">
+            <ShieldIcon className="icon-inline" aria-hidden="true" />
+          </div>
           Security & Privacy
         </div>
         <div className="profile-info-grid">
@@ -943,7 +1426,9 @@ const SettingsPage = () => {
 
       <section className="profile-section">
         <div className="profile-section-title">
-          <div className="profile-section-icon">⚡</div>
+          <div className="profile-section-icon">
+            <BoltIcon className="icon-inline" aria-hidden="true" />
+          </div>
           QuickLaunch settings
         </div>
         <p className="profile-section-note">Manage apps from the dashboard QuickLaunch section.</p>
@@ -1021,8 +1506,8 @@ const SubscriptionPage = () => {
     <div className="page-shell">
       <div className="hero card">
         <div className="release-chip">
-          <span role="img" aria-hidden="true">
-            🎉
+          <span aria-hidden="true">
+            <ConfettiIcon className="icon-inline icon-accent" width={16} height={16} />
           </span>
           Accounts 3.9
         </div>
@@ -1055,9 +1540,7 @@ const SubscriptionPage = () => {
             <ul className="plan-features">
               {plan.features.map((feat) => (
                 <li key={feat}>
-                  <span role="img" aria-hidden="true">
-                    ✅
-                  </span>
+                  <CheckIcon className="icon-inline icon-success" aria-hidden="true" width={16} height={16} />
                   {feat}
                 </li>
               ))}
@@ -1089,21 +1572,15 @@ const SubscriptionPage = () => {
       >
         <div className="comparison-grid">
           <div className="comparison-pill">
-            <span role="img" aria-hidden="true">
-              🛡️
-            </span>
+            <ShieldIcon className="icon-inline icon-accent" aria-hidden="true" width={16} height={16} />
             Employee / District perks honored for ULTRA+
           </div>
           <div className="comparison-pill">
-            <span role="img" aria-hidden="true">
-              ⚡
-            </span>
+            <BoltIcon className="icon-inline icon-warning" aria-hidden="true" width={16} height={16} />
             Fast activation—no downtime
           </div>
           <div className="comparison-pill">
-            <span role="img" aria-hidden="true">
-              🎨
-            </span>
+            <PaletteIcon className="icon-inline icon-accent" aria-hidden="true" width={16} height={16} />
             Premium themes unlocked
           </div>
         </div>
@@ -1161,13 +1638,14 @@ const BetaPage = () => (
     <div className="beta-hero">
       <div className="beta-hero-content">
         <div className="pill">
-          <i aria-hidden="true">🧪</i> Blacklink Beta
+          <FlaskIcon className="icon-inline icon-accent" aria-hidden="true" width={16} height={16} /> Blacklink Beta
         </div>
         <h1>
-          <i aria-hidden="true">🚀</i> Try upcoming Blacklink experiences
+          <RocketIcon className="icon-inline icon-accent" aria-hidden="true" width={18} height={18} /> Try upcoming
+          Blacklink experiences
         </h1>
         <p>
-          Opt in to the Beta program to preview releases and keep the legacy flows stable. Parity first, no new features.
+          Opt in to the Beta program to preview releases while keeping core flows stable. Parity first, no new features.
         </p>
         <div className="component-row">
           <Button size="sm">Opt in to Beta</Button>
@@ -1180,24 +1658,30 @@ const BetaPage = () => (
     <div className="beta-grid">
       <div className="beta-card">
         <h2>
-          <span aria-hidden="true">📋</span> Preferences
+          <span aria-hidden="true">
+            <ClipboardIcon className="icon-inline icon-accent" width={16} height={16} />
+          </span>
+          Preferences
         </h2>
         <div className="beta-list">
           <div className="beta-card">
             <h3>
-              <span aria-hidden="true">✅</span> Accounts 4.0 UI and settings
+              <CheckIcon className="icon-inline icon-success" aria-hidden="true" width={16} height={16} />
+              Accounts 4.0 UI and settings
             </h3>
             <p className="muted">Early access to settings + privacy center updates.</p>
           </div>
           <div className="beta-card">
             <h3>
-              <span aria-hidden="true">🔒</span> Privacy & data controls
+              <LockIcon className="icon-inline icon-muted" aria-hidden="true" width={16} height={16} /> Privacy &
+              data controls
             </h3>
             <p className="muted">Data controls, permissions, audit surfaces.</p>
           </div>
           <div className="beta-card">
             <h3>
-              <span aria-hidden="true">🎨</span> Themes & accessibility
+              <PaletteIcon className="icon-inline icon-accent" aria-hidden="true" width={16} height={16} /> Themes &
+              accessibility
             </h3>
             <p className="muted">Themes, accessibility tweaks, and layout polish.</p>
           </div>
@@ -1205,26 +1689,29 @@ const BetaPage = () => (
       </div>
       <div className="beta-card">
         <h2>
-          <span aria-hidden="true">🧭</span> Beta tracks
+          <span aria-hidden="true">
+            <CompassIcon className="icon-inline icon-accent" aria-hidden="true" width={16} height={16} />
+          </span>
+          Beta tracks
         </h2>
         <div className="beta-meta">
           <span className="status upcoming">
-            <i aria-hidden="true">🛣️</i> Upcoming
+            <RoadIcon className="icon-inline icon-muted" aria-hidden="true" width={16} height={16} /> Upcoming
           </span>
           <div className="tags">
             <span className="tag">
-              <i aria-hidden="true">🏷️</i> Accounts
+              <TagIcon className="icon-inline icon-muted" aria-hidden="true" width={12} height={12} /> Accounts
             </span>
             <span className="tag">
-              <i aria-hidden="true">🏷️</i> UI
+              <TagIcon className="icon-inline icon-muted" aria-hidden="true" width={12} height={12} /> UI
             </span>
             <span className="tag">
-              <i aria-hidden="true">🏷️</i> Settings
+              <TagIcon className="icon-inline icon-muted" aria-hidden="true" width={12} height={12} /> Settings
             </span>
           </div>
         </div>
         <p className="muted">
-          Accounts 4.0 preview: settings, theme system, privacy center, organized user subcollections. Running with legacy parity.
+          Accounts 4.0 preview: settings, theme system, privacy center, organized user subcollections.
         </p>
       </div>
     </div>
@@ -1240,7 +1727,10 @@ const AdminPage = () => (
     />
     <PageSection title="Controls" badge={<Badge variant="warning">Caution</Badge>}>
       <div className="component-row">
-        <Button variant="danger" icon="⚡">
+        <Button
+          variant="danger"
+          icon={<BoltIcon className="icon-inline icon-warning" aria-hidden="true" width={16} height={16} />}
+        >
           Suspend org
         </Button>
         <Button variant="secondary">Rotate secrets</Button>
@@ -1285,8 +1775,8 @@ const LogoutPage = () => {
 
 const NotificationsPage = () => (
   <div className="page-shell">
-    <PageHero title="Notifications" subtitle="Legacy notifications settings" badge={<Badge>Legacy</Badge>} />
-    <PageSection title="Email & system alerts" badge={<Badge variant="info">Accounts-Old</Badge>}>
+    <PageHero title="Notifications" subtitle="Notification preferences" badge={<Badge>Settings</Badge>} />
+    <PageSection title="Email & system alerts" badge={<Badge variant="info">Notifications</Badge>}>
       <ul className="list">
         <li>Security alerts</li>
         <li>Billing alerts</li>
@@ -1298,18 +1788,18 @@ const NotificationsPage = () => (
 
 const SecurityPage = () => (
   <div className="page-shell">
-    <PageHero title="Security" subtitle="Legacy security controls" badge={<Badge>Legacy</Badge>} />
-    <PageSection title="Devices & sessions" badge={<Badge variant="info">Accounts-Old</Badge>}>
-      <p className="theme-footnote">List active sessions, devices, login history (legacy parity placeholder).</p>
+    <PageHero title="Security" subtitle="Security controls" badge={<Badge>Security</Badge>} />
+    <PageSection title="Devices & sessions" badge={<Badge variant="info">Sessions</Badge>}>
+      <p className="theme-footnote">List active sessions, devices, and login history.</p>
     </PageSection>
   </div>
 );
 
 const DevicesPage = () => (
   <div className="page-shell">
-    <PageHero title="Devices" subtitle="Trusted devices and removal" badge={<Badge>Legacy</Badge>} />
-    <PageSection title="Device list" badge={<Badge variant="info">Accounts-Old</Badge>}>
-      <p className="theme-footnote">Legacy device management UI to be ported.</p>
+    <PageHero title="Devices" subtitle="Trusted devices and removal" badge={<Badge>Devices</Badge>} />
+    <PageSection title="Device list" badge={<Badge variant="info">Devices</Badge>}>
+      <p className="theme-footnote">Device management UI.</p>
     </PageSection>
   </div>
 );
@@ -1598,8 +2088,10 @@ const QuickLaunchPage = () => {
   const [draft, setDraft] = React.useState<Omit<QuickLaunchApp, "id">>({
     name: "",
     url: "",
-    icon: "⚡",
+    icon: "bolt",
     favorite: false,
+    group: "General",
+    color: "",
   });
   const [editingId, setEditingId] = React.useState<string | null>(null);
 
@@ -1619,7 +2111,7 @@ const QuickLaunchPage = () => {
     } else {
       await addQuickLaunch(draft);
     }
-    setDraft({ name: "", url: "", icon: "⚡", favorite: false });
+    setDraft({ name: "", url: "", icon: "bolt", favorite: false });
     setEditingId(null);
   };
 
@@ -1628,15 +2120,17 @@ const QuickLaunchPage = () => {
     setDraft({
       name: app.name,
       url: app.url,
-      icon: app.icon || "⚡",
+      icon: app.icon || "bolt",
       favorite: Boolean(app.favorite),
+      group: app.group || "General",
+      color: app.color || "",
     });
   };
 
   return (
     <div className="page-shell">
-      <PageHero title="QuickLaunch" subtitle="Manage shortcuts from Accounts-Old" badge={<Badge>Legacy</Badge>} />
-      <PageSection title="Apps" badge={<Badge variant="info">Accounts-Old</Badge>}>
+      <PageHero title="QuickLaunch" subtitle="Manage shortcuts" badge={<Badge>Shortcuts</Badge>} />
+      <PageSection title="Apps" badge={<Badge variant="info">QuickLaunch</Badge>}>
         <div className="quicklaunch">
           <form className="quicklaunch-form" onSubmit={handleSubmit}>
             <div className="form-row">
@@ -1670,8 +2164,30 @@ const QuickLaunchPage = () => {
               <input
                 id="ql-icon"
                 value={draft.icon}
-                onChange={(e) => setDraft((prev) => ({ ...prev, icon: e.target.value || "⚡" }))}
-                placeholder="⚡"
+                onChange={(e) => setDraft((prev) => ({ ...prev, icon: e.target.value || "bolt" }))}
+                placeholder="bolt"
+              />
+            </div>
+            <div className="form-row">
+              <label className="form-label" htmlFor="ql-group">
+                Group
+              </label>
+              <input
+                id="ql-group"
+                value={draft.group}
+                onChange={(e) => setDraft((prev) => ({ ...prev, group: e.target.value }))}
+                placeholder="General"
+              />
+            </div>
+            <div className="form-row">
+              <label className="form-label" htmlFor="ql-color">
+                Color (optional)
+              </label>
+              <input
+                id="ql-color"
+                type="color"
+                value={draft.color || "#667eea"}
+                onChange={(e) => setDraft((prev) => ({ ...prev, color: e.target.value }))}
               />
             </div>
             <label className={`toggle-switch ${draft.favorite ? "on" : ""}`}>
@@ -1694,7 +2210,7 @@ const QuickLaunchPage = () => {
                   type="button"
                   onClick={() => {
                     setEditingId(null);
-                    setDraft({ name: "", url: "", icon: "⚡", favorite: false });
+                    setDraft({ name: "", url: "", icon: "bolt", favorite: false });
                   }}
                 >
                   Cancel
@@ -1705,7 +2221,9 @@ const QuickLaunchPage = () => {
 
           <div className="quicklaunch-toolbar">
             <div className="search-apps">
-              <span className="search-icon">🔎</span>
+              <span className="search-icon" aria-hidden="true">
+                <SearchIcon className="icon-inline icon-muted" width={16} height={16} />
+              </span>
               <input
                 type="search"
                 aria-label="Search quicklaunch apps"
@@ -1735,7 +2253,9 @@ const QuickLaunchPage = () => {
           <div className="apps-grid">
             {filtered.map((app) => (
               <div key={app.id} className="app-card">
-                <div className="app-icon">{app.icon || "⚡"}</div>
+                <div className="app-icon">
+                  <BoltIcon className="icon-inline" aria-hidden="true" />
+                </div>
                 <div className="app-name">{app.name}</div>
                 <div className="app-url">{app.url}</div>
                 <div className="app-actions">
@@ -1745,7 +2265,7 @@ const QuickLaunchPage = () => {
                     type="button"
                     onClick={() => updateQuickLaunch(app.id, { favorite: !app.favorite })}
                   >
-                    ★
+                    <StarIcon className="icon-inline icon-warning" aria-hidden="true" width={14} height={14} />
                   </button>
                   <button
                     className="app-action-btn"
@@ -1753,7 +2273,7 @@ const QuickLaunchPage = () => {
                     type="button"
                     onClick={() => handleEdit(app)}
                   >
-                    ✏️
+                    <PencilIcon className="icon-inline icon-muted" aria-hidden="true" width={14} height={14} />
                   </button>
                   <button
                     className="app-action-btn"
@@ -1761,12 +2281,13 @@ const QuickLaunchPage = () => {
                     type="button"
                     onClick={() => deleteQuickLaunch(app.id)}
                   >
-                    🗑️
+                    <TrashIcon className="icon-inline icon-muted" aria-hidden="true" width={14} height={14} />
                   </button>
                 </div>
                 {app.favorite ? (
                   <span className="usage-chip">
-                    <i>★</i> Favorite
+                    <StarIcon className="icon-inline icon-warning" aria-hidden="true" width={12} height={12} />
+                    Favorite
                   </span>
                 ) : null}
               </div>
@@ -1787,10 +2308,16 @@ const DevComponentsPage = () => (
         <div className="component-row">
           <Button>Primary</Button>
           <Button variant="secondary">Secondary</Button>
-          <Button variant="success" icon="✅">
+          <Button
+            variant="success"
+            icon={<CheckIcon className="icon-inline icon-success" aria-hidden="true" width={14} height={14} />}
+          >
             Success
           </Button>
-          <Button variant="danger" icon="⚠️">
+          <Button
+            variant="danger"
+            icon={<AlertTriangleIcon className="icon-inline icon-warning" aria-hidden="true" width={14} height={14} />}
+          >
             Danger
           </Button>
         </div>
@@ -1889,31 +2416,31 @@ const AboutPage = () => (
       subtitle="The unified authentication and subscription platform powering Blacklink products with ULTRA tiers and Aero AI."
       badge={<Badge variant="info">About</Badge>}
     />
-    <PageSection title="Current build" badge={<Badge variant="success">Alpha 2 Fix 2</Badge>}>
+    <PageSection title="Current build" badge={<Badge variant="success">Beta 1</Badge>}>
       <div className="build-grid">
         <div className="build-stat">
           <div className="build-stat-label">Version</div>
-          <div className="build-stat-value">4.0 Alpha 2</div>
+          <div className="build-stat-value">4.0 Beta 1</div>
         </div>
         <div className="build-stat">
           <div className="build-stat-label">Build Number</div>
-          <div className="build-stat-value">4.0.PB2.A2-F2.20251117</div>
+          <div className="build-stat-value">4.0.PB1.B1.20251119</div>
         </div>
         <div className="build-stat">
           <div className="build-stat-label">Release Date</div>
-          <div className="build-stat-value">November 17 2025</div>
+          <div className="build-stat-value">November 19 2025</div>
         </div>
         <div className="build-stat">
           <div className="build-stat-label">Status</div>
           <div className="build-stat-value" style={{ color: "var(--success)" }}>
-            Alpha
+            Beta
           </div>
         </div>
       </div>
     </PageSection>
 
-    <PageSection title="What's new in 4.0 Alpha 2" badge={<Badge variant="info">Overview</Badge>}>
-      <p className="theme-footnote">Parity-focus port plus ULTRA+ Theme Mixer and visibility controls.</p>
+    <PageSection title="What's new in 4.0 Beta 1" badge={<Badge variant="info">Overview</Badge>}>
+      <p className="theme-footnote">Focus on matching existing behavior plus ULTRA+ Theme Mixer and visibility controls.</p>
       <ul className="feature-list">
         <li>Accounts-Old parity across dashboard, profile, settings, subscriptions</li>
         <li>Visibility & Privacy center restored with theme mixer</li>
@@ -1926,7 +2453,7 @@ const AboutPage = () => (
       </ul>
     </PageSection>
 
-    <PageSection title="Roadmap" badge={<Badge variant="info">Legacy</Badge>}>
+    <PageSection title="Roadmap" badge={<Badge variant="info">Roadmap</Badge>}>
       <div className="roadmap">
         <div className="roadmap-item">
           <span className="roadmap-version current">v3.9 (Current)</span>
@@ -2000,7 +2527,7 @@ const NotFoundPage = () => (
   <div className="page-shell">
     <PageHero
       title="Not found"
-      subtitle="The path you requested is not mapped yet. Try a legacy URL like /dashboard or /login."
+      subtitle="The path you requested is not mapped yet. Try a URL like /dashboard or /login."
       badge={<Badge variant="danger">404</Badge>}
     />
   </div>
@@ -2014,6 +2541,7 @@ const pages: Record<string, ReactElement> = {
   "/register": <RegisterPage />,
   "/logout": <LogoutPage />,
   "/profile": <ProfilePage />,
+  "/messages": <MessagesPage />,
   "/settings": <SettingsPage />,
   "/settings/notifications": <NotificationsPage />,
   "/settings/security": <SecurityPage />,
