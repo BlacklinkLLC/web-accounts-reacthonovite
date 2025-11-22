@@ -5,6 +5,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useCallback,
 } from "react";
 import {
   User,
@@ -32,6 +33,7 @@ import {
   setDoc,
   updateDoc,
   deleteDoc,
+  type DocumentData,
 } from "firebase/firestore";
 import { useRef } from "react";
 import { auth, db } from "../firebase/client";
@@ -336,7 +338,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
-  const signIn = async (email: string, password: string) => {
+  const signIn = useCallback(async (email: string, password: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -348,9 +350,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const signUp = async (email: string, password: string) => {
+  const signUp = useCallback(async (email: string, password: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -362,9 +364,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogle = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -377,9 +379,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const signInWithClassLink = async () => {
+  const signInWithClassLink = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -392,9 +394,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const setUsername = async (username: string) => {
+  const setUsername = useCallback(async (username: string) => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
     const desired = username.trim();
@@ -446,9 +448,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [profile]);
 
-  const setPhotoUrl = async (url: string) => {
+  const setPhotoUrl = useCallback(async (url: string) => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
     setLoading(true);
@@ -473,57 +475,57 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [profile]);
 
-  const addQuickLaunch = async (payload: Omit<QuickLaunchApp, "id">) => {
+  const addQuickLaunch = useCallback(async (payload: Omit<QuickLaunchApp, "id">) => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
     const colRef = collection(db, "product_pulse", uid, "quicklaunch");
     const docRef = doc(colRef);
-    const record = {
+    const record: Omit<QuickLaunchApp, "id"> & { userId: string; createdAt: unknown } = {
       name: payload.name,
       url: payload.url,
       icon: payload.icon || "bolt",
       favorite: Boolean(payload.favorite),
       group: payload.group || "General",
-      color: payload.color || null,
+      color: payload.color || undefined,
       userId: uid,
       createdAt: serverTimestamp(),
     };
     await setDoc(docRef, record);
     setQuickLaunch((prev) => [...prev, { ...record, id: docRef.id }]);
-  };
+  }, []);
 
-  const updateQuickLaunch = async (id: string, payload: Partial<QuickLaunchApp>) => {
+  const updateQuickLaunch = useCallback(async (id: string, payload: Partial<QuickLaunchApp>) => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
     const docRef = doc(db, "product_pulse", uid, "quicklaunch", id);
-    const update: Partial<QuickLaunchApp & { userId: string }> = {
+    const update: P = {
       ...payload,
       userId: uid,
     };
     delete (update as { id?: string }).id;
-    await updateDoc(docRef, update as any);
+    await updateDoc(docRef, update as DocumentData);
     setQuickLaunch((prev) =>
       prev.map((app) => (app.id === id ? { ...app, ...payload, userId: uid } : app)),
     );
-  };
+  }, []);
 
-  const deleteQuickLaunch = async (id: string) => {
+  const deleteQuickLaunch = useCallback(async (id: string) => {
     if (!auth.currentUser) return;
     const uid = auth.currentUser.uid;
     const docRef = doc(db, "product_pulse", uid, "quicklaunch", id);
     await deleteDoc(docRef);
     setQuickLaunch((prev) => prev.filter((app) => app.id !== id));
-  };
+  }, []);
 
-  const signOutUser = async () => {
+  const signOutUser = useCallback(async () => {
     try {
       await signOut(auth);
     } catch (err) {
       console.error("Sign-out failed", err);
     }
-  };
+  }, []);
 
   const value = useMemo(
     () => ({
@@ -547,7 +549,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       signOutUser,
       statsPermissionDenied,
     }),
-    [user, profile, orgs, stats, quickLaunch, aeroTokens, loading, error, statsPermissionDenied],
+    [
+      user,
+      profile,
+      orgs,
+      stats,
+      quickLaunch,
+      aeroTokens,
+      loading,
+      error,
+      signIn,
+      signUp,
+      signInWithGoogle,
+      signInWithClassLink,
+      addQuickLaunch,
+      updateQuickLaunch,
+      deleteQuickLaunch,
+      setUsername,
+      setPhotoUrl,
+      signOutUser,
+      statsPermissionDenied,
+    ],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

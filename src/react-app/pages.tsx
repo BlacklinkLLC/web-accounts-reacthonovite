@@ -198,6 +198,13 @@ const DashboardContent = () => {
       ];
   const [search, setSearch] = React.useState("");
   const [showFavorites, setShowFavorites] = React.useState(false);
+  const [modalKind, setModalKind] = React.useState<"add" | "edit" | "delete" | null>(null);
+  const [modalApp, setModalApp] = React.useState<QuickLaunchApp | null>(null);
+  const [modalName, setModalName] = React.useState("");
+  const [modalUrl, setModalUrl] = React.useState("");
+  const [modalBusy, setModalBusy] = React.useState(false);
+  const [modalError, setModalError] = React.useState<string | null>(null);
+
   const filteredApps = quickLaunchApps.filter((app) => {
     const matchesSearch =
       app.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -206,24 +213,72 @@ const DashboardContent = () => {
     return matchesSearch && matchesFavorite;
   });
 
-  const handleAddApp = async () => {
-    const name = window.prompt("App name");
-    if (!name) return;
-    const url = window.prompt("App URL");
-    if (!url) return;
-    await addQuickLaunch({ name, url, icon: "bolt", favorite: false });
+  const openAddModal = () => {
+    setModalKind("add");
+    setModalApp(null);
+    setModalName("");
+    setModalUrl("");
+    setModalError(null);
   };
 
-  const handleEditApp = async (app: QuickLaunchApp) => {
-    const name = window.prompt("Edit name", app.name) ?? "";
-    const url = window.prompt("Edit URL", app.url) ?? "";
-    if (!name.trim() || !url.trim()) return;
-    await updateQuickLaunch(app.id, { name, url });
+  const openEditModal = (app: QuickLaunchApp) => {
+    setModalKind("edit");
+    setModalApp(app);
+    setModalName(app.name);
+    setModalUrl(app.url);
+    setModalError(null);
   };
 
-  const handleDeleteApp = async (app: QuickLaunchApp) => {
-    if (!window.confirm(`Delete ${app.name}?`)) return;
-    await deleteQuickLaunch(app.id);
+  const openDeleteModal = (app: QuickLaunchApp) => {
+    setModalKind("delete");
+    setModalApp(app);
+    setModalName(app.name);
+    setModalUrl(app.url);
+    setModalError(null);
+  };
+
+  const closeModal = () => {
+    if (modalBusy) return;
+    setModalKind(null);
+    setModalApp(null);
+    setModalName("");
+    setModalUrl("");
+    setModalError(null);
+  };
+
+  const handleSubmitModal = async (event?: React.FormEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+    if (!modalKind) return;
+
+    const name = modalName.trim();
+    const url = modalUrl.trim();
+
+    if ((modalKind === "add" || modalKind === "edit") && (!name || !url)) {
+      setModalError("Name and URL are required.");
+      return;
+    }
+
+    try {
+      setModalBusy(true);
+      setModalError(null);
+      if (modalKind === "add") {
+        await addQuickLaunch({ name, url, icon: "bolt", favorite: false });
+      } else if (modalKind === "edit" && modalApp) {
+        await updateQuickLaunch(modalApp.id, { name, url });
+      } else if (modalKind === "delete" && modalApp) {
+        await deleteQuickLaunch(modalApp.id);
+      }
+      closeModal();
+    } catch (err) {
+      const fallback = "Something went wrong. Please try again.";
+      const typed = err as { message?: string } | null | undefined;
+      const message = typeof typed?.message === "string" && typed.message.trim().length > 0 ? typed.message : fallback;
+      setModalError(message);
+    } finally {
+      setModalBusy(false);
+    }
   };
 
   const handleToggleFavorite = async (app: QuickLaunchApp) => {
@@ -260,8 +315,7 @@ const DashboardContent = () => {
           <span className="release-note">Some areas are still in active development.</span>
         </div>
       </header>
-        <PageSection title="QuickLaunch" badge={<Badge variant="info">Accounts-Old</Badge>}>
-        <div className="quicklaunch">
+        <section className="quicklaunch">
           <div className="quicklaunch-header">
             <div className="quicklaunch-title">
               <div className="quicklaunch-icon">
@@ -269,7 +323,7 @@ const DashboardContent = () => {
               </div>
               QuickLaunch
             </div>
-            <Button size="sm" type="button" onClick={handleAddApp}>
+            <Button size="sm" type="button" onClick={openAddModal}>
               Add app
             </Button>
           </div>
@@ -308,10 +362,13 @@ const DashboardContent = () => {
             </div>
           </div>
           <div className="apps-grid">
-            {groupNames.map((group) => (
-              <div key={group} className="app-group">
-                <div className="app-group-header">{group}</div>
-                {groupedApps[group].map((app) => {
+            {groupNames.map((group) => {
+              const appsInGroup = groupedApps[group] ?? [];
+              return (
+                <div key={group} className="app-group">
+                  <div className="app-group-header">{group}</div>
+                  <div className="app-group-grid">
+                    {appsInGroup.map((app) => {
                   const iconName = app.icon || "bolt";
                   const iconEl =
                     iconName === "rocket" ? (
@@ -326,86 +383,161 @@ const DashboardContent = () => {
                       <BoltIcon className="icon-inline" aria-hidden="true" />
                     );
 
-                  return (
-                    <a key={app.id} className="app-card" href={app.url} target="_blank" rel="noreferrer">
-                      <div
-                        className="app-icon"
-                        style={app.color ? { background: app.color } : undefined}
-                      >
-                        {iconEl}
-                      </div>
-                      <div className="app-name">{app.name}</div>
-                      <div className="app-url">{app.url}</div>
-                      <div className="app-actions">
-                        <button
-                          className="app-action-btn favorite"
-                          title="Favorite"
-                          type="button"
+                    return (
+                      <a key={app.id} className="app-card" href={app.url} target="_blank" rel="noreferrer">
+                        <div
+                          className="app-icon"
+                          style={app.color ? { background: app.color } : undefined}
+                        >
+                          {iconEl}
+                        </div>
+                        <div className="app-name">{app.name}</div>
+                        <div className="app-url">{app.url}</div>
+                        <div className="app-actions">
+                          <button
+                            className="app-action-btn favorite"
+                            title="Favorite"
+                            type="button"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleToggleFavorite(app);
+                            }}
+                          >
+                            <StarIcon
+                              className="icon-inline icon-warning"
+                              aria-hidden="true"
+                              width={14}
+                              height={14}
+                            />
+                          </button>
+                          <button
+                            className="app-action-btn"
+                            title="Edit"
+                            type="button"
                           onClick={(e) => {
                             e.preventDefault();
-                            handleToggleFavorite(app);
+                            openEditModal(app);
                           }}
-                        >
-                          <StarIcon
-                            className="icon-inline icon-warning"
-                            aria-hidden="true"
-                            width={14}
-                            height={14}
-                          />
-                        </button>
-                        <button
-                          className="app-action-btn"
-                          title="Edit"
-                          type="button"
+                          >
+                            <PencilIcon
+                              className="icon-inline icon-muted"
+                              aria-hidden="true"
+                              width={14}
+                              height={14}
+                            />
+                          </button>
+                          <button
+                            className="app-action-btn"
+                            title="Delete"
+                            type="button"
                           onClick={(e) => {
                             e.preventDefault();
-                            handleEditApp(app);
+                            openDeleteModal(app);
                           }}
-                        >
-                          <PencilIcon
-                            className="icon-inline icon-muted"
-                            aria-hidden="true"
-                            width={14}
-                            height={14}
-                          />
-                        </button>
-                        <button
-                          className="app-action-btn"
-                          title="Delete"
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDeleteApp(app);
-                          }}
-                        >
-                          <TrashIcon
-                            className="icon-inline icon-muted"
-                            aria-hidden="true"
-                            width={14}
-                            height={14}
-                          />
-                        </button>
-                      </div>
-                      {app.favorite ? (
-                        <span className="usage-chip">
-                          <StarIcon
-                            className="icon-inline icon-warning"
-                            aria-hidden="true"
-                            width={12}
-                            height={12}
-                          />
-                          Favorite
-                        </span>
-                      ) : null}
-                    </a>
-                  );
-                })}
-              </div>
-            ))}
+                          >
+                            <TrashIcon
+                              className="icon-inline icon-muted"
+                              aria-hidden="true"
+                              width={14}
+                              height={14}
+                            />
+                          </button>
+                        </div>
+                        {app.favorite ? (
+                          <span className="usage-chip">
+                            <StarIcon
+                              className="icon-inline icon-warning"
+                              aria-hidden="true"
+                              width={12}
+                              height={12}
+                            />
+                            Favorite
+                          </span>
+                        ) : null}
+                      </a>
+                    );
+                  })}
+                  </div>
+                </div>
+              );
+            })}
           </div>
-        </div>
-        <p className="theme-footnote">QuickLaunch shortcuts are stored in product_pulse/quicklaunch.</p>
-      </PageSection>
+          <p className="theme-footnote">QuickLaunch shortcuts are stored in product_pulse/quicklaunch.</p>
+          {modalKind ? (
+            <div className="modal active" role="dialog" aria-modal="true" aria-label="QuickLaunch">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h2 className="modal-title">
+                    {modalKind === "add"
+                      ? "Add app"
+                      : modalKind === "edit"
+                        ? "Edit app"
+                        : "Remove app"}
+                  </h2>
+                  <button type="button" className="close-btn" onClick={closeModal} aria-label="Close dialog">
+                    ×
+                  </button>
+                </div>
+                {modalKind === "delete" && modalApp ? (
+                  <div>
+                    <p>Are you sure you want to remove “{modalApp.name}” from QuickLaunch?</p>
+                    <div className="component-row" style={{ marginTop: "1.25rem" }}>
+                      <Button variant="secondary" type="button" disabled={modalBusy} onClick={closeModal}>
+                        Cancel
+                      </Button>
+                      <Button
+                        variant="danger"
+                        type="button"
+                        disabled={modalBusy}
+                        onClick={() => void handleSubmitModal()}
+                      >
+                        {modalBusy ? "Removing..." : "Remove"}
+                      </Button>
+                    </div>
+                    {modalError ? <p className="form-error">{modalError}</p> : null}
+                  </div>
+                ) : (
+                  <form onSubmit={handleSubmitModal}>
+                    <div className="form-group">
+                      <label htmlFor="ql-modal-name">Name</label>
+                      <input
+                        id="ql-modal-name"
+                        value={modalName}
+                        onChange={(e) => setModalName(e.target.value)}
+                        placeholder="App name"
+                        autoFocus
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="ql-modal-url">URL</label>
+                      <input
+                        id="ql-modal-url"
+                        value={modalUrl}
+                        onChange={(e) => setModalUrl(e.target.value)}
+                        placeholder="https://example.com"
+                      />
+                    </div>
+                    {modalError ? <p className="form-error">{modalError}</p> : null}
+                    <div className="component-row" style={{ marginTop: "1.25rem" }}>
+                      <Button variant="secondary" type="button" disabled={modalBusy} onClick={closeModal}>
+                        Cancel
+                      </Button>
+                      <Button type="submit" disabled={modalBusy}>
+                        {modalBusy
+                          ? modalKind === "add"
+                            ? "Adding..."
+                            : "Saving..."
+                          : modalKind === "add"
+                            ? "Add app"
+                            : "Save changes"}
+                      </Button>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+          ) : null}
+        </section>
     </div>
   );
 };
@@ -1765,7 +1897,7 @@ const LogoutPage = () => {
     signOutUser().finally(() => {
       window.location.href = "/login";
     });
-  }, []);
+  }, [signOutUser]);
   return (
     <div className="page-shell">
       <PageHero title="Signing out" subtitle="Clearing your session..." badge={<Badge>Logout</Badge>} />
